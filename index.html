@@ -285,7 +285,7 @@
             padding: 16px 20px;
             display: flex;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 14px;
             align-items: flex-end;
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
@@ -874,13 +874,13 @@
                     <div class="sidebar-item"><span>📈</span> Reports <span style="margin-left:auto; font-size:10px;">▼</span></div>
                     <div class="sidebar-item"><span>🏗️</span> Site Development <span style="margin-left:auto; font-size:10px;">▼</span></div>
                     
-                    <!-- STORE MGMT PARENT CATEGORY (EXPANDED ACTIVE IN SCREENSHOT 2) -->
+                    <!-- STORE MGMT PARENT CATEGORY -->
                     <div class="sidebar-item active-parent"><span>🏪</span> Store Mgmt <span style="margin-left:auto; font-size:10px;">▲</span></div>
                     <div class="sidebar-subitem">📊 Budget Tracking</div>
                     <div class="sidebar-subitem">🏢 Franchise Info.</div>
                     <div class="sidebar-subitem">📊 Store ADS Target</div>
                     <div class="sidebar-subitem">💳 Store Info.</div>
-                    <!-- ACTIVE SUB-ITEM: STORE OPERATION (eLogbook Checklist) -->
+                    <!-- ACTIVE SUB-ITEM: STORE OPERATION (eLogbook) -->
                     <div class="sidebar-subitem active">🏪 Store Operation (eLogbook)</div>
                     <div class="sidebar-subitem">📅 Store Schedules</div>
                     <div class="sidebar-subitem">👥 Store Sub Accounts</div>
@@ -906,9 +906,9 @@
                     </div>
                 </div>
 
-                <!-- FILTER CONTROLS BAR (GS25 PORTAL STYLE) -->
+                <!-- UPDATED FILTER CONTROLS BAR (NEW 3 SELECT FILTERS FOR ÁP DỤNG NGÀY, TẦN SUẤT, CA) -->
                 <div class="portal-filter-card">
-                    <div class="form-group" style="flex: 1; min-width: 200px;">
+                    <div class="form-group" style="flex: 1; min-width: 170px;">
                         <label class="form-label-portal">Store (Cửa hàng):</label>
                         <select id="portal-store-select" class="form-control-portal" onchange="renderWebstorePortal()">
                             <option value="VN0102">VN0102 - GS25 Nguyễn Trãi (HCM)</option>
@@ -919,21 +919,54 @@
 
                     <div class="form-group">
                         <label class="form-label-portal">From Date:</label>
-                        <input type="date" class="form-control-portal" value="2026-05-14" style="width: 150px;">
+                        <input type="date" class="form-control-portal" value="2026-05-14" style="width: 135px;">
                     </div>
 
                     <div class="form-group">
                         <label class="form-label-portal">To Date:</label>
-                        <input type="date" class="form-control-portal" value="2026-08-12" style="width: 150px;" onchange="renderWebstorePortal()">
+                        <input type="date" class="form-control-portal" value="2026-08-12" style="width: 135px;" onchange="renderWebstorePortal()">
                     </div>
 
-                    <div class="form-group" style="flex: 1; min-width: 180px;">
-                        <label class="form-label-portal">Keyword / Barcode:</label>
-                        <input type="text" class="form-control-portal" placeholder="Nhập từ khóa / Barcode...">
+                    <!-- 1. FILTER ÁP DỤNG NGÀY -->
+                    <div class="form-group" style="flex: 1; min-width: 140px;">
+                        <label class="form-label-portal">Áp dụng ngày:</label>
+                        <select id="portal-filter-day" class="form-control-portal" onchange="renderWebstorePortal()">
+                            <option value="ALL">Tất cả ngày</option>
+                            <option value="Mọi ngày">Mọi ngày (Hằng ngày)</option>
+                            <option value="Thứ 2">Thứ 2</option>
+                            <option value="Thứ 3">Thứ 3</option>
+                            <option value="Thứ 4">Thứ 4</option>
+                            <option value="Thứ 5">Thứ 5</option>
+                            <option value="Thứ 6">Thứ 6</option>
+                            <option value="Thứ 7">Thứ 7</option>
+                            <option value="Chủ nhật">Chủ nhật</option>
+                        </select>
+                    </div>
+
+                    <!-- 2. FILTER TẦN SUẤT -->
+                    <div class="form-group" style="flex: 1; min-width: 130px;">
+                        <label class="form-label-portal">Tần suất:</label>
+                        <select id="portal-filter-freq" class="form-control-portal" onchange="renderWebstorePortal()">
+                            <option value="ALL">Tất cả tần suất</option>
+                            <option value="Theo ngày">Theo ngày</option>
+                            <option value="Theo tuần">Theo tuần</option>
+                            <option value="Theo tháng">Theo tháng</option>
+                        </select>
+                    </div>
+
+                    <!-- 3. FILTER CA LÀM VIỆC -->
+                    <div class="form-group" style="flex: 1; min-width: 140px;">
+                        <label class="form-label-portal">Ca làm việc:</label>
+                        <select id="portal-filter-shift" class="form-control-portal" onchange="renderWebstorePortal()">
+                            <option value="ALL">Tất cả các ca</option>
+                            <option value="Ca 1">Ca 1 (06:00 - 14:00)</option>
+                            <option value="Ca 2">Ca 2 (14:00 - 22:00)</option>
+                            <option value="Ca 3">Ca 3 (22:00 - 06:00)</option>
+                        </select>
                     </div>
 
                     <button class="btn-portal-search" onclick="renderWebstorePortal()">
-                        🔍 Search
+                        🔍 Filter
                     </button>
 
                     <button class="btn-portal-export" onclick="alert('Đã xuất báo cáo tổng hợp Audit eLogbook Excel cho Cửa hàng!')">
@@ -941,7 +974,7 @@
                     </button>
                 </div>
 
-                <!-- PORTAL CONTENT TABS (3 MAIN TABS AS REQUESTED) -->
+                <!-- PORTAL CONTENT TABS -->
                 <div class="portal-content-tabs">
                     <button class="ptab-btn active" id="pnav-csr" onclick="switchPortalTab('csr')">
                         📋 1. Checklist CSR (113 Items Format)
@@ -979,7 +1012,7 @@
                         </table>
                         
                         <div class="portal-pagination-bar">
-                            <div>Total 113 records</div>
+                            <div id="portal-csr-total">Total 113 records</div>
                             <div class="pagination-pages">
                                 <button class="page-num-btn">previous</button>
                                 <button class="page-num-btn active">1</button>
@@ -1017,7 +1050,7 @@
                         </table>
                         
                         <div class="portal-pagination-bar">
-                            <div>Total 35 records</div>
+                            <div id="portal-sm-total">Total 35 records</div>
                             <div class="pagination-pages">
                                 <button class="page-num-btn">previous</button>
                                 <button class="page-num-btn active">1</button>
@@ -1844,14 +1877,38 @@
             ctx.clearRect(0, 0, cvs.width, cvs.height);
         }
 
-        // RENDER WEBSTORE PORTAL TABLES MATCHING AUTHENTIC GS25 PORTAL STYLING
+        // RENDER WEBSTORE PORTAL TABLES WITH REAL-TIME DYNAMIC FILTERS (ÁP DỤNG NGÀY, TẦN SUẤT, CA)
         function renderWebstorePortal() {
             const storeCode = document.getElementById('portal-store-select').value;
+            const filterDay = document.getElementById('portal-filter-day') ? document.getElementById('portal-filter-day').value : 'ALL';
+            const filterFreq = document.getElementById('portal-filter-freq') ? document.getElementById('portal-filter-freq').value : 'ALL';
+            const filterShift = document.getElementById('portal-filter-shift') ? document.getElementById('portal-filter-shift').value : 'ALL';
+
+            // Filter CSR items
+            const filteredCSR = rawCSR.filter(item => {
+                if (filterDay !== 'ALL' && !item.apDungNgay.includes(filterDay) && item.apDungNgay !== 'Mọi ngày') return false;
+                if (filterFreq !== 'ALL' && item.tanSuat !== filterFreq) return false;
+                if (filterShift !== 'ALL' && item.ca !== filterShift) return false;
+                return true;
+            });
+
+            // Filter SM items
+            const filteredSM = rawSM.filter(item => {
+                if (filterDay !== 'ALL' && !item.apDungNgay.includes(filterDay) && item.apDungNgay !== 'Mọi ngày') return false;
+                if (filterFreq !== 'ALL' && item.tanSuat !== filterFreq) return false;
+                if (filterShift !== 'ALL') {
+                    const hour = parseInt(item.gio.split(':')[0] || '0');
+                    if (filterShift === 'Ca 1' && !(hour >= 6 && hour < 14)) return false;
+                    if (filterShift === 'Ca 2' && !(hour >= 14 && hour < 22)) return false;
+                    if (filterShift === 'Ca 3' && !(hour >= 22 || hour < 6)) return false;
+                }
+                return true;
+            });
             
             // 1. CSR Table
             const csrTbody = document.getElementById('portal-csr-tbody');
             csrTbody.innerHTML = '';
-            rawCSR.forEach((item, idx) => {
+            filteredCSR.forEach((item, idx) => {
                 const status = csrTaskStates[item.stt];
                 const note = csrTaskNotes[item.stt] || '';
                 const tr = document.createElement('tr');
@@ -1872,11 +1929,12 @@
                 `;
                 csrTbody.appendChild(tr);
             });
+            document.getElementById('portal-csr-total').innerText = 'Total ' + filteredCSR.length + ' records';
 
             // 2. SM Table
             const smTbody = document.getElementById('portal-sm-tbody');
             smTbody.innerHTML = '';
-            rawSM.forEach((item, idx) => {
+            filteredSM.forEach((item, idx) => {
                 const status = smTaskStates[item.stt];
                 const note = smTaskNotes[item.stt] || '';
                 const tr = document.createElement('tr');
@@ -1896,6 +1954,7 @@
                 `;
                 smTbody.appendChild(tr);
             });
+            document.getElementById('portal-sm-total').innerText = 'Total ' + filteredSM.length + ' records';
 
             // 3. Logbook Tab A Matrix Table
             const logATbody = document.getElementById('portal-log-a-tbody');
@@ -2033,4 +2092,4 @@
 "@
 
 [System.IO.File]::WriteAllText($templatePath, $CodeContent, [System.Text.Encoding]::UTF8)
-Write-Host "Updated template.html to make eLogbook Checklist a sub-item under Store Mgmt"
+Write-Host "Updated template.html with new filter dropdowns"
