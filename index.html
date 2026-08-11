@@ -1,0 +1,2036 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GS25 Vietnam - Internal Web Portal & eLogbook System v2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gs25-blue: #00A0E9;
+            --gs25-primary: #0080FF;
+            --gs25-header-blue: #0080FF;
+            --gs25-bg: #F4F6F9;
+            --gs25-card-bg: #FFFFFF;
+            --gs25-border: #E5E7EB;
+            --gs25-text: #1F2937;
+            --gs25-muted: #6B7280;
+            --gs25-green: #16A34A;
+            --gs25-red: #DC2626;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--gs25-bg);
+            color: var(--gs25-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* DUAL VIEW TOP BAR SWITCHER */
+        .view-switcher-bar {
+            background: #0F172A;
+            color: white;
+            padding: 8px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            z-index: 2000;
+        }
+
+        .view-switch-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .vswitch-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .vswitch-btn.active {
+            background: var(--gs25-blue);
+            border-color: var(--gs25-blue);
+            box-shadow: 0 2px 8px rgba(0, 160, 233, 0.4);
+        }
+
+        /* AUTHENTIC GS25 PORTAL TOP HEADER */
+        .portal-top-header {
+            background: #FFFFFF;
+            border-bottom: 1px solid var(--gs25-border);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .portal-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .gs25-logo {
+            font-size: 30px;
+            font-weight: 900;
+            color: #00A0E9;
+            letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+        }
+
+        .gs25-logo span {
+            color: #00A0E9;
+        }
+
+        .menu-toggle-btn {
+            background: transparent;
+            border: none;
+            color: var(--gs25-muted);
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .portal-top-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .portal-link {
+            color: #0080FF;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .portal-link:hover { text-decoration: underline; }
+
+        .region-select {
+            background: #FFFFFF;
+            border: 1px solid var(--gs25-border);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--gs25-text);
+        }
+
+        .user-profile-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gs25-text);
+        }
+
+        .user-avatar {
+            width: 28px;
+            height: 28px;
+            background: #E5E7EB;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        /* MAIN PORTAL BODY LAYOUT */
+        .portal-body {
+            display: flex;
+            flex: 1;
+        }
+
+        /* LEFT SIDEBAR NAVIGATION */
+        .portal-sidebar {
+            width: 240px;
+            background: #FFFFFF;
+            border-right: 1px solid var(--gs25-border);
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 13px;
+        }
+
+        .sidebar-search {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--gs25-border);
+            border-radius: 6px;
+            font-size: 12px;
+            margin-bottom: 10px;
+            background: #F9FAFB;
+        }
+
+        .sidebar-menu-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            color: var(--gs25-text);
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .sidebar-item:hover {
+            background: #F3F4F6;
+        }
+
+        .sidebar-item.active-parent {
+            color: #0080FF;
+            font-weight: 700;
+        }
+
+        .sidebar-subitem {
+            padding-left: 32px;
+            font-size: 12px;
+            color: var(--gs25-muted);
+            padding-top: 6px;
+            padding-bottom: 6px;
+            cursor: pointer;
+            display: block;
+            border-radius: 4px;
+        }
+
+        .sidebar-subitem:hover {
+            color: #0080FF;
+            background: #F8FAFC;
+        }
+
+        .sidebar-subitem.active {
+            background: #E6F6FF;
+            color: #0080FF;
+            font-weight: 700;
+            border-left: 3px solid #0080FF;
+        }
+
+        /* MAIN CONTENT AREA */
+        .portal-main-content {
+            flex: 1;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: #F4F6F9;
+        }
+
+        /* BREADCRUMB & PAGE HEADER */
+        .portal-page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-icon {
+            width: 34px;
+            height: 34px;
+            background: #E6F6FF;
+            color: #0080FF;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .page-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1F2937;
+        }
+
+        /* FILTER CONTROLS BAR */
+        .portal-filter-card {
+            background: #FFFFFF;
+            border: 1px solid var(--gs25-border);
+            border-radius: 8px;
+            padding: 16px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-end;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label-portal {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gs25-muted);
+            text-transform: uppercase;
+        }
+
+        .form-control-portal {
+            padding: 8px 12px;
+            border: 1px solid var(--gs25-border);
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--gs25-text);
+            background: #FFFFFF;
+            height: 38px;
+        }
+
+        .btn-portal-search {
+            background: #0080FF;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            height: 38px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-portal-search:hover { background: #0066CC; }
+
+        .btn-portal-export {
+            background: #16A34A;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            height: 38px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-portal-export:hover { background: #15803D; }
+
+        /* PORTAL TABS */
+        .portal-content-tabs {
+            display: flex;
+            gap: 6px;
+            border-bottom: 2px solid var(--gs25-border);
+            background: transparent;
+        }
+
+        .ptab-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 20px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gs25-muted);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+
+        .ptab-btn.active {
+            color: #0080FF;
+            border-bottom-color: #0080FF;
+            background: #FFFFFF;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.03);
+        }
+
+        /* GS25 DATA TABLE FORMAT */
+        .portal-table-container {
+            background: #FFFFFF;
+            border: 1px solid var(--gs25-border);
+            border-radius: 8px;
+            overflow-x: auto;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .gs25-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        .gs25-table th {
+            background: #0080FF;
+            color: #FFFFFF;
+            font-weight: 700;
+            padding: 10px 12px;
+            border-right: 1px solid rgba(255,255,255,0.2);
+            white-space: nowrap;
+        }
+
+        .gs25-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--gs25-border);
+            border-right: 1px solid #F3F4F6;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+        .gs25-table tr:hover {
+            background-color: #F9FAFB;
+        }
+
+        .status-pill-active {
+            background: #ECFDF5;
+            color: #10B981;
+            border: 1px solid #A7F3D0;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 11px;
+            display: inline-block;
+        }
+
+        .status-pill-terminated {
+            background: #FEF2F2;
+            color: #EF4444;
+            border: 1px solid #FECACA;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 11px;
+            display: inline-block;
+        }
+
+        .btn-action-icon {
+            background: #0080FF;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* PAGINATION BAR */
+        .portal-pagination-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #FFFFFF;
+            border-top: 1px solid var(--gs25-border);
+            font-size: 12px;
+            color: var(--gs25-muted);
+        }
+
+        .pagination-pages {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .page-num-btn {
+            padding: 4px 10px;
+            border: 1px solid var(--gs25-border);
+            background: #FFFFFF;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .page-num-btn.active {
+            background: #0080FF;
+            color: white;
+            border-color: #0080FF;
+            font-weight: 700;
+        }
+
+        /* PDA SIMULATOR STYLES */
+        .pda-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 36px;
+            padding: 24px;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .pda-frame {
+            width: 520px;
+            height: 980px;
+            background: #0F172A;
+            border-radius: 44px;
+            padding: 16px 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 12px #334155;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pda-notch {
+            width: 150px;
+            height: 22px;
+            background: #334155;
+            margin: 0 auto 10px auto;
+            border-radius: 0 0 14px 14px;
+        }
+
+        .pda-screen {
+            flex: 1;
+            background: #F8FAFC;
+            border-radius: 28px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #E2E8F0;
+        }
+
+        .pda-screen::-webkit-scrollbar { width: 6px; }
+        .pda-screen::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+
+        .pda-header {
+            background: linear-gradient(135deg, #0080FF, #00569E);
+            padding: 16px;
+            color: white;
+        }
+
+        .pda-store-title { font-size: 16px; font-weight: 800; }
+        .pda-sub-info { font-size: 12px; opacity: 0.9; margin-top: 4px; }
+
+        .pda-tabs {
+            display: flex;
+            background: #FFFFFF;
+            border-bottom: 1px solid var(--gs25-border);
+        }
+
+        .pda-tab-btn {
+            flex: 1;
+            padding: 12px 4px;
+            background: transparent;
+            border: none;
+            color: var(--gs25-muted);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .pda-tab-btn.active {
+            color: #0080FF;
+            border-bottom-color: #0080FF;
+            background: rgba(0, 128, 255, 0.08);
+        }
+
+        .pda-content { padding: 14px; flex: 1; color: var(--gs25-text); }
+
+        .filter-box {
+            background: #FFFFFF;
+            border: 1px solid var(--gs25-border);
+            padding: 14px;
+            border-radius: 14px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+
+        .filter-row { display: flex; gap: 10px; margin-top: 8px; }
+
+        .filter-select, .filter-input {
+            width: 100%;
+            padding: 9px;
+            background: #FFFFFF;
+            border: 1px solid var(--gs25-border);
+            color: var(--gs25-text);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .task-card {
+            background: #FFFFFF;
+            border: 1px solid var(--gs25-border);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--gs25-muted);
+            margin-bottom: 8px;
+        }
+
+        .task-badge {
+            background: rgba(0, 128, 255, 0.1);
+            color: #0080FF;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+        }
+
+        .task-title {
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            color: var(--gs25-text);
+        }
+
+        .guide-btn {
+            background: #F1F5F9;
+            border: 1px solid var(--gs25-border);
+            color: var(--gs25-muted);
+            font-size: 11px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .guide-content {
+            display: none;
+            background: #F8FAFC;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #334155;
+            margin-bottom: 10px;
+            border-left: 3px solid #0080FF;
+            border-top: 1px solid #E2E8F0;
+            border-right: 1px solid #E2E8F0;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .evidence-box {
+            background: #EFF6FF;
+            border: 1px dashed #93C5FD;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #1E40AF;
+            margin-top: 6px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .action-row { display: flex; gap: 10px; margin-top: 10px; }
+
+        .btn-status {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--gs25-border);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            background: #F1F5F9;
+            color: var(--gs25-muted);
+            transition: all 0.2s;
+        }
+
+        .btn-status.pass.active {
+            background: var(--gs25-green);
+            color: white;
+            border-color: var(--gs25-green);
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+        }
+
+        .btn-status.fail.active {
+            background: var(--gs25-red);
+            color: white;
+            border-color: var(--gs25-red);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+
+        .fail-box {
+            display: none;
+            margin-top: 10px;
+            background: #FEF2F2;
+            border: 1px dashed var(--gs25-red);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .fail-input {
+            width: 100%;
+            padding: 8px;
+            background: #FFFFFF;
+            border: 1px solid var(--gs25-border);
+            color: var(--gs25-text);
+            border-radius: 6px;
+            font-size: 11px;
+            margin-bottom: 6px;
+        }
+
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin-top: 8px;
+            background: #FFFFFF;
+        }
+
+        .log-table th, .log-table td {
+            border: 1px solid var(--gs25-border);
+            padding: 6px 4px;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .log-table th { background: #F1F5F9; color: var(--gs25-text); font-weight: 700; }
+
+        .temp-input {
+            width: 58px;
+            padding: 5px;
+            background: #FFFFFF;
+            border: 1px solid var(--gs25-border);
+            color: var(--gs25-text);
+            border-radius: 6px;
+            font-weight: 700;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .temp-input.out-range {
+            border-color: var(--gs25-red);
+            color: var(--gs25-red);
+            background: #FEF2F2;
+        }
+
+        .temp-input.in-range {
+            border-color: var(--gs25-green);
+            color: var(--gs25-green);
+            background: #ECFDF5;
+        }
+
+        canvas.sig-canvas {
+            border: 1px dashed var(--gs25-border);
+            background: #FFFFFF;
+            border-radius: 8px;
+            width: 100%;
+            height: 80px;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .excel-section-header {
+            background: linear-gradient(90deg, #0080FF, #00569E);
+            color: #FFFFFF;
+            font-weight: 800;
+            padding: 10px 16px;
+            font-size: 13px;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .banner-warning {
+            background: #FEF3C7;
+            border: 1px solid #D97706;
+            color: #92400E;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            line-height: 1.5;
+        }
+
+        .sig-box-display {
+            border: 1px dashed var(--gs25-border);
+            padding: 6px 10px;
+            background: #F9FAFB;
+            border-radius: 6px;
+            font-weight: 700;
+            color: #0080FF;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .footer-note {
+            font-size: 11px;
+            color: #92400E;
+            background: #FEF3C7;
+            border-left: 3px solid #D97706;
+            padding: 8px 12px;
+            margin-top: 10px;
+            border-radius: 0 6px 6px 0;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- DUAL-VIEW SWITCHER HEADER BAR -->
+    <div class="view-switcher-bar">
+        <div style="font-weight: 800; display: flex; align-items: center; gap: 8px;">
+            <span>GS25 VIETNAM</span>
+            <span style="background: #00A0E9; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px;">eLogbook System v2.0</span>
+        </div>
+        <div class="view-switch-btns">
+            <button class="vswitch-btn" id="btn-pda" onclick="switchView('pda')">📱 PDA Handheld App</button>
+            <button class="vswitch-btn active" id="btn-cms" onclick="switchView('cms')">💻 eLogbook - GS25 Internal Web Portal</button>
+        </div>
+    </div>
+
+    <!-- VIEW 1: AUTHENTIC GS25 INTERNAL WEB PORTAL -->
+    <div id="cms-view" style="display: flex; flex-direction: column; min-height: 100vh;">
+        
+        <!-- GS25 TOP NAVIGATION BAR -->
+        <header class="portal-top-header">
+            <div class="portal-brand">
+                <button class="menu-toggle-btn">☰</button>
+                <div class="gs25-logo">GS<span>25</span></div>
+            </div>
+
+            <div class="portal-top-links">
+                <a href="#" class="portal-link">FC support</a>
+                <a href="#" class="portal-link">Store management</a>
+                <a href="#" class="portal-link">Feedback</a>
+                <select class="region-select">
+                    <option selected>South ˅</option>
+                    <option>North ˅</option>
+                </select>
+                <div style="position: relative; cursor: pointer;">
+                    🔔 <span style="position: absolute; top: -6px; right: -8px; background: #EF4444; color: white; border-radius: 50%; padding: 1px 5px; font-size: 10px; font-weight: 800;">0</span>
+                </div>
+                <div class="user-profile-badge">
+                    <div class="user-avatar">👤</div>
+                    <span>Lý Vĩ Nghiệp</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- GS25 PORTAL BODY (LEFT SIDEBAR + MAIN CONTENT) -->
+        <div class="portal-body">
+            
+            <!-- LEFT SIDEBAR ACCORDION MENU -->
+            <aside class="portal-sidebar">
+                <input type="text" class="sidebar-search" placeholder="Search page">
+                
+                <div class="sidebar-menu-group">
+                    <div class="sidebar-item"><span>👥</span> HR Mgmt. <span style="margin-left:auto; font-size:10px;">▼</span></div>
+                    <div class="sidebar-item"><span>🏢</span> Internal Portal <span style="margin-left:auto; font-size:10px;">▼</span></div>
+                    <div class="sidebar-item"><span>🛠️</span> IT Operation <span style="margin-left:auto; font-size:10px;">▼</span></div>
+                    <div class="sidebar-item"><span>📢</span> Marketing Mgmt. <span style="margin-left:auto; font-size:10px;">▼</span></div>
+                    <div class="sidebar-item"><span>🛒</span> Merchandiser <span style="margin-left:auto; font-size:10px;">▼</span></div>
+                    <div class="sidebar-item"><span>📊</span> OM Mgmt <span style="margin-left:auto; font-size:10px;">▼</span></div>
+                    <div class="sidebar-item"><span>📋</span> Quality control <span style="margin-left:auto; font-size:10px;">▼</span></div>
+                    <div class="sidebar-item"><span>📈</span> Reports <span style="margin-left:auto; font-size:10px;">▼</span></div>
+                    <div class="sidebar-item"><span>🏗️</span> Site Development <span style="margin-left:auto; font-size:10px;">▼</span></div>
+                    
+                    <!-- STORE MGMT PARENT CATEGORY (EXPANDED ACTIVE IN SCREENSHOT 2) -->
+                    <div class="sidebar-item active-parent"><span>🏪</span> Store Mgmt <span style="margin-left:auto; font-size:10px;">▲</span></div>
+                    <div class="sidebar-subitem">📊 Budget Tracking</div>
+                    <div class="sidebar-subitem">🏢 Franchise Info.</div>
+                    <div class="sidebar-subitem">📊 Store ADS Target</div>
+                    <div class="sidebar-subitem">💳 Store Info.</div>
+                    <!-- ACTIVE SUB-ITEM: STORE OPERATION (eLogbook Checklist) -->
+                    <div class="sidebar-subitem active">🏪 Store Operation (eLogbook)</div>
+                    <div class="sidebar-subitem">📅 Store Schedules</div>
+                    <div class="sidebar-subitem">👥 Store Sub Accounts</div>
+                    
+                    <div class="sidebar-item"><span>🎟️</span> Ticket Requests <span style="margin-left:auto; font-size:10px;">▼</span></div>
+                    <div class="sidebar-item"><span>👤</span> Users and Roles <span style="margin-left:auto; font-size:10px;">▼</span></div>
+                    <div class="sidebar-item"><span>📦</span> WH-Logistics <span style="margin-left:auto; font-size:10px;">▼</span></div>
+                    <div class="sidebar-item"><span>📘</span> User wiki <span style="margin-left:auto; font-size:10px;">▼</span></div>
+                </div>
+            </aside>
+
+            <!-- MAIN PORTAL CONTENT AREA -->
+            <main class="portal-main-content">
+                
+                <!-- BREADCRUMB & HEADER TITLE -->
+                <div class="portal-page-header">
+                    <div class="page-title-group">
+                        <div class="page-icon">🏪</div>
+                        <div>
+                            <div class="page-title">Store Mgmt ➔ Store Operation (eLogbook Checklist Audit Portal)</div>
+                            <div style="font-size: 12px; color: var(--gs25-muted);">Quality Control & Store Operation Management — Digital Checklist CSR/SM & Logbook Records</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FILTER CONTROLS BAR (GS25 PORTAL STYLE) -->
+                <div class="portal-filter-card">
+                    <div class="form-group" style="flex: 1; min-width: 200px;">
+                        <label class="form-label-portal">Store (Cửa hàng):</label>
+                        <select id="portal-store-select" class="form-control-portal" onchange="renderWebstorePortal()">
+                            <option value="VN0102">VN0102 - GS25 Nguyễn Trãi (HCM)</option>
+                            <option value="VN0105">VN0105 - GS25 Lê Lai (HCM)</option>
+                            <option value="VN0210">VN0210 - GS25 Điện Biên Phủ (Bình Thạnh)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label-portal">From Date:</label>
+                        <input type="date" class="form-control-portal" value="2026-05-14" style="width: 150px;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label-portal">To Date:</label>
+                        <input type="date" class="form-control-portal" value="2026-08-12" style="width: 150px;" onchange="renderWebstorePortal()">
+                    </div>
+
+                    <div class="form-group" style="flex: 1; min-width: 180px;">
+                        <label class="form-label-portal">Keyword / Barcode:</label>
+                        <input type="text" class="form-control-portal" placeholder="Nhập từ khóa / Barcode...">
+                    </div>
+
+                    <button class="btn-portal-search" onclick="renderWebstorePortal()">
+                        🔍 Search
+                    </button>
+
+                    <button class="btn-portal-export" onclick="alert('Đã xuất báo cáo tổng hợp Audit eLogbook Excel cho Cửa hàng!')">
+                        📥 Export
+                    </button>
+                </div>
+
+                <!-- PORTAL CONTENT TABS (3 MAIN TABS AS REQUESTED) -->
+                <div class="portal-content-tabs">
+                    <button class="ptab-btn active" id="pnav-csr" onclick="switchPortalTab('csr')">
+                        📋 1. Checklist CSR (113 Items Format)
+                    </button>
+                    <button class="ptab-btn" id="pnav-sm" onclick="switchPortalTab('sm')">
+                        👔 2. Checklist SM (35 Items Format)
+                    </button>
+                    <button class="ptab-btn" id="pnav-logbook" onclick="switchPortalTab('logbook')">
+                        📖 3. Logbook Biểu Mẫu Gốc (Bảng A, B, C1, C2, D & OFC)
+                    </button>
+                </div>
+
+                <!-- TAB 1: CSR CHECKLIST TABLE -->
+                <div id="portal-tab-csr-view">
+                    <div class="portal-table-container">
+                        <table class="gs25-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;">No.</th>
+                                    <th style="width: 90px;">Áp dụng ngày</th>
+                                    <th style="width: 90px;">Tần suất</th>
+                                    <th style="width: 60px;">Ca</th>
+                                    <th style="width: 60px;">Giờ</th>
+                                    <th style="width: 60px;">Ước tính</th>
+                                    <th style="width: 140px;">Khu vực / Thiết bị</th>
+                                    <th>Công việc phải làm</th>
+                                    <th>TIÊU CHUẨN ĐẠT</th>
+                                    <th style="width: 110px;">Người thực hiện</th>
+                                    <th style="width: 90px;">Status</th>
+                                    <th style="width: 140px;">Ghi chú khi Không đạt</th>
+                                    <th style="width: 50px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="portal-csr-tbody"></tbody>
+                        </table>
+                        
+                        <div class="portal-pagination-bar">
+                            <div>Total 113 records</div>
+                            <div class="pagination-pages">
+                                <button class="page-num-btn">previous</button>
+                                <button class="page-num-btn active">1</button>
+                                <button class="page-num-btn">2</button>
+                                <button class="page-num-btn">3</button>
+                                <button class="page-num-btn">4</button>
+                                <button class="page-num-btn">next</button>
+                            </div>
+                            <div>30 / page ˅</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: SM CHECKLIST TABLE -->
+                <div id="portal-tab-sm-view" style="display: none;">
+                    <div class="portal-table-container">
+                        <table class="gs25-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;">No.</th>
+                                    <th style="width: 90px;">Áp dụng ngày</th>
+                                    <th style="width: 90px;">Tần suất</th>
+                                    <th style="width: 60px;">Giờ</th>
+                                    <th style="width: 60px;">Ước tính</th>
+                                    <th style="width: 120px;">Nhóm việc</th>
+                                    <th>Nội dung SM phải làm</th>
+                                    <th>TIÊU CHUẨN ĐẠT</th>
+                                    <th>Bằng chứng phải để lại</th>
+                                    <th style="width: 90px;">Status</th>
+                                    <th style="width: 140px;">Ghi chú & Bằng chứng số</th>
+                                    <th style="width: 50px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="portal-sm-tbody"></tbody>
+                        </table>
+                        
+                        <div class="portal-pagination-bar">
+                            <div>Total 35 records</div>
+                            <div class="pagination-pages">
+                                <button class="page-num-btn">previous</button>
+                                <button class="page-num-btn active">1</button>
+                                <button class="page-num-btn">2</button>
+                                <button class="page-num-btn">next</button>
+                            </div>
+                            <div>30 / page ˅</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: LOGBOOK ORIGINAL FORMAT TABLES -->
+                <div id="portal-tab-logbook-view" style="display: none;">
+                    
+                    <!-- BẢNG A -->
+                    <div class="excel-section-header">
+                        BẢNG A — NHIỆT ĐỘ 14 THIẾT BỊ LẠNH (3 lần/ngày: đầu Ca 1, Ca 2, Ca 3)
+                    </div>
+                    <div class="portal-table-container" style="margin-bottom: 20px;">
+                        <table class="gs25-table">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" style="width: 40px;">No.</th>
+                                    <th rowspan="2">Thiết bị</th>
+                                    <th rowspan="2">Ngưỡng đạt</th>
+                                    <th colspan="3" style="text-align: center;">CA 1</th>
+                                    <th colspan="3" style="text-align: center;">CA 2</th>
+                                    <th colspan="3" style="text-align: center;">CA 3</th>
+                                </tr>
+                                <tr>
+                                    <th>Giờ đo</th><th>°C đo</th><th>Status</th>
+                                    <th>Giờ đo</th><th>°C đo</th><th>Status</th>
+                                    <th>Giờ đo</th><th>°C đo</th><th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="portal-log-a-tbody"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- BẢNG B -->
+                    <div class="excel-section-header">
+                        BẢNG B — BẤT THƯỜNG VÀ THIẾT BỊ CHƯA ĐẠT → PHIẾU I&C (ĐẦY ĐỦ 12 CỘT CHUẨN HR EXCEL)
+                    </div>
+                    <div class="portal-table-container" style="margin-bottom: 8px;">
+                        <table class="gs25-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;">No.</th>
+                                    <th style="width: 90px;">Giờ phát hiện</th>
+                                    <th style="width: 130px;">Thiết bị / Khu vực</th>
+                                    <th style="width: 70px;">Số đo</th>
+                                    <th>Đã xử lý tạm thế nào</th>
+                                    <th style="width: 80px;">Giờ báo SM</th>
+                                    <th style="width: 140px;">Số phiếu I&C</th>
+                                    <th style="width: 80px;">Mức ưu tiên</th>
+                                    <th style="width: 100px;">Ngày I&C nhận</th>
+                                    <th style="width: 90px;">Giờ sửa xong</th>
+                                    <th style="width: 140px;">SM NGHIỆM THU (Số đo sau sửa)</th>
+                                    <th style="width: 130px;">SM ký đóng phiếu</th>
+                                </tr>
+                            </thead>
+                            <tbody id="portal-log-b-tbody"></tbody>
+                        </table>
+                    </div>
+                    <div class="footer-note" style="margin-bottom: 20px;">
+                        Cột 'SM NGHIỆM THU' và 'SM ký đóng phiếu' là hai ô BỔ SUNG so với bản cũ. Chỉ SM/ASM được đóng phiếu, sau khi chạy thử và đo lại thiết bị. Dòng chưa có giờ sửa xong thì SM chưa được ký xác nhận ngay.
+                    </div>
+
+                    <!-- BẢNG C1 & C2 -->
+                    <div class="excel-section-header">
+                        BẢNG C — GHI NHẬN KIỂM HÀNG HÓA VÀ HÀNG HỦY THỰC TẾ
+                    </div>
+                    <div style="padding: 16px; background: #FFFFFF; border: 1px solid var(--gs25-border); border-radius: 0 0 8px 8px;">
+                        <div style="font-weight: 800; font-size: 13px; color: #0080FF; margin-bottom: 8px;">▸ C1 — KẾT QUẢ KIỂM QUẦY KỆ (Mỗi ca ghi 1 dòng)</div>
+                        <table class="gs25-table" style="margin-bottom: 16px; border: 1px solid var(--gs25-border);">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;">No.</th>
+                                    <th style="width: 60px;">Ca</th>
+                                    <th style="width: 90px;">Giờ kiểm</th>
+                                    <th style="width: 130px;">Người kiểm</th>
+                                    <th>Kết quả kiểm quầy kệ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="portal-log-c1-tbody"></tbody>
+                        </table>
+
+                        <div style="font-weight: 800; font-size: 13px; color: #92400E; margin-bottom: 8px;">▸ C2 — HÀNG HỦY THỰC TẾ PHÁT SINH TRONG NGÀY (Chỉ ghi khi có hủy)</div>
+                        <table class="gs25-table" style="border: 1px solid var(--gs25-border);">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;">No.</th>
+                                    <th style="width: 80px;">Giờ</th>
+                                    <th style="width: 60px;">Ca</th>
+                                    <th style="width: 110px;">SKU</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th style="width: 70px;">Số lượng</th>
+                                    <th style="width: 140px;">Lý do hủy</th>
+                                    <th style="width: 130px;">Số lệnh Disposal</th>
+                                    <th style="width: 120px;">Người thực hiện</th>
+                                    <th style="width: 100px;">SM đối chiếu</th>
+                                </tr>
+                            </thead>
+                            <tbody id="portal-log-c2-tbody"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- BẢNG D -->
+                    <div class="excel-section-header" style="margin-top: 20px;">
+                        BẢNG D — BÀN GIAO CA (Ký đủ 2 bên mới tính là đã bàn giao)
+                    </div>
+                    <div class="portal-table-container" style="margin-bottom: 16px;">
+                        <table class="gs25-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;">No.</th>
+                                    <th style="width: 100px;">Giờ bàn giao</th>
+                                    <th style="width: 120px;">Ca giao → Ca nhận</th>
+                                    <th>Thiết bị đang chờ sửa (số phiếu)</th>
+                                    <th>Hàng chờ hủy</th>
+                                    <th style="width: 110px;">Tiền quỹ</th>
+                                    <th style="width: 140px;">Người giao ký</th>
+                                    <th style="width: 140px;">Người nhận ký</th>
+                                    <th>Ghi chú</th>
+                                </tr>
+                            </thead>
+                            <tbody id="portal-log-d-tbody"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- SM XÁC NHẬN CROSS-CHECK -->
+                    <div style="padding: 16px; background: #EFF6FF; border: 1px solid #93C5FD; border-radius: 8px; font-size: 13px; font-weight: 700; color: #1E40AF;" id="portal-sm-crosscheck-block">
+                        SM XÁC NHẬN CROSS-CHECK: 
+                        <span id="portal-sm-crosscheck-text" class="status-pill-active" style="margin-left: 10px;">✓ CSR đã hoàn thành và điền đầy đủ</span>
+                        <span style="float: right; color: var(--gs25-text);" id="portal-sm-sig-display">SM ký tên: Store Manager VN0102</span>
+                    </div>
+
+                    <!-- OFC AUDIT SECTION -->
+                    <div class="excel-section-header" style="margin-top: 20px;">
+                        MỤC NÀY ĐƯỢC GHI BỞI OFC (Kiểm tra công việc của SM/ASM kỳ liền kề trước đó)
+                    </div>
+                    <div style="padding: 16px; background: #FFFFFF; border: 1px solid var(--gs25-border); border-radius: 0 0 8px 8px; font-size: 12px; line-height: 1.8;">
+                        <div style="display: flex; gap: 20px; margin-bottom: 10px;">
+                            <div><strong>Ngày kiểm tra:</strong> 12/08/2026</div>
+                            <div><strong>Giờ verify:</strong> 14:30</div>
+                            <div><strong>OFC (họ tên):</strong> Nguyễn Văn Giám Sát</div>
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <strong>Kết quả kiểm tra:</strong> <span class="status-pill-active">✓ SM đã hoàn thành công việc</span>
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <strong>OFC cross-check:</strong> Đo lại Tủ mát counter (3.2°C - Khớp Logbook), Tủ đông 1 (-19.0°C - Khớp Logbook), kiểm HSD 5 SP (Đủ nhãn, đúng HSD).
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <strong>Nhận xét OFC về Action Plan của SM:</strong> SM đã dời hàng tủ đông 2 hỏng kịp thời, tạo phiếu I&C đúng quy trình. Đề nghị I&C xử lý trong ngày.
+                        </div>
+                        <div class="sig-box-display" style="max-width: 250px;">
+                            ✍️ OFC Nguyễn Văn Giám Sát (Đã ký duyệt)
+                        </div>
+                    </div>
+
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- VIEW 2: PDA HANDHELD APP SIMULATOR -->
+    <div id="pda-view" class="pda-wrapper" style="display: none;">
+        <div class="pda-frame">
+            <div class="pda-notch"></div>
+            <div class="pda-screen">
+                <div class="pda-header">
+                    <div class="pda-store-title">VN0102 - GS25 Nguyễn Trãi</div>
+                    <div class="pda-sub-info">Thứ Ba, 12/08/2026 | Tuần 2 của Tháng</div>
+                </div>
+
+                <div class="pda-tabs">
+                    <button class="pda-tab-btn active" id="tab-btn-csr" onclick="switchPdaTab('csr')">CSR Checklist</button>
+                    <button class="pda-tab-btn" id="tab-btn-sm" onclick="switchPdaTab('sm')">SM Checklist</button>
+                    <button class="pda-tab-btn" id="tab-btn-logbook" onclick="switchPdaTab('logbook')">Logbook</button>
+                </div>
+
+                <div class="pda-content">
+                    <!-- CSR TAB -->
+                    <div id="pda-tab-csr">
+                        <div class="filter-box">
+                            <div style="font-size: 11px; font-weight: 800; color: var(--gs25-muted); text-transform: uppercase;">⚡ Thuật toán Lọc Thông Minh (Smart Filter)</div>
+                            <div class="filter-row">
+                                <select id="csr-shift" class="filter-select" onchange="renderCSRTasks()">
+                                    <option value="ALL">Tất cả 113 Công việc CSR</option>
+                                    <option value="Ca 1" selected>Ca 1 (06:00 - 14:00) — 45 công việc</option>
+                                    <option value="Ca 2">Ca 2 (14:00 - 22:00) — 39 công việc</option>
+                                    <option value="Ca 3">Ca 3 (22:00 - 06:00) — 35 công việc</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 12px; font-size: 12px; color: var(--gs25-muted); display: flex; justify-content: space-between; font-weight: 700;">
+                            <span>Tiến độ Tuân thủ Ca CSR:</span>
+                            <span id="csr-progress" style="color: var(--gs25-green);">0 / 0 (0%)</span>
+                        </div>
+
+                        <div id="csr-task-list"></div>
+                    </div>
+
+                    <!-- SM TAB -->
+                    <div id="pda-tab-sm" style="display: none;">
+                        <div class="banner-warning">
+                            ⚠️ KHUNG GIỜ CAO ĐIỂM SÁNG (08:00): SM CÓ MẶT BÊN NGOÀI CỬA HÀNG QUAN SÁT VẬN HÀNH — KHÔNG NGỒI BÀN LÀM GIẤY TỜ
+                        </div>
+
+                        <div style="margin-bottom: 12px; font-size: 12px; color: var(--gs25-muted); display: flex; justify-content: space-between; font-weight: 700;">
+                            <span>Tiến độ Tuân thủ Checklist SM:</span>
+                            <span id="sm-progress" style="color: #D97706;">0 / 35 (0%)</span>
+                        </div>
+
+                        <div id="sm-task-list"></div>
+
+                        <div class="filter-box" style="margin-top: 16px;">
+                            <div style="font-size: 12px; font-weight: 800; color: #92400E; margin-bottom: 8px;">BẢNG RÀ SOÁT VẤN ĐỀ (DAILY ISSUE / WEEKLY TOP 3)</div>
+                            <div style="font-size: 11px; color: var(--gs25-muted); margin-bottom: 10px;">Ghi nhận tối đa 3 vấn đề nổi bật của ngày/tuần. Vấn đề lặp lại >= 2 lần trong 4 tuần tự động chuyển lên Review lỗi Thứ 2.</div>
+                            <input type="text" class="filter-input" placeholder="Vấn đề 1: Mô tả vấn đề & Hành động khắc phục..." style="margin-bottom: 6px;">
+                            <input type="text" class="filter-input" placeholder="Vấn đề 2: Mô tả vấn đề & Hành động khắc phục..." style="margin-bottom: 6px;">
+                            <input type="text" class="filter-input" placeholder="Vấn đề 3: Mô tả vấn đề & Hành động khắc phục..." style="margin-bottom: 8px;">
+                            <button class="vswitch-btn" style="width: 100%; justify-content: center; background: #0080FF; font-size: 11px;" onclick="alert('Đã lưu Bảng rà soát vấn đề của SM!')">💾 Lưu Bảng Rà Soát Vấn Đề</button>
+                        </div>
+                    </div>
+
+                    <!-- LOGBOOK TAB -->
+                    <div id="pda-tab-logbook" style="display: none;">
+                        <div class="pda-tabs" style="margin: -14px -14px 14px -14px; background: #FFFFFF;">
+                            <button class="pda-tab-btn active" id="subtab-btn-a" onclick="switchLogTab('tab-a')">A: Nhiệt Độ</button>
+                            <button class="pda-tab-btn" id="subtab-btn-b" onclick="switchLogTab('tab-b')">B: I&C</button>
+                            <button class="pda-tab-btn" id="subtab-btn-c" onclick="switchLogTab('tab-c')">C: Hàng Hủy</button>
+                            <button class="pda-tab-btn" id="subtab-btn-d" onclick="switchLogTab('tab-d')">D: Bàn Giao</button>
+                        </div>
+
+                        <!-- TAB A -->
+                        <div id="log-tab-a">
+                            <div style="font-size: 12px; font-weight: 800; margin-bottom: 6px; color: #0080FF;">BẢNG A — NHIỆT ĐỘ 14 THIẾT BỊ LẠNH (3 LẦN/NGÀY)</div>
+                            <div style="font-size: 10px; color: var(--gs25-muted); margin-bottom: 10px;">(CHỈ ĐO SỐ HIỂN THỊ TRÊN THIẾT BỊ - Tủ đông -22 đến -18°C, Tủ mát 1 đến 5°C)</div>
+                            <table class="log-table">
+                                <thead>
+                                    <tr>
+                                        <th>Thiết bị</th>
+                                        <th>Ngưỡng</th>
+                                        <th>Ca 1 °C</th>
+                                        <th>Ca 2 °C</th>
+                                        <th>Ca 3 °C</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="log-a-body"></tbody>
+                            </table>
+                        </div>
+
+                        <!-- TAB B -->
+                        <div id="log-tab-b" style="display: none;">
+                            <div style="font-size: 12px; font-weight: 800; margin-bottom: 6px; color: var(--gs25-red);">BẢNG B — BẤT THƯỜNG VÀ THIẾT BỊ CHƯA ĐẠT → PHIẾU I&C</div>
+                            <div class="filter-box" style="margin-bottom: 12px;">
+                                <div style="font-size: 11px; font-weight: 800; color: #0080FF; margin-bottom: 8px;">FORM THÊM/CẬP NHẬT PHIẾU I&C (CỘT 1 - 12)</div>
+                                <div class="filter-row">
+                                    <div style="flex:1;">
+                                        <label class="form-label-portal">Giờ phát hiện (Cột 2):</label>
+                                        <input type="text" id="inc-gioPhatHien" class="filter-input" value="23:40">
+                                    </div>
+                                    <div style="flex:1;">
+                                        <label class="form-label-portal">Giờ báo SM (Cột 6):</label>
+                                        <input type="text" id="inc-gioBaoSM" class="filter-input" value="23:50">
+                                    </div>
+                                </div>
+                                <div class="filter-row" style="margin-top:6px;">
+                                    <div style="flex:1;">
+                                        <label class="form-label-portal">Thiết bị / Khu vực (Cột 3):</label>
+                                        <input type="text" id="inc-thietBi" class="filter-input" value="Tủ đông 2">
+                                    </div>
+                                    <div style="flex:1;">
+                                        <label class="form-label-portal">Số đo lỗi (Cột 4):</label>
+                                        <input type="text" id="inc-soDo" class="filter-input" value="-9.2°C">
+                                    </div>
+                                </div>
+                                <div style="margin-top:6px;">
+                                    <label class="form-label-portal">Đã xử lý tạm thế nào (Cột 5):</label>
+                                    <input type="text" id="inc-xuLyTam" class="filter-input" value="Dời hàng sang Tủ đông 3, dán nhãn KHÔNG SỬ DỤNG">
+                                </div>
+                                <div class="filter-row" style="margin-top:6px;">
+                                    <div style="flex:1;">
+                                        <label class="form-label-portal">Số phiếu I&C (Cột 7):</label>
+                                        <input type="text" id="inc-soPhieu" class="filter-input" value="INC-20260812-VN0102-001">
+                                    </div>
+                                    <div style="flex:1;">
+                                        <label class="form-label-portal">Mức ưu tiên (Cột 8):</label>
+                                        <select id="inc-mucUuTien" class="filter-select">
+                                            <option value="P1" selected>P1 - Khẩn cấp</option>
+                                            <option value="P2">P2 - Trung bình</option>
+                                            <option value="P3">P3 - Thấp</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="filter-row" style="margin-top:6px;">
+                                    <div style="flex:1;">
+                                        <label class="form-label-portal">Ngày I&C nhận (Cột 9):</label>
+                                        <input type="text" id="inc-ngayIC" class="filter-input" value="12/08/2026">
+                                    </div>
+                                    <div style="flex:1;">
+                                        <label class="form-label-portal">Giờ sửa xong (Cột 10):</label>
+                                        <input type="text" id="inc-gioSuaXong" class="filter-input" value="11:45">
+                                    </div>
+                                </div>
+                                <div style="margin-top:6px;">
+                                    <label class="form-label-portal">SM NGHIỆM THU - Số đo sau sửa (Cột 11):</label>
+                                    <input type="text" id="inc-smNghihemThu" class="filter-input" value="-19.0°C (Đạt ngưỡng)">
+                                </div>
+                                <div style="margin-top:8px;">
+                                    <label class="form-label-portal">SM ký đóng phiếu (Cột 12):</label>
+                                    <canvas id="sig-canvas-b" class="sig-canvas" style="height:70px;"></canvas>
+                                </div>
+                                <button class="vswitch-btn" style="width: 100%; justify-content: center; background: var(--gs25-green); color: white; margin-top: 10px;" onclick="saveIncidentB()">
+                                    💾 LƯU PHIẾU I&C & ĐỒNG BỘ NỀN TẢNG WEB
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- TAB C -->
+                        <div id="log-tab-c" style="display: none;">
+                            <div style="font-size: 12px; font-weight: 800; margin-bottom: 6px; color: #92400E;">BẢNG C — GHI NHẬN KIỂM HÀNG HÓA VÀ HÀNG HỦY THỰC TẾ</div>
+                            <div class="filter-box" style="margin-bottom: 12px;">
+                                <div style="font-size: 11px; font-weight: 800; color: #0080FF; margin-bottom: 6px;">▸ C1 — KẾT QUẢ KIỂM QUẦY KỆ (Mỗi ca ghi 1 dòng)</div>
+                                <div style="margin-bottom: 8px;">
+                                    <div style="font-size: 11px; font-weight: 700; color: #0080FF;">Ca 1:</div>
+                                    <div class="filter-row">
+                                        <input type="text" id="c1-ca1-time" class="filter-input" value="07:05" style="width:70px;">
+                                        <input type="text" id="c1-ca1-user" class="filter-input" value="Phạm Văn A" style="flex:1;">
+                                    </div>
+                                    <select id="c1-ca1-choice" class="filter-select" style="margin-top:4px;" onchange="syncLogbookToPortal()">
+                                        <option value="1" selected>☐ Không phát hiện hàng hư hỏng, hết hạn hoặc không phù hợp</option>
+                                        <option value="2">☐ Có sản phẩm đến hạn — đã thu hồi và xử lý đúng thời gian quy định</option>
+                                        <option value="3">☐ Có sản phẩm nhưng ĐÃ QUÁ thời điểm thu hồi quy định (bắt buộc ghi C2 & báo SM)</option>
+                                    </select>
+                                </div>
+                                <div style="margin-bottom: 8px;">
+                                    <div style="font-size: 11px; font-weight: 700; color: #0080FF;">Ca 2:</div>
+                                    <div class="filter-row">
+                                        <input type="text" id="c1-ca2-time" class="filter-input" value="14:30" style="width:70px;">
+                                        <input type="text" id="c1-ca2-user" class="filter-input" value="Lê Thị B" style="flex:1;">
+                                    </div>
+                                    <select id="c1-ca2-choice" class="filter-select" style="margin-top:4px;" onchange="syncLogbookToPortal()">
+                                        <option value="1">☐ Không phát hiện hàng hư hỏng, hết hạn hoặc không phù hợp</option>
+                                        <option value="2" selected>☐ Có sản phẩm đến hạn — đã thu hồi và xử lý đúng thời gian quy định</option>
+                                        <option value="3">☐ Có sản phẩm nhưng ĐÃ QUÁ thời điểm thu hồi quy định (bắt buộc ghi C2 & báo SM)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <div style="font-size: 11px; font-weight: 700; color: #0080FF;">Ca 3:</div>
+                                    <div class="filter-row">
+                                        <input type="text" id="c1-ca3-time" class="filter-input" value="22:35" style="width:70px;">
+                                        <input type="text" id="c1-ca3-user" class="filter-input" value="Trần Văn C" style="flex:1;">
+                                    </div>
+                                    <select id="c1-ca3-choice" class="filter-select" style="margin-top:4px;" onchange="syncLogbookToPortal()">
+                                        <option value="1" selected>☐ Không phát hiện hàng hư hỏng, hết hạn hoặc không phù hợp</option>
+                                        <option value="2">☐ Có sản phẩm đến hạn — đã thu hồi và xử lý đúng thời gian quy định</option>
+                                        <option value="3">☐ Có sản phẩm nhưng ĐÃ QUÁ thời điểm thu hồi quy định (bắt buộc ghi C2 & báo SM)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="font-size: 11px; font-weight: 800; margin-bottom: 6px; color: #92400E;">▸ C2 — HÀNG HỦY THỰC TẾ PHÁT SINH TRONG NGÀY</div>
+                            <button class="vswitch-btn" style="width: 100%; justify-content: center; background: #0080FF; margin-bottom: 10px;" onclick="addDisposalRow()">
+                                📸 Quét Mã Vạch Barcode SKU Hủy Hàng
+                            </button>
+                            <table class="log-table">
+                                <thead>
+                                    <tr>
+                                        <th>Giờ</th>
+                                        <th>Ca</th>
+                                        <th>SKU</th>
+                                        <th>Tên SP</th>
+                                        <th>SL</th>
+                                        <th>Lý do hủy</th>
+                                        <th>Số lệnh</th>
+                                        <th>SM ĐC</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="log-c-body"></tbody>
+                            </table>
+                        </div>
+
+                        <!-- TAB D -->
+                        <div id="log-tab-d" style="display: none;">
+                            <div style="font-size: 12px; font-weight: 800; margin-bottom: 6px; color: var(--gs25-green);">BÀN GIAO CA D (KÝ ĐỦ 2 BÊN MỚI TÍNH LÀ ĐÃ BÀN GIAO)</div>
+                            <div class="filter-box" style="margin-bottom: 10px; font-size: 11px;">
+                                <div style="font-weight: 800; color: #0080FF; margin-bottom: 6px;">Bàn giao: Ca 3 → Ca 1 (Giờ: 05:45)</div>
+                                <div style="margin-bottom: 4px;">
+                                    <label class="form-label-portal">Thiết bị đang chờ sửa (Số phiếu I&C):</label>
+                                    <input type="text" id="d-thietBi" class="filter-input" value="INC-20260812-VN0102-001" onchange="syncLogbookToPortal()">
+                                </div>
+                                <div style="margin-bottom: 4px;">
+                                    <label class="form-label-portal">Hàng chờ hủy:</label>
+                                    <input type="text" id="d-hangHuy" class="filter-input" value="2 bánh bao thịt cút" onchange="syncLogbookToPortal()">
+                                </div>
+                                <div style="margin-bottom: 4px;">
+                                    <label class="form-label-portal">Tiền quỹ thực tế (VND):</label>
+                                    <input type="text" id="d-tienQuy" class="filter-input" value="5,000,000 ₫" onchange="syncLogbookToPortal()">
+                                </div>
+                                <div>
+                                    <label class="form-label-portal">Ghi chú bàn giao:</label>
+                                    <input type="text" id="d-ghiChu" class="filter-input" value="Tủ đông 2 đang chờ kỹ thuật I&C đến sửa" onchange="syncLogbookToPortal()">
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 8px;">
+                                <label class="form-label-portal">✍️ Người giao ký (Ca 3 - Trần Văn C):</label>
+                                <canvas id="sig-canvas-1" class="sig-canvas"></canvas>
+                                <button style="font-size: 10px; background: transparent; border: none; color: var(--gs25-red); cursor: pointer;" onclick="clearCanvas('sig-canvas-1')">Xóa vẽ lại</button>
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <label class="form-label-portal">✍️ Người nhận ký (Ca 1 - Phạm Văn A):</label>
+                                <canvas id="sig-canvas-2" class="sig-canvas"></canvas>
+                                <button style="font-size: 10px; background: transparent; border: none; color: var(--gs25-red); cursor: pointer;" onclick="clearCanvas('sig-canvas-2')">Xóa vẽ lại</button>
+                            </div>
+                            <div class="filter-box" style="margin-top: 10px; background: rgba(0, 128, 255, 0.05); border-color: #0080FF;">
+                                <div style="font-size: 11px; font-weight: 800; color: #0080FF; margin-bottom: 6px;">SM XÁC NHẬN CROSS-CHECK:</div>
+                                <div style="font-size: 11px; margin-bottom: 4px;">
+                                    <label><input type="checkbox" id="sm-check-done" checked onchange="syncLogbookToPortal()"> CSR đã hoàn thành và điền đầy đủ</label>
+                                </div>
+                                <div style="font-size: 11px; margin-bottom: 6px;">
+                                    <label><input type="checkbox" id="sm-check-undone" onchange="syncLogbookToPortal()"> CSR CHƯA hoàn thành — nêu STT:</label>
+                                    <input type="text" id="sm-check-notes" class="filter-input" placeholder="Nhập STT công việc chưa xong..." style="margin-top:4px; padding:4px;" onchange="syncLogbookToPortal()">
+                                </div>
+                                <div>
+                                    <label class="form-label-portal">SM ký tên xác nhận:</label>
+                                    <input type="text" id="sm-sig-name" class="filter-input" value="Store Manager VN0102" onchange="syncLogbookToPortal()">
+                                </div>
+                            </div>
+                            <button class="vswitch-btn" style="width: 100%; justify-content: center; background: var(--gs25-green); color: white; margin-top: 10px;" onclick="alert('Xác nhận bàn giao ca thành công! Dữ liệu đã khóa và đồng bộ sang GS25 Internal Web Portal.')">
+                                🔒 XÁC NHẬN BÀN GIAO CA & ĐỒNG BỘ PORTAL
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="flex: 1; min-width: 340px; max-width: 520px;">
+            <h2 style="font-size: 26px; font-weight: 800; margin-bottom: 14px; letter-spacing: -0.5px; color: #0080FF;">Vận Hành eLogbook Cửa Hàng GS25</h2>
+            <p style="font-size: 14px; color: var(--gs25-muted); line-height: 1.6; margin-bottom: 24px;">
+                Hệ thống số hóa 100% quy trình kiểm tra nghiệp vụ vận hành của Nhân viên cửa hàng (CSR) và Cửa hàng trưởng (SM) tại hơn 500 cửa hàng GS25 Việt Nam.
+            </p>
+            <div class="filter-box">
+                <h3 style="font-size: 15px; font-weight: 800; margin-bottom: 12px; color: #0080FF;">Bảng Tra Cứu Quy Tắc Nghiệp Vụ:</h3>
+                <ul style="font-size: 13px; color: var(--gs25-text); padding-left: 20px; line-height: 1.8;">
+                    <li><strong>Checklist CSR (113 items):</strong> Tự động lọc theo Ca, Thứ trong tuần và Tuần trong tháng. Chọn Không đạt bắt buộc chụp ảnh & nhập ghi chú.</li>
+                    <li><strong>Checklist SM (35 items):</strong> Xếp chuẩn theo giờ 08:00 - 17:00. Đánh giá ĐẠT / KHÔNG ĐẠT. Chọn Không đạt bắt buộc nhập ghi chú & bằng chứng để lại tương ứng.</li>
+                    <li><strong>Logbook Tab A (14 Tủ lạnh):</strong> Đo số hiển thị. Tủ mát (1 đến 5°C), Tủ đông (-22 đến -18°C). Ngoài ngưỡng khởi động Timer 30 phút.</li>
+                    <li><strong>Logbook Tab B (I&C Ticket):</strong> Tự động kích hoạt tạo dòng Bảng B khi tủ hỏng. SM ký đóng phiếu khi đã đo lại đạt ngưỡng.</li>
+                    <li><strong>Logbook Tab D (Bàn giao ca):</strong> Vẽ chữ ký điện tử trực tiếp trên màn hình PDA để khóa dữ liệu ca cũ.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const rawCSR = [{"congViecPhaiLam":"Nhận bàn giao ca từ Ca 3","ca":"Ca 1","gio":"06:00","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":1,"apDungNgay":"Mọi ngày","khuVucThietBi":"Toàn cửa hàng","tieuChuanDat":"Đọc hết dòng bất thường Ca 3 đã ghi trong Logbook. Việc nào chưa xong thì ghi lại để làm tiếp trong ca. Hai bên cùng ký bảng bàn giao."},{"congViecPhaiLam":"Vệ sinh cá nhân trước khi vào quầy — đủ 6 tiêu chí","ca":"Ca 1","gio":"06:05","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":2,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter","tieuChuanDat":"(a) rửa tay theo bảng hướng dẫn; (b) xịt cồn thực phẩm khi vào counter; (c) đeo khẩu trang che kín mũi và miệng; (d) tóc cột gọn và đội nón; (e) không trang sức, không đồng hồ; (f) không móng giả, không gắn hạt, không sơn móng, móng cắt ngắn. Thiếu 1 trong 6 thì KHÔNG được vào quầy."},{"congViecPhaiLam":"Đo nhiệt độ thiết bị lần 1 trong ngày — ghi vào LOGBOOK Bảng A","ca":"Ca 1","gio":"06:10","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":3,"apDungNgay":"Mọi ngày","khuVucThietBi":"Toàn bộ 14 thiết bị lạnh trong danh mục","tieuChuanDat":"Đo đủ 14 thiết bị. CHỈ đọc số hiển thị trên thiết bị, không chọc nhiệt kế vào thức ăn. Ngưỡng: tủ mát/OSC/RIC/tủ mát kho/WIC 1–5°C; tủ đông/tủ kem −22 đến −18°C. Ngoài ngưỡng: chờ 30 phút đo lại; vẫn không đạt thì tick Không đạt, báo SM ngay và ghi vào LOGBOOK Bảng B."},{"congViecPhaiLam":"Kiểm bồn rửa tay và bồn rửa dụng cụ","ca":"Ca 1","gio":"06:25","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":4,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — khu rửa tay","tieuChuanDat":"Có ít nhất 2 bồn (1 rửa tay, 1 rửa dụng cụ), không rỉ sét, không đọng nước, không mùi. Đủ 4 thứ: xà phòng rửa tay, cồn thực phẩm, khăn giấy dùng một lần, bảng hướng dẫn rửa tay. Vách ngăn giữa bồn rửa và khu sơ chế/chế biến kín, sạch, không có đường hở sâu bên trong."},{"congViecPhaiLam":"Kiểm đèn bắt côn trùng","ca":"Ca 1","gio":"06:35","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":5,"apDungNgay":"Mọi ngày","khuVucThietBi":"Lối ra vào","tieuChuanDat":"Tất cả đèn sáng bình thường. Hộp hoặc màng bảo vệ chống bóng đèn rơi vỡ còn nguyên vẹn."},{"congViecPhaiLam":"Kiểm hệ thống đèn chiếu sáng","ca":"Ca 1","gio":"06:40","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":6,"apDungNgay":"Mọi ngày","khuVucThietBi":"Toàn cửa hàng","tieuChuanDat":"Tất cả đèn của các khu vực hoạt động bình thường, không tắt, không chớp. Đèn là LED hoặc có hộp bảo vệ chống rơi vỡ để mảnh vỡ không rơi vào thực phẩm. Liệt kê đèn cần thay để đề xuất I\u0026C."},{"congViecPhaiLam":"Kiểm sân hè, đường nội bộ và nơi tập kết chất thải","ca":"Ca 1","gio":"06:45","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":7,"apDungNgay":"Mọi ngày","khuVucThietBi":"Bên ngoài cửa hàng","tieuChuanDat":"Sân hè và đường nội bộ sạch, không ngập nước, không đọng nước. Nơi tập kết chất thải nằm hẳn ngoài khu vực cửa hàng, thùng có nắp, không tràn, không mùi."},{"congViecPhaiLam":"Kiểm hạn sử dụng và hủy sản phẩm hết hạn","ca":"Ca 1","gio":"07:00","tanSuat":"Theo ngày","uocTinhPhut":"20","stt":8,"apDungNgay":"Mọi ngày","khuVucThietBi":"Tủ OSC, FF-onsite, FF-offsite, Dessert, Bakery","tieuChuanDat":"0 sản phẩm quá hạn sử dụng trên quầy. Bao bì còn nguyên vẹn, không phồng, không rách, không có dấu hiệu hư hỏng hoặc có vật lạ như côn trùng, dị vật, kim loại. Ghi SKU và số lượng đã hủy vào LOGBOOK Bảng C và tạo lệnh Disposal."},{"congViecPhaiLam":"Kiểm tem HSD sau mở bao bì","ca":"Ca 1","gio":"07:25","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":9,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — nguyên liệu đã mở bao bì","tieuChuanDat":"Mọi nguyên liệu đã mở bao bì, nguyên liệu chiết rót và FF-onsite đang trưng bày (bánh bao, tokbokki, oden, topping) đều có nhãn in từ hệ thống ghi HSD sau mở. Không có nhãn hoặc quá hạn ghi trên nhãn thì hủy ngay."},{"congViecPhaiLam":"Kiểm thời gian trưng bày của các món FF-onsite","ca":"Ca 1","gio":"07:40","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":10,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — FF onsite","tieuChuanDat":"Tất cả các món FF onsite đang trưng bày trong khu vực counter đều có thời gian trưng bày. Nếu quá giờ thì hủy ngay, không hâm lại, không bán tiếp, không đánh giá bằng cảm quan."},{"congViecPhaiLam":"Kiểm nhiễm chéo và cách trưng bày","ca":"Ca 1","gio":"07:50","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":11,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter và khu trưng bày","tieuChuanDat":"Đủ 5 điều: (1) nguyên liệu sống và FF chín tách riêng hoặc có vách ngăn; (2) thực phẩm và phi thực phẩm tách riêng hoặc có vách ngăn; (3) hộp chứa và bao bì thực phẩm úp xuống; (4) sản phẩm không đóng gói kín thì đựng trong hộp nhựa, có nắp đậy kín, túi zip có cover; (5) không bảo quản nước đá chung với RM, vật dụng cá nhân, sản phẩm khác"},{"congViecPhaiLam":"Kiểm cách kê hàng ở CẢ BA khu vực","ca":"Ca 1","gio":"08:20","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":12,"apDungNgay":"Mọi ngày","khuVucThietBi":"Kho + khu trưng bày + counter","tieuChuanDat":"Không có sản phẩm, nguyên liệu, bao bì, thùng carton hoặc vật chứa nào đặt trực tiếp trên sàn — phải nâng lên khỏi sàn bằng kệ, tủ, pallet hoặc xe kéo. Không đặt sát tường. Cách trần tối thiểu 50cm. Hạn chế tối đa thùng carton trong kho và trong cửa hàng."},{"congViecPhaiLam":"Kiểm khu HÀNG CHỜ XỬ LÝ","ca":"Ca 1","gio":"08:40","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":13,"apDungNgay":"Mọi ngày","khuVucThietBi":"Kho","tieuChuanDat":"Có khu riêng biệt, dán nhãn nhận diện \u0027HÀNG CHỜ XỬ LÝ\u0027, tách khỏi khu trưng bày và khu lưu trữ hàng bán. Không lẫn hàng còn bán được."},{"congViecPhaiLam":"Ghi nhận côn trùng và động vật gây hại","ca":"Ca 1","gio":"08:50","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":14,"apDungNgay":"Mọi ngày","khuVucThietBi":"Toàn cửa hàng","tieuChuanDat":"0 lần phát hiện chuột, gián, kiến, ruồi, phân chuột, vết gặm hoặc tổ côn trùng. Phát hiện thì ghi vào LOGBOOK Bảng B (giờ, vị trí, loại) và báo SM ngay."},{"congViecPhaiLam":"Kiểm nhãn tiếng Việt và tài liệu hướng dẫn","ca":"Ca 1","gio":"09:00","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":15,"apDungNgay":"Mọi ngày","khuVucThietBi":"Khu trưng bày và counter","tieuChuanDat":"Spot-check 5 sản phẩm bất kỳ: có tem nhãn tiếng Việt ghi HSD và thông tin sản phẩm. Tại counter có đầy đủ tài liệu hướng dẫn chuẩn bị và bảo quản thực phẩm, đúng phiên bản hiện hành."},{"congViecPhaiLam":"Vệ sinh sâu tủ đông trưng bày hàng đông lạnh","ca":"Ca 1","gio":"09:00","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":16,"apDungNgay":"Thứ 2","khuVucThietBi":"Tủ đông trưng bày — ngành Frozen Food","tieuChuanDat":"Vệ sinh bề mặt, kẽ hở, gầm, bên trong và rãnh tủ. Không đóng tuyết dày, không rác dưới gầm. Xếp hàng lại đúng planogram."},{"congViecPhaiLam":"Vệ sinh sâu tủ mát nước giải khát","ca":"Ca 1","gio":"09:00","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":17,"apDungNgay":"Thứ 3","khuVucThietBi":"Tủ mát trưng bày — ngành Beverage","tieuChuanDat":"Vệ sinh bề mặt, kẽ hở, gầm, gioăng cửa. Gioăng không mốc, đáy tủ không đọng nước."},{"congViecPhaiLam":"Kiểm hạn sử dụng định kỳ khu kho và kệ hàng","ca":"Ca 1","gio":"09:00","tanSuat":"Theo tuần","uocTinhPhut":"40","stt":18,"apDungNgay":"Thứ 4","khuVucThietBi":"Kho và kệ hàng","tieuChuanDat":"0 sản phẩm quá hạn trong kho và trên kệ. Ghi rõ số sản phẩm và SKU đã hủy vào LOGBOOK Bảng C, tạo lệnh Disposal."},{"congViecPhaiLam":"Vệ sinh kệ hàng tạp hóa và thực phẩm tươi","ca":"Ca 1","gio":"09:00","tanSuat":"Theo tuần","uocTinhPhut":"30","stt":19,"apDungNgay":"Thứ 5","khuVucThietBi":"Kệ Grocery và Fresh Grocery","tieuChuanDat":"Vệ sinh mặt kệ, mặt trên, gầm kệ. Không bụi, không côn trùng, không rơi vãi, không sản phẩm hỏng còn trên kệ."},{"congViecPhaiLam":"Vệ sinh kệ đồ ăn vặt và bánh quy","ca":"Ca 1","gio":"09:00","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":20,"apDungNgay":"Thứ 6","khuVucThietBi":"Kệ Snacks và Biscuit \u0026 Cookies","tieuChuanDat":"Vệ sinh mặt kệ, mặt trên, gầm kệ. Không vụn bánh, không kiến."},{"congViecPhaiLam":"Vệ sinh toàn bộ toilet trong tuần","ca":"Ca 1","gio":"09:00","tanSuat":"Theo tuần","uocTinhPhut":"30","stt":21,"apDungNgay":"Thứ 7","khuVucThietBi":"Toilet","tieuChuanDat":"Dùng dụng cụ riêng của toilet, không dùng chung với khu vực khác. Vệ sinh bồn cầu, bồn rửa, gương, sàn, tường và phía sau bồn cầu. Không mùi hôi, gương trong. Đủ 5 trang bị: bồn rửa tay, xà phòng, nước sạch, bảng hướng dẫn rửa tay, bảng \u0027Rửa tay sau khi đi vệ sinh\u0027. Cửa đóng kín được."},{"congViecPhaiLam":"Kiểm hạn sử dụng định kỳ khu vực counter","ca":"Ca 1","gio":"09:00","tanSuat":"Theo tuần","uocTinhPhut":"30","stt":22,"apDungNgay":"Chủ nhật","khuVucThietBi":"Counter","tieuChuanDat":"0 sản phẩm quá hạn tại counter, kể cả hạn sau khi mở ghi trên nhãn. Ghi rõ số sản phẩm và SKU đã hủy."},{"congViecPhaiLam":"Vệ sinh sâu tủ kem trưng bày","ca":"Ca 1","gio":"09:30","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":23,"apDungNgay":"Thứ 2","khuVucThietBi":"Tủ kem — ngành Ice Cream","tieuChuanDat":"Vệ sinh bề mặt, kẽ hở, gầm, bên trong và rãnh tủ. Không kem chảy dính đáy tủ."},{"congViecPhaiLam":"Vệ sinh sâu tủ mát sữa","ca":"Ca 1","gio":"09:30","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":24,"apDungNgay":"Thứ 3","khuVucThietBi":"Tủ mát trưng bày — ngành Milk","tieuChuanDat":"Vệ sinh bề mặt, kẽ hở, gầm, gioăng cửa. Không vết sữa đổ khô bám kệ."},{"congViecPhaiLam":"Vệ sinh kệ kẹo","ca":"Ca 1","gio":"09:40","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":25,"apDungNgay":"Thứ 6","khuVucThietBi":"Kệ Candy","tieuChuanDat":"Vệ sinh mặt kệ, mặt trên, gầm kệ. Không kiến, không sản phẩm chảy nước dính kệ."},{"congViecPhaiLam":"Vệ sinh kệ đồ uống có cồn — Bia","ca":"Ca 1","gio":"09:45","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":26,"apDungNgay":"Thứ 4","khuVucThietBi":"Kệ Bia (Beer)","tieuChuanDat":"Vệ sinh bề mặt, mặt trên, gầm kệ. Không đọng nước, không mảnh vỡ chai."},{"congViecPhaiLam":"Vệ sinh khu bánh mì và bánh nướng","ca":"Ca 1","gio":"09:45","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":27,"apDungNgay":"Thứ 5","khuVucThietBi":"Khu Bakery","tieuChuanDat":"Vệ sinh mặt kệ và khay đựng. Không vụn bánh, không kiến, không mùi ẩm."},{"congViecPhaiLam":"Kiểm hàng khi nhận (RCV)","ca":"Ca 1","gio":"Khi có xe giao","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":28,"apDungNgay":"Mọi ngày","khuVucThietBi":"Khu nhận hàng","tieuChuanDat":"Đủ 4 điều: (1) hàng mát đo được 5–10°C, hàng đông đo được −18°C trở xuống; (2) còn hạn sử dụng và còn tối thiểu 2/3 hạn; (3) bao bì nguyên vẹn, không rách, không phồng, không móp ướt; (4) xếp theo FIFO/FEFO, hàng cũ ở trước và ở trên. Sai 1 trong 4 thì TỪ CHỐI NHẬN, ghi vào LOGBOOK Bảng B và báo SM ngay."},{"congViecPhaiLam":"Kiểm trần nhà và phần trên cao","ca":"Ca 1","gio":"10:00","tanSuat":"Theo tháng – Tuần 1","uocTinhPhut":"20","stt":29,"apDungNgay":"Thứ 2","khuVucThietBi":"Trần nhà","tieuChuanDat":"Không thấm dột, không ẩm mốc, không rạn nứt, không đọng nước, không có khoảng trống thông ra không gian bên ngoài. Chụp ảnh 4 góc trần. 0 vết ố, mốc hoặc nứt lớn hơn 5cm."},{"congViecPhaiLam":"Kiểm tường","ca":"Ca 1","gio":"10:00","tanSuat":"Theo tháng – Tuần 1","uocTinhPhut":"20","stt":30,"apDungNgay":"Thứ 3","khuVucThietBi":"Tường","tieuChuanDat":"Tường phẳng, sáng màu, không thấm nước, không rạn nứt, không ẩm mốc, không có khoảng hở. Chụp ảnh 4 mặt tường chính. 0 vết mốc hoặc nứt lớn hơn 5cm."},{"congViecPhaiLam":"Tổng kiểm dụng cụ và khăn lau","ca":"Ca 1","gio":"10:00","tanSuat":"Theo tháng – Tuần 4","uocTinhPhut":"25","stt":31,"apDungNgay":"Thứ 4","khuVucThietBi":"Toàn cửa hàng — dụng cụ","tieuChuanDat":"Dụng cụ kim loại không rỉ sét, không đứt gãy, không đầu nhọn sắc bén. Đủ cây lau nhà, chổi, bàn chải, khăn lau và còn dùng được; khăn rách hoặc mục thì thay. Dụng cụ của toilet để riêng."},{"congViecPhaiLam":"Kiểm tra độ chính xác của nhiệt kế bằng ly nước đá tan","ca":"Ca 1","gio":"10:00","tanSuat":"Theo tháng – Tuần 3","uocTinhPhut":"20","stt":32,"apDungNgay":"Thứ 6","khuVucThietBi":"Nhiệt kế hồng ngoại/nhiệt kế đo tâm/nhiệt kế đầu dò","tieuChuanDat":"Cho nước đá và nước sạch vào ly, khuấy đều và chờ khoảng 30 giây để nhiệt độ ổn định, hướng nhiệt kế vào bề mặt hỗn hợp nước đá. Phải đọc 0°C, sai số nhiều nhất 1°C. Lệch quá 1°C thì ngừng dùng ngay, dán nhãn KHÔNG SỬ DỤNG và lập phiếu I\u0026C."},{"congViecPhaiLam":"Kiểm sàn nhà","ca":"Ca 1","gio":"10:25","tanSuat":"Theo tháng – Tuần 2","uocTinhPhut":"20","stt":33,"apDungNgay":"Thứ 2","khuVucThietBi":"Sàn nhà","tieuChuanDat":"Nền phẳng, nhẵn, không nứt, không bể, không vỡ. Nền nhà không thấm ngập nước. Chụp ảnh 4 góc sàn. 0 vết nứt lớn hơn 5cm."},{"congViecPhaiLam":"Kiểm đủ trang thiết bị và tủ chứa nguyên liệu","ca":"Ca 1","gio":"12:00","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":34,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter","tieuChuanDat":"Đủ tủ chứa và quầy kệ để tách biệt khu lưu trữ nguyên liệu với khu trưng bày/lưu trữ thành phẩm. Tủ lưu trữ nguyên liệu có đủ tủ đông, tủ lạnh, tủ nhiệt độ thường, máy làm đá; không rỉ sét, không dơ. Có thiết bị rã đông (lò vi sóng) hoạt động bình thường."},{"congViecPhaiLam":"Kiểm đủ dụng cụ vệ sinh","ca":"Ca 1","gio":"12:20","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":35,"apDungNgay":"Mọi ngày","khuVucThietBi":"Toàn cửa hàng","tieuChuanDat":"Đủ cây lau nhà, chổi, bàn chải, khăn lau và trong tình trạng sử dụng tốt. Khăn lau và dụng cụ của toilet để riêng, không dùng chung với khu vực chế biến và khu bán hàng. Khăn rách hoặc mục thì thay."},{"congViecPhaiLam":"Vệ sinh và kiểm dụng cụ, thiết bị nấu tok","ca":"Ca 1","gio":"13:20","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":36,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — dụng cụ và bếp tok","tieuChuanDat":"Muỗng, đũa, kẹp, dao, thớt không dính thức ăn, không rỉ sét, khô ráo, không đứt gãy, không có đầu nhọn sắc bén, còn dùng tốt. Mặt bếp từ và chảo sạch, không cặn."},{"congViecPhaiLam":"Vệ sinh máy pha cà phê và máy Milo/Nestle","ca":"Ca 1","gio":"13:35","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":37,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — máy đồ uống","tieuChuanDat":"Vòi pha, vòi rót và khay hứng không cặn cà phê, cặn sữa, cặn bột, không có tạp chất. Mặt ngoài máy khô, không dính. Không mùi chua."},{"congViecPhaiLam":"Kiểm thùng rác counter, gầm counter và hộc tủ counter","ca":"Ca 1","gio":"13:45","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":38,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter","tieuChuanDat":"Thùng rác: có nắp đậy, có túi nilon, cố định đúng vị trí, không đặt sát tủ/quầy/kệ chứa thực phẩm, thùng nguyên vẹn. Gầm counter: không rác, không nước đọng, không bao bì hoặc hàng hóa che khuất, không côn trùng. Hộc tủ: không chứa đồ cá nhân, túi nilon, giấy tờ, chai lọ hoặc vật dễ cháy; không che chắn ổ cắm và thiết bị điện; chỉ đựng dụng cụ vận hành, sắp xếp gọn."},{"congViecPhaiLam":"Bàn giao cho Ca 2","ca":"Ca 1","gio":"13:55","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":39,"apDungNgay":"Mọi ngày","khuVucThietBi":"Toàn cửa hàng","tieuChuanDat":"Ghi vào LOGBOOK Bảng D: bất thường chưa xử lý xong, thiết bị đang chờ sửa, hàng chờ hủy, tiền quỹ. Hai bên cùng ký."},{"congViecPhaiLam":"Nhận bàn giao ca từ Ca 1","ca":"Ca 2","gio":"14:00","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":40,"apDungNgay":"Mọi ngày","khuVucThietBi":"Toàn cửa hàng","tieuChuanDat":"Đọc hết dòng bất thường Ca 1 đã ghi. Việc chưa xong thì ghi lại để làm tiếp. Hai bên cùng ký."},{"congViecPhaiLam":"Vệ sinh cá nhân trước khi vào quầy — đủ 6 tiêu chí","ca":"Ca 2","gio":"14:05","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":41,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter","tieuChuanDat":"(a) rửa tay theo bảng hướng dẫn; (b) xịt cồn thực phẩm; (c) khẩu trang che kín mũi miệng; (d) tóc cột gọn và đội nón; (e) không trang sức, không đồng hồ; (f) không móng giả, không gắn hạt, không sơn móng, móng cắt ngắn. Thiếu 1 trong 6 thì KHÔNG vào quầy."},{"congViecPhaiLam":"Đo nhiệt độ thiết bị lần 2 trong ngày — ghi vào LOGBOOK Bảng A","ca":"Ca 2","gio":"14:10","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":42,"apDungNgay":"Mọi ngày","khuVucThietBi":"Toàn bộ 14 thiết bị lạnh trong danh mục","tieuChuanDat":"Đo đủ 14 thiết bị, chỉ đọc số hiển thị. Ngoài ngưỡng: chờ 30 phút đo lại, vẫn không đạt thì tick Không đạt, báo SM và ghi LOGBOOK Bảng B."},{"congViecPhaiLam":"Kiểm hạn sử dụng lần 2 và hủy sản phẩm hết hạn","ca":"Ca 2","gio":"14:25","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":43,"apDungNgay":"Mọi ngày","khuVucThietBi":"Tủ OSC, FF-onsite, FF-offsite, Dessert, Bakery","tieuChuanDat":"0 sản phẩm quá hạn trên quầy. Ghi SKU và số lượng hủy vào LOGBOOK Bảng C."},{"congViecPhaiLam":"Kiểm tem HSD sau mở bao bì lần 2","ca":"Ca 2","gio":"14:45","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":44,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — nguyên liệu đã mở và món nóng trưng bày","tieuChuanDat":"Mọi nguyên liệu đã mở, nguyên liệu chiết rót và FF-onsite trưng bày có nhãn in từ hệ thống còn hạn. Không nhãn hoặc quá hạn thì hủy ngay."},{"congViecPhaiLam":"Kiểm thời gian trưng bày của các món FF-onsite","ca":"Ca 2","gio":"15:00","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":45,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — FF onsite","tieuChuanDat":"Tất cả các món FF onsite đang trưng bày trong khu vực counter đều có thời gian trưng bày. Nếu quá giờ thì hủy ngay, không hâm lại, không bán tiếp, không đánh giá bằng cảm quan."},{"congViecPhaiLam":"Vệ sinh toàn bộ kệ hàng khu bán","ca":"Ca 2","gio":"15:30","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":46,"apDungNgay":"Mọi ngày","khuVucThietBi":"Khu bán hàng","tieuChuanDat":"Bề mặt kệ, mặt trên và mặt dưới không bụi. Không có sản phẩm rơi vãi."},{"congViecPhaiLam":"Vệ sinh sâu tủ trưng bày món tráng miệng","ca":"Ca 2","gio":"15:30","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":47,"apDungNgay":"Thứ 2","khuVucThietBi":"Tủ trưng bày Dessert","tieuChuanDat":"Vệ sinh bề mặt, kẽ hở, gầm, gioăng cửa. Gioăng không mốc, cửa đóng hít chặt."},{"congViecPhaiLam":"Vệ sinh sâu tủ mát thực phẩm mát","ca":"Ca 2","gio":"15:30","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":48,"apDungNgay":"Thứ 3","khuVucThietBi":"Tủ mát trưng bày — ngành Chilled Food","tieuChuanDat":"Vệ sinh bề mặt, kẽ hở, gầm, gioăng cửa. Đáy tủ không đọng nước."},{"congViecPhaiLam":"Vệ sinh kệ rượu vang và rượu mạnh","ca":"Ca 2","gio":"15:30","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":49,"apDungNgay":"Thứ 4","khuVucThietBi":"Kệ Wine \u0026 Liquor","tieuChuanDat":"Vệ sinh kệ. Chai lọ nguyên vẹn, không nứt vỡ, không rò rỉ, nhãn không bong."},{"congViecPhaiLam":"Vệ sinh sâu kệ hàng kho và kiểm cách kê hàng","ca":"Ca 2","gio":"15:30","tanSuat":"Theo tuần","uocTinhPhut":"30","stt":50,"apDungNgay":"Thứ 5","khuVucThietBi":"Kho — kệ hàng và sàn","tieuChuanDat":"Vệ sinh bề mặt, kẽ hở, gầm và đường viền kệ. Không bụi, không côn trùng. Sản phẩm không đặt trực tiếp trên sàn, không sát tường, cách trần tối thiểu 50cm. Sàn sạch, không nước đọng."},{"congViecPhaiLam":"Vệ sinh kệ phi thực phẩm","ca":"Ca 2","gio":"15:30","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":51,"apDungNgay":"Thứ 7","khuVucThietBi":"Kệ Health \u0026 Beauty và Living Goods","tieuChuanDat":"Vệ sinh mặt kệ, mặt trên, gầm kệ. Chai lọ nguyên vẹn, không rò rỉ. Bao bì sản phẩm nguyên vẹn, không bụi."},{"congViecPhaiLam":"Vệ sinh khu vực OSC và tủ trưng bày offsite","ca":"Ca 2","gio":"15:30","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":52,"apDungNgay":"Chủ nhật","khuVucThietBi":"Khu FF Offsite (OSC)","tieuChuanDat":"Vệ sinh bề mặt, kẽ hở, gioăng cửa tủ trưng bày offsite. Gioăng kín, đáy tủ không đọng nước."},{"congViecPhaiLam":"Vệ sinh bàn khách ngồi và sàn nhà","ca":"Ca 2","gio":"16:00","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":53,"apDungNgay":"Mọi ngày","khuVucThietBi":"Khu bán hàng","tieuChuanDat":"Không rác, không dính thức ăn hoặc đồ uống. Sàn khô, không nước đọng."},{"congViecPhaiLam":"Vệ sinh sâu vòi rót, đường ống, khay hứng","ca":"Ca 2","gio":"16:00","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":54,"apDungNgay":"Thứ 2","khuVucThietBi":"Counter — máy Milo/Nestle và máy nước nóng","tieuChuanDat":"Kiểm tra bên trong thiết bị. Vòi rót, khay hứng và đường ống không cặn bột. Máy nước nóng: nước ra trong, không cặn vôi."},{"congViecPhaiLam":"Vệ sinh sâu tủ mát đồ uống pha chế","ca":"Ca 2","gio":"16:00","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":55,"apDungNgay":"Thứ 3","khuVucThietBi":"Tủ mát trưng bày — ngành FF Beverage","tieuChuanDat":"Vệ sinh bề mặt, kẽ hở, gầm, gioăng cửa."},{"congViecPhaiLam":"Vệ sinh sâu: xả cặn vôi kệ nước","ca":"Ca 2","gio":"16:00","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":56,"apDungNgay":"Thứ 4","khuVucThietBi":"Counter — tủ hấp bánh bao","tieuChuanDat":"Xả cặn vôi kệ nước, vệ sinh bên trong. Không cặn vôi, kính trong, không rỉ sét."},{"congViecPhaiLam":"Kiểm dụng cụ kim loại và dụng cụ vệ sinh","ca":"Ca 2","gio":"16:00","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":57,"apDungNgay":"Thứ 6","khuVucThietBi":"Toàn cửa hàng — dụng cụ","tieuChuanDat":"Dụng cụ kim loại không rỉ sét, không đứt gãy, không có đầu nhọn sắc bén, còn dùng tốt. Đủ cây lau nhà, chổi, bàn chải, khăn lau và trong tình trạng sử dụng tốt; dụng cụ của toilet để riêng."},{"congViecPhaiLam":"Vệ sinh tủ và kệ thuốc lá","ca":"Ca 2","gio":"16:00","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":58,"apDungNgay":"Thứ 7","khuVucThietBi":"Tủ và kệ Cigarettes","tieuChuanDat":"Vệ sinh mặt kệ và bên trong tủ. Bao bì nguyên vẹn, không ẩm."},{"congViecPhaiLam":"Dọn gọn nguyên vật liệu và hàng store use tại counter","ca":"Ca 2","gio":"16:00","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":59,"apDungNgay":"Chủ nhật","khuVucThietBi":"Counter — FoodService","tieuChuanDat":"Nguyên vật liệu và hàng store use sắp xếp lại gọn gàng đúng vị trí quy định, không chồng lấn khu chế biến."},{"congViecPhaiLam":"Vệ sinh vách kính và cửa kính ra vào","ca":"Ca 2","gio":"16:15","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":60,"apDungNgay":"Mọi ngày","khuVucThietBi":"Khu bán hàng","tieuChuanDat":"Kính trong, không dấu tay, không mạng nhện."},{"congViecPhaiLam":"Vệ sinh sâu tủ đông và tủ mát kho","ca":"Ca 2","gio":"16:15","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":61,"apDungNgay":"Thứ 5","khuVucThietBi":"Kho — tủ đông kho và tủ mát kho","tieuChuanDat":"Vệ sinh trong, ngoài và gioăng cửa. Gioăng kín, cửa đóng hít chặt."},{"congViecPhaiLam":"Bổ sung vật tư bồn rửa tay","ca":"Ca 2","gio":"17:00","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":62,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — khu rửa tay","tieuChuanDat":"Đủ 4 thứ: xà phòng rửa tay, cồn thực phẩm, khăn giấy dùng một lần, bảng hướng dẫn rửa tay. Thiếu thì bổ sung ngay trong ca."},{"congViecPhaiLam":"Kiểm toàn bộ bình chữa cháy","ca":"Ca 2","gio":"17:00","tanSuat":"Theo tháng – Tuần 1","uocTinhPhut":"20","stt":63,"apDungNgay":"Thứ 5","khuVucThietBi":"Bình chữa cháy (toàn bộ)","tieuChuanDat":"Hạn sử dụng còn hơn 3 tháng. Kẹp chì nguyên vẹn. Kim đồng hồ áp suất nằm trong vạch xanh. Đúng vị trí, không bị che chắn. Chụp ảnh đồng hồ từng bình."},{"congViecPhaiLam":"Vệ sinh sâu khu tập kết rác","ca":"Ca 2","gio":"17:00","tanSuat":"Theo tháng – Tuần 4","uocTinhPhut":"25","stt":64,"apDungNgay":"Thứ 5","khuVucThietBi":"Khu tập kết rác ngoài cửa hàng","tieuChuanDat":"Xịt rửa và khử trùng toàn bộ nền và thùng. Không mùi hôi, không nước đọng, tất cả thùng có nắp. Khu tập kết nằm hẳn ngoài khu vực cửa hàng."},{"congViecPhaiLam":"Kiểm bố trí toilet, nhà rác và bồn giặt dụng cụ","ca":"Ca 2","gio":"17:00","tanSuat":"Theo tháng – Tuần 2","uocTinhPhut":"20","stt":65,"apDungNgay":"Thứ 6","khuVucThietBi":"Bố trí mặt bằng","tieuChuanDat":"Toilet và nhà rác không có hướng mở cửa đối diện khu chuẩn bị, chế biến, quầy counter và cửa không mở thông vào kho. Nơi tập kết chất thải thiết kế ngoài khu vực cửa hàng. Cửa hàng không có nhà vệ sinh riêng thì phải có bồn giặt dụng cụ vệ sinh."},{"congViecPhaiLam":"Rà soát các lần ghi nhận động vật gây hại trong tháng","ca":"Ca 2","gio":"17:15","tanSuat":"Theo tháng – Tuần 4","uocTinhPhut":"15","stt":66,"apDungNgay":"Thứ 7","khuVucThietBi":"Ghi nhận động vật gây hại","tieuChuanDat":"Đếm số dòng ghi nhận động vật gây hại trong LOGBOOK Bảng B của cả tháng. Không quá 2 lần trong tháng. Nhiều hơn 2 lần thì báo SM để yêu cầu nhà cung cấp diệt bổ sung."},{"congViecPhaiLam":"Vệ sinh sàn kho, lối đi và kiểm cách kê hàng","ca":"Ca 2","gio":"17:30","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":67,"apDungNgay":"Mọi ngày","khuVucThietBi":"Kho","tieuChuanDat":"Sàn kho sạch, không nước đọng, lối đi thông không bị hàng chắn. Không sản phẩm nào đặt trực tiếp trên sàn, không sát tường, cách trần tối thiểu 50cm."},{"congViecPhaiLam":"Kiểm khoảng cách với nguồn gây ô nhiễm","ca":"Ca 2","gio":"17:30","tanSuat":"Theo tháng – Tuần 3","uocTinhPhut":"15","stt":68,"apDungNgay":"Thứ 6","khuVucThietBi":"Vị trí cửa hàng","tieuChuanDat":"Khu vực kinh doanh và lưu trữ sản phẩm bố trí cách biệt với nguồn gây ô nhiễm: không gần và không thuộc bãi rác, khu giết mổ gia súc gia cầm, khu vực sản xuất hóa chất. Thay đổi bất thường của khu vực xung quanh thì báo OFC."},{"congViecPhaiLam":"Kiểm thời gian trưng bày của các món FF-onsite","ca":"Ca 2","gio":"18:00","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":69,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — FF onsite","tieuChuanDat":"Tất cả các món FF onsite đang trưng bày trong khu vực counter đều có thời gian trưng bày. Nếu quá giờ thì hủy ngay, không hâm lại, không bán tiếp, không đánh giá bằng cảm quan."},{"congViecPhaiLam":"Kiểm tủ Warm và nồi lẩu oden trong ca","ca":"Ca 2","gio":"19:00","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":70,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — Tủ Warm \u0026 nồi lẩu onden","tieuChuanDat":"Khay giữ nóng và bên ngoài tủ không dầu mỡ. Đèn báo hoạt động. Nồi và mặt bếp không cặn nước dùng, không mùi hôi. Nước dùng còn trong hạn sử dụng."},{"congViecPhaiLam":"Đổ rác và thay túi lót toàn bộ thùng rác","ca":"Ca 2","gio":"20:00","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":71,"apDungNgay":"Mọi ngày","khuVucThietBi":"Toàn cửa hàng","tieuChuanDat":"100% thùng rác có nắp và túi nilon, không tràn quá 2/3, không đặt sát tủ/quầy/kệ chứa thực phẩm. Rác đưa ra khỏi khu vực bán hàng."},{"congViecPhaiLam":"Vệ sinh tủ hấp bánh bao","ca":"Ca 2","gio":"20:30","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":72,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — tủ hấp bánh bao","tieuChuanDat":"Kệ nước đã xả. Kính trong, không đóng cặn vôi. Bên trong không mùi."},{"congViecPhaiLam":"Vệ sinh lò vi sóng và lò nướng","ca":"Ca 2","gio":"20:45","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":73,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — lò vi sóng và lò nướng","tieuChuanDat":"Bên trong lò và đĩa xoay không dầu mỡ, không mảnh vụn thức ăn. Khay đã lấy ra vệ sinh. Bên ngoài lò không dầu mỡ, không mùi khét."},{"congViecPhaiLam":"Vệ sinh thiết bị chiên và kiểm dầu","ca":"Ca 2","gio":"21:10","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":74,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — thiết bị chiên","tieuChuanDat":"Nồi trong và ngoài không dầu mỡ đóng. Bể tích mỡ đã kiểm, có nắp đậy, không tràn. Dầu trong, không đen, không khét."},{"congViecPhaiLam":"Vệ sinh cuối ca máy pha cà phê, máy Milo/Nestle, máy nước nóng","ca":"Ca 2","gio":"21:30","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":75,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — máy đồ uống","tieuChuanDat":"Vòi và khay hứng không cặn. Mặt ngoài máy khô. Không mùi chua."},{"congViecPhaiLam":"Vệ sinh sâu nồi chiên không dầu","ca":"Ca 2","gio":"21:30","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":76,"apDungNgay":"Thứ 6","khuVucThietBi":"Counter — nồi chiên không dầu","tieuChuanDat":"Tháo khay, vệ sinh trong và ngoài. Không dầu mỡ."},{"congViecPhaiLam":"Vệ sinh bồn rửa, dụng cụ và mặt bếp cuối ca","ca":"Ca 2","gio":"21:45","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":77,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter","tieuChuanDat":"Kiểm bên trong thiết bị, bồn không rỉ sét, không đọng nước, không mùi. Dụng cụ rửa sạch, khô ráo, úp xuống. Mặt bếp từ và chảo không cặn."},{"congViecPhaiLam":"Bàn giao cho Ca 3","ca":"Ca 2","gio":"21:55","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":78,"apDungNgay":"Mọi ngày","khuVucThietBi":"Toàn cửa hàng","tieuChuanDat":"Ghi vào LOGBOOK Bảng D: bất thường chưa xong, thiết bị chờ sửa, hàng chờ hủy, tiền quỹ. Hai bên cùng ký."},{"congViecPhaiLam":"Nhận bàn giao ca từ Ca 2","ca":"Ca 3","gio":"22:00","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":79,"apDungNgay":"Mọi ngày","khuVucThietBi":"Toàn cửa hàng","tieuChuanDat":"Đọc hết dòng bất thường Ca 2 đã ghi. Việc chưa xong thì ghi lại để làm tiếp. Hai bên cùng ký."},{"congViecPhaiLam":"Vệ sinh cá nhân trước khi vào quầy — đủ 6 tiêu chí","ca":"Ca 3","gio":"22:05","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":80,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter","tieuChuanDat":"(a) rửa tay theo bảng hướng dẫn; (b) xịt cồn thực phẩm; (c) khẩu trang che kín mũi miệng; (d) tóc cột gọn và đội nón; (e) không trang sức, không đồng hồ; (f) không móng giả, không gắn hạt, không sơn móng, móng cắt ngắn."},{"congViecPhaiLam":"Đo nhiệt độ thiết bị lần 3 trong ngày — ghi vào LOGBOOK Bảng A","ca":"Ca 3","gio":"22:10","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":81,"apDungNgay":"Mọi ngày","khuVucThietBi":"Toàn bộ 14 thiết bị lạnh trong danh mục","tieuChuanDat":"Đo đủ 14 thiết bị, chỉ đọc số hiển thị. Ngoài ngưỡng: chờ 30 phút đo lại, vẫn không đạt thì báo SM và ghi LOGBOOK Bảng B."},{"congViecPhaiLam":"Hủy các món FF onsite quá giờ và tắt thiết bị thiết bị điện.","ca":"Ca 3","gio":"22:30","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":82,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — Ngưng bán hàng FF onsite","tieuChuanDat":"0 có FF onsite tồn qua đêm. Toàn bộ hàng hủy ghi SKU và số lượng vào LOGBOOK Bảng C, tạo lệnh Disposal."},{"congViecPhaiLam":"Vệ sinh nồi lẩu oden, chảo tokbokki và bếp từ","ca":"Ca 3","gio":"23:00","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":83,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — nồi lẩu oden và chảo tokbokki","tieuChuanDat":"Nồi và mặt bếp không cặn nước dùng, không mùi hôi. Chảo và mặt bếp từ không cặn tương ớt, không dầu bám."},{"congViecPhaiLam":"Vệ sinh tủ Warm / giữ nóng","ca":"Ca 3","gio":"23:20","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":84,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — tủ Warm","tieuChuanDat":"Khay giữ nóng và bên ngoài tủ không dầu mỡ. Đèn báo hoạt động bình thường."},{"congViecPhaiLam":"Vệ sinh sâu: tháo vòi, ngâm cồn thực phẩm, rửa máy","ca":"Ca 3","gio":"23:30","tanSuat":"Theo tuần","uocTinhPhut":"35","stt":85,"apDungNgay":"Thứ 2","khuVucThietBi":"Counter — máy pha cà phê","tieuChuanDat":"Tháo vòi, ngâm cồn thực phẩm, rửa máy rồi lắp lại. Nước xả cuối trong, không mùi."},{"congViecPhaiLam":"Vệ sinh sâu khoang chứa đá và lưới lọc nước","ca":"Ca 3","gio":"23:30","tanSuat":"Theo tuần","uocTinhPhut":"30","stt":86,"apDungNgay":"Thứ 3","khuVucThietBi":"Counter — máy đá","tieuChuanDat":"Vệ sinh khoang chứa đá và lưới lọc nước, khử trùng rồi để khô. Đá thành phẩm trong, không mùi. Muỗng xúc đá để trong hộp riêng, không cắm vào đá."},{"congViecPhaiLam":"Vệ sinh sâu trong và ngoài lò vi sóng","ca":"Ca 3","gio":"23:30","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":87,"apDungNgay":"Thứ 4","khuVucThietBi":"Counter — lò vi sóng","tieuChuanDat":"Vệ sinh trong và ngoài lò, tháo đĩa xoay ra rửa. Không dầu mỡ, không mảnh vụn."},{"congViecPhaiLam":"Kiểm locker, khu HÀNG CHỜ XỬ LÝ và dấu vết động vật gây hại trong kho","ca":"Ca 3","gio":"23:30","tanSuat":"Theo tuần","uocTinhPhut":"15","stt":88,"apDungNgay":"Thứ 5","khuVucThietBi":"Kho — locker và khu hàng chờ xử lý","tieuChuanDat":"Có khu riêng cho đồ cá nhân nhân viên, không lẫn khu hàng hóa, sạch và gọn. Khu HÀNG CHỜ XỬ LÝ có dán nhãn, tách khỏi khu trưng bày và lưu trữ hàng bán. 0 dấu vết chuột, gián, kiến, ruồi, phân chuột, tổ côn trùng."},{"congViecPhaiLam":"Vệ sinh sâu nồi chiên có dầu","ca":"Ca 3","gio":"23:30","tanSuat":"Theo tuần","uocTinhPhut":"30","stt":89,"apDungNgay":"Thứ 6","khuVucThietBi":"Counter — nồi chiên có dầu","tieuChuanDat":"Tháo bể tích mỡ, vệ sinh trong và ngoài nồi. Không dầu mỡ đóng đáy."},{"congViecPhaiLam":"Vệ sinh sâu toàn bộ thiết bị lạnh khu counter","ca":"Ca 3","gio":"23:30","tanSuat":"Theo tuần","uocTinhPhut":"45","stt":90,"apDungNgay":"Thứ 7","khuVucThietBi":"Counter — tủ đông, tủ mát, tủ kem","tieuChuanDat":"Vệ sinh bề mặt, kẽ hở, gầm, bên trong và gioăng cửa của cả 3 loại tủ. Gioăng kín, cửa đóng hít chặt."},{"congViecPhaiLam":"Rà soát lại vệ sinh thiết bị chế biến và trưng bày FF Onsite","ca":"Ca 3","gio":"23:30","tanSuat":"Theo tuần","uocTinhPhut":"30","stt":91,"apDungNgay":"Chủ nhật","khuVucThietBi":"Counter — FF Onsite","tieuChuanDat":"Rà lại toàn bộ thiết bị chế biến và trưng bày FF Onsite đã vệ sinh trong tuần. Không sót dầu mỡ, không cặn thức ăn. Thiết bị nào chưa đạt thì làm lại ngay trong ca."},{"congViecPhaiLam":"Vệ sinh mặt kính tủ đông, tủ mát, tủ kem counter","ca":"Ca 3","gio":"23:35","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":92,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter","tieuChuanDat":"Mặt kính bên ngoài trong, không dấu tay, không dầu."},{"congViecPhaiLam":"Vệ sinh sàn khu bán hàng và chân tường","ca":"Ca 3","gio":"00:00","tanSuat":"Theo ngày","uocTinhPhut":"20","stt":93,"apDungNgay":"Mọi ngày","khuVucThietBi":"Khu bán hàng","tieuChuanDat":"Sàn sạch, lau xong phải khô, không đọng nước. Chân tường không rác kẹt."},{"congViecPhaiLam":"Vệ sinh sâu trong và ngoài lò nướng, tháo khay","ca":"Ca 3","gio":"00:00","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":94,"apDungNgay":"Thứ 4","khuVucThietBi":"Counter — lò nướng","tieuChuanDat":"Vệ sinh trong và ngoài, tháo khay ra vệ sinh riêng. Không dầu mỡ, không mùi khét."},{"congViecPhaiLam":"Vệ sinh sâu khay giữ nóng và bên trong tủ","ca":"Ca 3","gio":"00:00","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":95,"apDungNgay":"Thứ 5","khuVucThietBi":"Counter — tủ Warm / giữ nóng","tieuChuanDat":"Vệ sinh khay giữ nóng và bên trong tủ. Không dầu mỡ, không cặn."},{"congViecPhaiLam":"Vệ sinh sâu 2 bồn rửa và thông cống thoát sàn","ca":"Ca 3","gio":"00:10","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":96,"apDungNgay":"Thứ 3","khuVucThietBi":"Counter — bồn rửa và cống thoát sàn","tieuChuanDat":"Vệ sinh 2 bồn và đường thoát nước: không rỉ sét, không nhớt, không mùi. Cống thoát sàn: xả nước nóng và hóa chất thông cống, không đọng nước, không mùi."},{"congViecPhaiLam":"Hoàn tất các mục còn thiếu trong tuần và dọn tổng thể","ca":"Ca 3","gio":"00:10","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":97,"apDungNgay":"Chủ nhật","khuVucThietBi":"Toàn cửa hàng","tieuChuanDat":"Rà lại toàn bộ checklist của cả tuần, làm nốt những dòng chưa tick. Cuối ngày không còn dòng nào bỏ trống mà không có lý do ghi ở cột ghi chú."},{"congViecPhaiLam":"Vệ sinh sàn kho và lối đi","ca":"Ca 3","gio":"00:30","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":98,"apDungNgay":"Mọi ngày","khuVucThietBi":"Kho","tieuChuanDat":"Sàn kho sạch, không rác tồn, không nước đọng. Lối đi thông thoáng."},{"congViecPhaiLam":"Vệ sinh sâu nồi oden, chảo tokbokki và bếp từ","ca":"Ca 3","gio":"00:30","tanSuat":"Theo tuần","uocTinhPhut":"30","stt":99,"apDungNgay":"Thứ 5","khuVucThietBi":"Counter — nồi lẩu oden và chảo tokbokki","tieuChuanDat":"Vệ sinh nồi, bếp, kệ đựng: không cặn nước dùng, không mùi. Chảo và mặt bếp từ: không cặn tương ớt, không dầu bám."},{"congViecPhaiLam":"Xả mỡ thải và vệ sinh bể tích mỡ","ca":"Ca 3","gio":"00:35","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":100,"apDungNgay":"Thứ 6","khuVucThietBi":"Counter — bể tích mỡ","tieuChuanDat":"Xả mỡ thải đúng nơi quy định, vệ sinh bể. Bể sạch, có nắp đậy, không tràn, không mùi."},{"congViecPhaiLam":"Đưa rác ra nơi tập kết ngoài cửa hàng và xịt rửa nền","ca":"Ca 3","gio":"00:50","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":101,"apDungNgay":"Mọi ngày","khuVucThietBi":"Bên ngoài cửa hàng","tieuChuanDat":"Không còn rác tồn qua đêm bên trong cửa hàng. Nơi tập kết không mùi, nền không đọng nước."},{"congViecPhaiLam":"Kiểm thùng rác khu bán","ca":"Ca 3","gio":"00:55","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":102,"apDungNgay":"Mọi ngày","khuVucThietBi":"Khu bán hàng","tieuChuanDat":"Có nắp đậy, có túi nilon, không đặt sát tủ hoặc kệ chứa thực phẩm."},{"congViecPhaiLam":"Tổng vệ sinh khu vực khuất","ca":"Ca 3","gio":"01:30","tanSuat":"Theo tháng – Tuần 4","uocTinhPhut":"30","stt":103,"apDungNgay":"Thứ 2","khuVucThietBi":"Khu vực khuất toàn cửa hàng","tieuChuanDat":"Kéo tủ ra để lau gầm và mặt sau tủ, kệ. Vệ sinh chân tường, hố ga thoát sàn, phía sau máy đá. Không rác tồn, không mùi, không đọng nước, không dấu hiệu động vật gây hại. Chụp ảnh trước và sau tối thiểu 2 vị trí."},{"congViecPhaiLam":"Vệ sinh quạt hút khói","ca":"Ca 3","gio":"01:30","tanSuat":"Theo tháng – Tuần 1","uocTinhPhut":"30","stt":104,"apDungNgay":"Thứ 2","khuVucThietBi":"Quạt hút khói khu Counter","tieuChuanDat":"Vệ sinh sạch dầu mỡ và bụi, tháo lưới ra rửa. Quạt chạy êm, không tiếng lạ."},{"congViecPhaiLam":"Vệ sinh trên cao","ca":"Ca 3","gio":"01:30","tanSuat":"Theo tháng – Tuần 3","uocTinhPhut":"30","stt":105,"apDungNgay":"Thứ 3","khuVucThietBi":"Khu vực trên cao","tieuChuanDat":"Vệ sinh trần, hệ thống ống và máng, thân đèn, mặt trên tủ và kệ bằng cây lau cán dài. Không bụi bám dày, không mạng nhện. Chụp ảnh trước và sau tối thiểu 2 khu vực."},{"congViecPhaiLam":"Vệ sinh quạt thông gió","ca":"Ca 3","gio":"01:30","tanSuat":"Theo tháng – Tuần 2","uocTinhPhut":"25","stt":106,"apDungNgay":"Thứ 4","khuVucThietBi":"Quạt thông gió (khu bán, kho, toilet)","tieuChuanDat":"Vệ sinh lưới quạt, không bụi. Quạt chạy đều, không tiếng lạ. Quạt hút toilet hoạt động tốt."},{"congViecPhaiLam":"Kiểm hạn sử dụng và sắp xếp FIFO/FEFO","ca":"Ca 3","gio":"02:00","tanSuat":"Theo ngày","uocTinhPhut":"20","stt":107,"apDungNgay":"Mọi ngày","khuVucThietBi":"Khu bán hàng — kệ được phân công","tieuChuanDat":"0 sản phẩm quá hạn ở khu vực được phân công. Hàng có hạn gần nhất và hàng cũ xếp ở trước, ở trên. Ghi SKU và số lượng hủy vào LOGBOOK Bảng C."},{"congViecPhaiLam":"Kiểm vật dụng nhỏ và vật liệu tiếp xúc thực phẩm","ca":"Ca 3","gio":"02:30","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":108,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter","tieuChuanDat":"Không có kim bấm, kẹp giấy, ghim, dây rút hoặc vật nhỏ tương tự tại các công đoạn tiếp xúc trực tiếp thực phẩm. Vật liệu tiếp xúc thực phẩm có bề mặt nhẵn, không thấm nước, dễ lau chùi và khử trùng."},{"congViecPhaiLam":"Kiểm hóa chất vệ sinh","ca":"Ca 3","gio":"02:40","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":109,"apDungNgay":"Mọi ngày","khuVucThietBi":"Counter — hóa chất","tieuChuanDat":"Còn nhãn nhận diện bằng tiếng Việt. Lưu trữ ở khu riêng biệt và kín, không lẫn thực phẩm. Chỉ có hóa chất nằm trong danh mục công ty cho phép. Đủ 3 nhóm: hóa chất rửa tay, cồn thực phẩm, hóa chất vệ sinh."},{"congViecPhaiLam":"Soi động vật gây hại ban đêm","ca":"Ca 3","gio":"03:00","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":110,"apDungNgay":"Mọi ngày","khuVucThietBi":"Toàn cửa hàng","tieuChuanDat":"Soi bằng đèn pin vào gầm tủ, mặt sau tủ, chân tường, hố ga thoát sàn, khu rác. 0 dấu hiệu chuột, gián, kiến, ruồi, phân chuột, vết gặm, tổ côn trùng. Phát hiện thì chụp ảnh, ghi LOGBOOK Bảng B và báo SM ngay đầu giờ sáng."},{"congViecPhaiLam":"Kiểm kết cấu chống xâm nhập từ bên ngoài","ca":"Ca 3","gio":"03:30","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":111,"apDungNgay":"Mọi ngày","khuVucThietBi":"Toàn cửa hàng","tieuChuanDat":"Các cửa bên ngoài đóng khít hoặc bịt kín đầy đủ. Cửa sổ và hệ thống thông gió được che kín. Không có rãnh hoặc lỗ ở lối ra vào, trần nhà, chân tường thông ra môi trường bên ngoài."},{"congViecPhaiLam":"Bổ sung hàng lên kệ theo FIFO/FEFO và kiểm giá kệ","ca":"Ca 3","gio":"04:00","tanSuat":"Theo ngày","uocTinhPhut":"25","stt":112,"apDungNgay":"Mọi ngày","khuVucThietBi":"Khu bán hàng","tieuChuanDat":"Kệ đủ hàng theo planogram, kệ trống không quá 3 facing liên tiếp mỗi tầng. Hàng cũ xếp ra trước và lên trên. Giá trên kệ khớp giá POS."},{"congViecPhaiLam":"Bàn giao cho Ca 1","ca":"Ca 3","gio":"05:45","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":113,"apDungNgay":"Mọi ngày","khuVucThietBi":"Toàn cửa hàng","tieuChuanDat":"Ghi vào LOGBOOK Bảng D: bất thường chưa xong, thiết bị chờ sửa, hàng chờ hủy, tiền quỹ. Hai bên cùng ký."}];
+        const rawSM = [{"tieuChuanDat":"Kiểm đủ 4 nội dung trong lúc đi bên ngoài cửa hàng: (1) đồng phục và tác phong — đúng đồng phục, có nón, có bảng tên, không đeo trang sức; (2) vệ sinh cá nhân CSR làm counter đủ 6 tiêu chí; (3) đủ hàng theo planogram, kệ trống không quá 3 facing liên tiếp mỗi tầng; (4) khu vực dưới tủ điện và ổ cắm quầy counter thông thoáng, không bị che chắn. Trong khung giờ này SM KHÔNG ngồi bàn làm giấy tờ.","gio":"08:00","tanSuat":"Theo ngày","uocTinhPhut":"60","stt":1,"apDungNgay":"Mọi ngày","bangChung":"Ghi tên CSR và nội dung chưa đạt (nếu có)","nhomViec":"RA CỬA HÀNG — cao điểm sáng","noiDungSM":"CÓ MẶT BÊN NGOÀI CỬA HÀNG: giờ cao điểm sáng: quan sát vận hành, hỗ trợ CSR khi đông khách, kiểm bằng mắt trong lúc đi sàn"},{"tieuChuanDat":"Đủ chữ ký từng ca. Đủ 14 thiết bị có số nhiệt độ ở cả 3 ca. Không ô Đạt/Không đạt nào bỏ trống. Mọi dòng Không đạt đều có ghi chú và có dòng tương ứng ở Bảng B.","gio":"09:00","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":2,"apDungNgay":"Mọi ngày","bangChung":"Ký xác nhận cuối Logbook + ghi số ô còn trống","nhomViec":"Kiểm Logbook","noiDungSM":"Kiểm LOGBOOK và sổ chế biến của Ca 3 hôm qua và Ca 1 hôm nay"},{"tieuChuanDat":"Chênh lệch không quá 2°C. Chênh quá 2°C phải điều tra nguyên nhân (nhiệt kế sai, đo sai vị trí, hay ghi mà không đo) và ghi kết luận vào cột ghi chú.","gio":"09:20","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":3,"apDungNgay":"Mọi ngày","bangChung":"Ghi tên 2 thiết bị và 2 cặp số đo","nhomViec":"Audit đối chứng","noiDungSM":"Tự đo lại 1 tủ đông và 1 tủ mát bất kỳ, so với số CSR đã ghi"},{"tieuChuanDat":"Gửi TRƯỚC 10:00, gồm: số hạng mục Không đạt trong ngày hôm trước, phiếu I\u0026C mới phát sinh, vấn đề cần OFC hỗ trợ.","gio":"09:40","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":4,"apDungNgay":"Mọi ngày","bangChung":"Tin nhắn trên group có dấu thời gian","nhomViec":"Báo cáo","noiDungSM":"Gửi báo cáo hằng ngày cho OFC qua group SM–OFC"},{"tieuChuanDat":"Hoàn tất trước 10:30. Không kịp thì ghi rõ lý do.","gio":"10:15","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":5,"apDungNgay":"Mọi ngày","bangChung":"Đơn hàng trên hệ thống","nhomViec":"Vận hành","noiDungSM":"Hoàn tất đặt hàng trong ngày"},{"tieuChuanDat":"0 sản phẩm lệch giá. POSM khớp chương trình đang chạy.","gio":"10:40","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":6,"apDungNgay":"Mọi ngày","bangChung":"Ghi tên 5 sản phẩm đã kiểm","nhomViec":"Audit đối chứng","noiDungSM":"Spot check 5 sản phẩm: giá kệ khớp giá POS và POSM đúng chương trình đang chạy"},{"tieuChuanDat":"Mọi phiếu đang mở có mức ưu tiên và ngày dự kiến hoàn tất. 0 phiếu mức P1 quá hạn mà chưa báo OFC. Phiếu đã sửa xong phải được SM nghiệm thu và đóng trong 24 giờ.","gio":"10:55","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":7,"apDungNgay":"Mọi ngày","bangChung":"Cập nhật Sổ theo dõi phiếu I\u0026C","nhomViec":"Follow up — phiếu I\u0026C","noiDungSM":"Rà toàn bộ phiếu sửa chữa I\u0026C đang mở"},{"tieuChuanDat":"Có mặt liên tục tại khu bán hàng và counter trong khung 11:30–13:00, trừ thời gian ăn trưa luân phiên. Quan sát và ghi lại: điểm nghẽn khi đông khách, thao tác CSR chưa đúng, thiết bị chạy bất thường. Trong khung giờ này SM KHÔNG ngồi bàn làm giấy tờ.","gio":"11:30","tanSuat":"Theo ngày","uocTinhPhut":"90","stt":8,"apDungNgay":"Mọi ngày","bangChung":"Ghi nội dung quan sát vào Bảng rà soát vấn đề","nhomViec":"RA CỬA HÀNG — cao điểm trưa","noiDungSM":"CÓ MẶT BÊN NGOÀI CỬA HÀNG: giờ cao điểm trưa: quan sát vận hành, hỗ trợ CSR khi đông khách, xử lý tình huống khách hàng"},{"tieuChuanDat":"Ghi rõ chênh lệch hoặc bất thường nếu có.","gio":"13:00","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":9,"apDungNgay":"Mọi ngày","bangChung":"Báo cáo doanh thu","nhomViec":"Kinh doanh","noiDungSM":"Tổng kết doanh thu ngày hôm trước, kiểm hóa đơn hủy và thẻ thành viên"},{"tieuChuanDat":"0 lệnh treo quá 1 ngày.","gio":"13:20","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":10,"apDungNgay":"Mọi ngày","bangChung":"Ảnh chụp màn hình hệ thống","nhomViec":"Hệ thống","noiDungSM":"Kiểm tất cả lệnh trên hệ thống đã hoàn thành (RCV, Disposal, TF)"},{"tieuChuanDat":"Số lượng và SKU trong LOGBOOK Bảng C khớp với lệnh Disposal trên hệ thống. Lệch thì phải giải trình.","gio":"13:35","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":11,"apDungNgay":"Mọi ngày","bangChung":"File waste log + lệnh Disposal","nhomViec":"Hàng hủy","noiDungSM":"Tổng hợp sản phẩm hủy trong ngày (SKU, số lượng, lý do) và đối chiếu với hệ thống"},{"tieuChuanDat":"0 vị trí sai so với sơ đồ kho. Không hàng đặt trực tiếp trên sàn.","gio":"13:50","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":12,"apDungNgay":"Mọi ngày","bangChung":"Ảnh kho","nhomViec":"Kho","noiDungSM":"Kiểm hàng hóa trong kho sắp xếp đúng vị trí quy định"},{"tieuChuanDat":"Toàn bộ email trong ngày đã đọc và xử lý. Email nào cần cửa hàng phản hồi thì trả lời ngay trong ngày, không để tồn sang hôm sau.","gio":"14:05","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":13,"apDungNgay":"Mọi ngày","bangChung":"Ghi chú vào checklist + email đã trả lời","nhomViec":"Hành chính","noiDungSM":"Tổng hợp và xử lý email của Admin OP và OFC"},{"tieuChuanDat":"Nhiệt kế hồng ngoại, nhiệt kế đo tâm, nhiệt kế đầu dò có sẵn tại counter, bật lên đọc được nhiệt độ. Tất cả bồn rửa tay đủ 4 thứ: xà phòng, cồn thực phẩm, khăn giấy, bảng hướng dẫn rửa tay.","gio":"14:20","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":14,"apDungNgay":"Mọi ngày","bangChung":"Ghi chú vào checklist","nhomViec":"Thiết bị đo và bồn rửa","noiDungSM":"Kiểm nhiệt kế hồng ngoại. Kiểm nhiệt kế đo tâm Nhiệt kế đầu dò và vật tư bồn rửa tay"},{"tieuChuanDat":"Mỗi khu vực trọng yếu (OSC, FF, kho, counter) có 1 người phụ trách được ghi rõ tên.","gio":"14:35","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":15,"apDungNgay":"Mọi ngày","bangChung":"Bảng phân công ngày hôm sau","nhomViec":"Nhân sự","noiDungSM":"Phân công CSR kiểm tra hàng hóa (HSD, ATVSTP) cho ngày hôm sau"},{"tieuChuanDat":"Mặt bàn gọn gàng, sạch. Giấy tờ và chứng từ phân loại theo bìa hoặc file, không chồng đống rời. Dây cáp modem, router, máy in bó gọn. Không để hàng hóa hoặc đồ cá nhân trong hộc.","gio":"14:50","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":16,"apDungNgay":"Mọi ngày","bangChung":"Ảnh khu làm việc","nhomViec":"5S khu làm việc","noiDungSM":"Kiểm mặt bàn, kệ và hộc bàn SM/ASM"},{"tieuChuanDat":"Mỗi vấn đề có hành động đã làm. Vấn đề nào lặp lại từ 2 lần trở lên trong 4 tuần thì đưa vào Review lỗi tuần vào Thứ 2.","gio":"15:05","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":17,"apDungNgay":"Mọi ngày","bangChung":"Bảng rà soát vấn đề","nhomViec":"Review","noiDungSM":"Ghi nhận DAILY ISSUE: tối đa 3 vấn đề nổi bật trong ngày"},{"tieuChuanDat":"100% biểu mẫu trong ngày có chữ ký SM. Mọi dòng Không đạt đã có hướng xử lý hoặc đã lập phiếu I\u0026C.","gio":"16:45","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":18,"apDungNgay":"Mọi ngày","bangChung":"Chữ ký SM/ASM","nhomViec":"Ký xác nhận","noiDungSM":"Ký xác nhận toàn bộ Logbook và Checklist Nhân viên trong ngày"},{"tieuChuanDat":"Đúng 17:00 ra ngoài cửa hàng nhìn lên bảng hiệu khi đèn vừa bật: toàn bộ bóng sáng đều, không bóng nào tối, không chớp nháy. Bảng hiệu không nứt vỡ, không bong tróc, không bám mạng nhện. Có bóng tối, chớp hoặc bảng hiệu hư hỏng thì lập phiếu I\u0026C ngay trong ngày và ghi số phiếu vào cột ghi chú.","gio":"17:00","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":19,"apDungNgay":"Mọi ngày","bangChung":"Ảnh chụp bảng hiệu lúc 17:00","nhomViec":"Cơ sở vật chất","noiDungSM":"Kiểm đèn bảng hiệu lúc 17:00"},{"tieuChuanDat":"Gửi trong ngày Thứ 2. Nêu rõ họ tên, vị trí, ngày nghỉ chính thức của từng người. Tuần không phát sinh thì vẫn nhắn \u0027không phát sinh\u0027 để OFC biết là đã rà.","gio":"15:30","tanSuat":"Theo tuần","uocTinhPhut":"5","stt":20,"apDungNgay":"Thứ 2","bangChung":"Tin nhắn trên group SM–OFC có dấu thời gian","nhomViec":"Nhân sự","noiDungSM":"Thông báo thông tin nhân sự nghỉ việc qua group SM – OFC  (BM Weekly – mục 1)"},{"tieuChuanDat":"Nêu rõ số người cần bổ sung theo từng ca và thời điểm cần có mặt. Không thiếu người thì nhắn \u0027không phát sinh\u0027.","gio":"15:40","tanSuat":"Theo tuần","uocTinhPhut":"5","stt":21,"apDungNgay":"Thứ 2","bangChung":"Tin nhắn trên group SM–OFC","nhomViec":"Nhân sự","noiDungSM":"Thông báo số lượng nhân sự cần bổ sung tại cửa hàng qua group SM – OFC  (BM Weekly – mục 2)"},{"tieuChuanDat":"Nêu rõ họ tên, chuyển từ cửa hàng hoặc ca nào sang cửa hàng hoặc ca nào, ngày áp dụng. Không phát sinh thì nhắn \u0027không phát sinh\u0027.","gio":"15:50","tanSuat":"Theo tuần","uocTinhPhut":"5","stt":22,"apDungNgay":"Thứ 2","bangChung":"Tin nhắn trên group SM–OFC","nhomViec":"Nhân sự","noiDungSM":"Thông báo số lượng chuyển đổi nhân sự qua group SM – OFC  (BM Weekly – mục 3)"},{"tieuChuanDat":"Lịch của tuần kế tiếp phải xong trong ngày Thứ 2 và gửi cho toàn bộ nhân viên. Đủ người cho cả 3 ca, không có ca nào trống. Ai nghỉ phép hoặc đổi ca đều đã được ghi vào lịch.","gio":"16:00","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":23,"apDungNgay":"Thứ 2","bangChung":"Lịch tuần đã gửi cho nhân viên","nhomViec":"Nhân sự","noiDungSM":"Xếp lịch làm việc cho nhân sự cửa hàng theo tuần  (BM Weekly – mục 4)"},{"tieuChuanDat":"Toàn bộ sản phẩm đổi giá trong tuần đã được thay nhãn giá trên kệ. Kiểm ngẫu nhiên 5 sản phẩm: 0 sản phẩm có giá trên kệ khác giá trên máy tính tiền.","gio":"15:30","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":24,"apDungNgay":"Thứ 4","bangChung":"Ảnh nhãn giá đã thay + danh sách sản phẩm đổi giá","nhomViec":"Kinh doanh","noiDungSM":"Báo cáo đổi giá và cập nhật giá mới trên kệ hàng  (BM Weekly – mục 7)"},{"tieuChuanDat":"Toàn bộ sản phẩm mới của tuần đã có mặt trên kệ đúng ngày quy định, đúng vị trí theo sơ đồ trưng bày và đã có nhãn giá. Sản phẩm nào chưa về thì ghi rõ tên và báo OFC.","gio":"16:00","tanSuat":"Theo tuần","uocTinhPhut":"15","stt":25,"apDungNgay":"Thứ 4","bangChung":"Danh sách new item của tuần có đánh dấu đã lên kệ","nhomViec":"Kinh doanh","noiDungSM":"Kiểm tra sản phẩm mới (New item) của tuần  (BM Weekly – mục 8)"},{"tieuChuanDat":"POSM đang treo tại cửa hàng khớp với chương trình khuyến mãi đang chạy. Gỡ bỏ toàn bộ POSM của chương trình đã kết thúc. Thiếu POSM thì báo OFC trong ngày.","gio":"16:20","tanSuat":"Theo tuần","uocTinhPhut":"10","stt":26,"apDungNgay":"Thứ 4","bangChung":"Ảnh POSM tại quầy và tại kệ","nhomViec":"Kinh doanh","noiDungSM":"Kiểm tra POSM đã được cập nhật tại cửa hàng  (BM Weekly – mục 9)"},{"tieuChuanDat":"Bảng dự tính đủ toàn bộ nhân viên đang làm việc, tính đúng giờ ca ngày và ca đêm. Hoàn tất trong ngày Thứ 5.","gio":"15:30","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":27,"apDungNgay":"Thứ 5","bangChung":"Bảng dự tính giờ công và tiền lương tuần","nhomViec":"Nhân sự","noiDungSM":"Lập bảng dự tính giờ công và tiền lương của cửa hàng theo tuần  (BM Weekly – mục 5)"},{"tieuChuanDat":"Đối chiếu giờ công thực tế với bảng dự tính. Mọi chênh lệch đều phải ghi rõ lý do (tăng ca, nghỉ đột xuất, đổi ca, quên chấm công). Không để chênh lệch nào không có giải trình.","gio":"16:00","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":28,"apDungNgay":"Thứ 5","bangChung":"Bảng giờ công thực tế có ghi lý do chênh lệch","nhomViec":"Nhân sự","noiDungSM":"Kiểm tra giờ công làm việc thực tế của toàn bộ nhân viên cửa hàng  (BM Weekly – mục 6)"},{"tieuChuanDat":"Chứng từ của cả tuần được tập hợp đủ, sắp theo loại và gửi xong trong ngày Thứ 7. Thiếu chứng từ nào thì ghi rõ và bổ sung trong tuần kế tiếp.","gio":"15:30","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":29,"apDungNgay":"Thứ 7","bangChung":"Biên nhận hoặc xác nhận đã gửi của OFC","nhomViec":"Hành chính","noiDungSM":"Tổng hợp toàn bộ chứng từ cần gửi về văn phòng và gửi cho OFC  (BM Weekly – mục 10)"},{"tieuChuanDat":"Tối đa 3 vấn đề nổi bật của tuần. Mỗi vấn đề ghi đủ: hành động khắc phục đã làm, người chịu trách nhiệm, deadline, kết quả và có cần OFC hỗ trợ hay không. Trường hợp phát hiện hư hỏng hoặc sự cố thì báo ngay OFC và bộ phận I\u0026C, không chờ tới cuối tuần.","gio":"16:00","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":30,"apDungNgay":"Thứ 7","bangChung":"Bảng rà soát vấn đề đã điền và ký","nhomViec":"Review","noiDungSM":"Điền Bảng rà soát vấn đề trong tuần (bảng bên dưới)"},{"tieuChuanDat":"Chỉ gửi vào tháng đến chu kỳ. Tháng không đến chu kỳ thì ghi \u0027không áp dụng\u0027 vào cột ghi chú. Order đủ số lượng dùng cho 2 tháng, không đặt thừa.","gio":"16:30","tanSuat":"Theo tháng – Tuần 1","uocTinhPhut":"20","stt":31,"apDungNgay":"Thứ 4","bangChung":"Đơn order văn phòng phẩm đã gửi","nhomViec":"Hành chính","noiDungSM":"Gửi order văn phòng phẩm — 2 tháng 1 lần  (BM Monthly – mục 4)"},{"tieuChuanDat":"Điền đúng biểu mẫu file HR yêu cầu, đủ toàn bộ nhân viên có phản hồi, gửi đúng deadline của HR. Không có phản hồi nào thì ghi rõ \u0027không phát sinh\u0027.","gio":"16:30","tanSuat":"Theo tháng – Tuần 3","uocTinhPhut":"25","stt":32,"apDungNgay":"Thứ 4","bangChung":"File đã gửi + biên nhận của HR","nhomViec":"Hành chính","noiDungSM":"Gửi danh sách phản hồi về lương của nhân sự cửa hàng (theo file)  (BM Monthly – mục 1)"},{"tieuChuanDat":"Danh sách đủ họ tên và số tiền của từng người, gửi đúng deadline. Cửa hàng không phát sinh thì ghi rõ \u0027không phát sinh\u0027.","gio":"16:30","tanSuat":"Theo tháng – Tuần 3","uocTinhPhut":"20","stt":33,"apDungNgay":"Thứ 5","bangChung":"Danh sách đã gửi + biên nhận","nhomViec":"Hành chính","noiDungSM":"Gửi danh sách nhân viên hỗ trợ tiền gửi xe (nếu có)  (BM Monthly – mục 2)"},{"tieuChuanDat":"Mỗi khu vực trọng yếu có một CSR phụ trách được ghi rõ họ tên và khu vực phân công cho cả tháng: khu OSC và FF, khu kệ hàng khô, kho, counter. Nhân viên nghỉ việc giữa tháng thì phải phân công người thay và cập nhật lại bảng.","gio":"16:30","tanSuat":"Theo tháng – Tuần 4","uocTinhPhut":"20","stt":34,"apDungNgay":"Thứ 5","bangChung":"Bảng phân công tháng ghi rõ tên CSR và khu vực","nhomViec":"Nhân sự","noiDungSM":"Phân công CSR kiểm tra hàng hóa: hạn sử dụng và vấn đề an toàn vệ sinh thực phẩm  (BM Monthly – mục 6)"},{"tieuChuanDat":"Báo cáo đủ mục theo quy định và gửi đúng deadline. Kèm kết quả thực hiện Checklist CSR và Checklist SM của tháng, các vấn đề nổi bật và đề xuất cần OFC hỗ trợ.","gio":"16:30","tanSuat":"Theo tháng – Tuần 4","uocTinhPhut":"30","stt":35,"apDungNgay":"Thứ 6","bangChung":"Báo cáo tháng đã gửi + xác nhận của OFC","nhomViec":"Báo cáo","noiDungSM":"Gửi Báo cáo tháng cho OFC  (BM Monthly – mục 5)"},{"tieuChuanDat":"","gio":"","tanSuat":"","uocTinhPhut":"","stt":1,"apDungNgay":"","bangChung":"","nhomViec":"","noiDungSM":""},{"tieuChuanDat":"","gio":"","tanSuat":"","uocTinhPhut":"","stt":2,"apDungNgay":"","bangChung":"","nhomViec":"","noiDungSM":""},{"tieuChuanDat":"","gio":"","tanSuat":"","uocTinhPhut":"","stt":3,"apDungNgay":"","bangChung":"","nhomViec":"","noiDungSM":""}];
+
+        const coldDevices = [
+            { name: "Tủ đông counter", threshold: "-22°C đến -18°C", defaultTemp: "-19.5" },
+            { name: "Tủ mát counter", threshold: "1°C đến 5°C", defaultTemp: "3.2" },
+            { name: "Tủ kem counter", threshold: "-22°C đến -18°C", defaultTemp: "-20.0" },
+            { name: "Tủ OSC 1", threshold: "1°C đến 5°C", defaultTemp: "2.8" },
+            { name: "Tủ OSC 2", threshold: "1°C đến 5°C", defaultTemp: "3.0" },
+            { name: "Tủ OSC 3", threshold: "1°C đến 5°C", defaultTemp: "2.5" },
+            { name: "Tủ đông 1", threshold: "-22°C đến -18°C", defaultTemp: "-19.0" },
+            { name: "Tủ đông 2", threshold: "-22°C đến -18°C", defaultTemp: "-9.2" },
+            { name: "Tủ đông 3", threshold: "-22°C đến -18°C", defaultTemp: "-21.0" },
+            { name: "Tủ đông 4", threshold: "-22°C đến -18°C", defaultTemp: "-18.5" },
+            { name: "WIC (kho lạnh)", threshold: "1°C đến 5°C", defaultTemp: "4.0" },
+            { name: "RIC (kho lạnh)", threshold: "1°C đến 5°C", defaultTemp: "3.8" },
+            { name: "Tủ đông kho", threshold: "-22°C đến -18°C", defaultTemp: "-20.5" },
+            { name: "Tủ mát kho", threshold: "1°C đến 5°C", defaultTemp: "4.2" }
+        ];
+
+        const csrTaskStates = {};
+        const smTaskStates = {};
+        const csrTaskNotes = {};
+        const smTaskNotes = {};
+
+        const logbookState = {
+            tabA: coldDevices.map(d => ({
+                name: d.name,
+                threshold: d.threshold,
+                ca1Time: "06:12", ca1Temp: (d.name === 'Tủ đông 2' ? '-9.2' : d.defaultTemp),
+                ca2Time: "14:10", ca2Temp: d.defaultTemp,
+                ca3Time: "22:10", ca3Temp: d.defaultTemp
+            })),
+            tabB: [
+                { stt: 1, gioPhatHien: "23:40", thietBiKhuVuc: "Tủ đông 2", soDo: "-9.2°C", xuLyTam: "Dời hàng sang Tủ đông 3, dán nhãn KHÔNG SỬ DỤNG", gioBaoSM: "23:50", soPhieuIC: "INC-20260812-VN0102-001", mucUuTien: "P1", ngayICNhan: "12/08/2026", gioSuaXong: "11:45", smNghihemThu: "-19.0°C", smKyDong: "✍️ SM VN0102 (Đã ký)" },
+                { stt: 2, gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" },
+                { stt: 3, gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" },
+                { stt: 4, gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" },
+                { stt: 5, gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" },
+                { stt: 6, gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" },
+                { stt: 7, gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" },
+                { stt: 8, gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" }
+            ],
+            tabC1: [
+                { stt: 1, ca: "Ca 1", gioKiem: "07:05", nguoiKiem: "Phạm Văn A", choice: 1 },
+                { stt: 2, ca: "Ca 2", gioKiem: "14:30", nguoiKiem: "Lê Thị B", choice: 2 },
+                { stt: 3, ca: "Ca 3", gioKiem: "22:35", nguoiKiem: "Trần Văn C", choice: 1 }
+            ],
+            tabC2: [
+                { stt: 1, gio: "22:35", ca: "Ca 3", sku: "893456701", tenSp: "Bánh bao thịt cút", sl: 2, lyDo: "Quá giờ giữ nóng", soLenhDisposal: "DSP-20260812-09", nguoiThucHien: "Trần Văn C", smDoiChieu: true },
+                { stt: 2, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false },
+                { stt: 3, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false },
+                { stt: 4, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false },
+                { stt: 5, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false },
+                { stt: 6, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false },
+                { stt: 7, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false },
+                { stt: 8, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false },
+                { stt: 9, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false },
+                { stt: 10, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false }
+            ],
+            tabD: [
+                { stt: 1, gioBanGiao: "05:45", caGiaoNhan: "Ca 3 → Ca 1", thietBiChoSua: "INC-20260812-VN0102-001", hangChoHuy: "2 bánh bao cút", tienQuy: "5,000,000 ₫", nguoiGiaoKy: "✍️ Trần Văn C", nguoiNhanKy: "✍️ Phạm Văn A", ghiChu: "Tủ đông 2 chờ I&C sửa" },
+                { stt: 2, gioBanGiao: "13:55", caGiaoNhan: "Ca 1 → Ca 2", thietBiChoSua: "INC-20260812-VN0102-001", hangChoHuy: "Không phát sinh", tienQuy: "5,000,000 ₫", nguoiGiaoKy: "✍️ Phạm Văn A", nguoiNhanKy: "✍️ Lê Thị B", ghiChu: "Ca 1 xong checklist" },
+                { stt: 3, gioBanGiao: "21:55", caGiaoNhan: "Ca 2 → Ca 3", thietBiChoSua: "", hangChoHuy: "", tienQuy: "5,000,000 ₫", nguoiGiaoKy: "✍️ Lê Thị B", nguoiNhanKy: "✍️ Trần Văn C", ghiChu: "Vận hành ổn định" }
+            ]
+        };
+
+        function switchView(view) {
+            document.querySelectorAll('.vswitch-btn').forEach(btn => btn.classList.remove('active'));
+            if (view === 'pda') {
+                document.getElementById('btn-pda').classList.add('active');
+                document.getElementById('pda-view').style.display = 'flex';
+                document.getElementById('cms-view').style.display = 'none';
+            } else {
+                document.getElementById('btn-cms').classList.add('active');
+                document.getElementById('pda-view').style.display = 'none';
+                document.getElementById('cms-view').style.display = 'flex';
+                renderWebstorePortal();
+            }
+        }
+
+        function switchPdaTab(tab) {
+            document.querySelectorAll('.pda-tabs .pda-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-btn-' + tab).classList.add('active');
+
+            document.getElementById('pda-tab-csr').style.display = tab === 'csr' ? 'block' : 'none';
+            document.getElementById('pda-tab-sm').style.display = tab === 'sm' ? 'block' : 'none';
+            document.getElementById('pda-tab-logbook').style.display = tab === 'logbook' ? 'block' : 'none';
+        }
+
+        function switchLogTab(tab) {
+            document.querySelectorAll('#pda-tab-logbook .pda-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('sub' + tab.replace('tab-', 'tab-btn-')).classList.add('active');
+
+            document.getElementById('log-tab-a').style.display = tab === 'tab-a' ? 'block' : 'none';
+            document.getElementById('log-tab-b').style.display = tab === 'tab-b' ? 'block' : 'none';
+            document.getElementById('log-tab-c').style.display = tab === 'tab-c' ? 'block' : 'none';
+            document.getElementById('log-tab-d').style.display = tab === 'tab-d' ? 'block' : 'none';
+        }
+
+        function switchPortalTab(tab) {
+            document.querySelectorAll('.portal-content-tabs .ptab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('pnav-' + tab).classList.add('active');
+
+            document.getElementById('portal-tab-csr-view').style.display = tab === 'csr' ? 'block' : 'none';
+            document.getElementById('portal-tab-sm-view').style.display = tab === 'sm' ? 'block' : 'none';
+            document.getElementById('portal-tab-logbook-view').style.display = tab === 'logbook' ? 'block' : 'none';
+        }
+
+        function toggleGuide(id) {
+            const el = document.getElementById(id);
+            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function setCSRTaskStatus(taskId, status) {
+            csrTaskStates[taskId] = status;
+            renderCSRTasks();
+            renderWebstorePortal();
+        }
+
+        function setSMTaskStatus(taskId, status) {
+            smTaskStates[taskId] = status;
+            renderSMTasks();
+            renderWebstorePortal();
+        }
+
+        function updateCSRNote(taskId, noteVal) {
+            csrTaskNotes[taskId] = noteVal;
+            renderWebstorePortal();
+        }
+
+        function updateSMNote(taskId, noteVal) {
+            smTaskNotes[taskId] = noteVal;
+            renderWebstorePortal();
+        }
+
+        function renderCSRTasks() {
+            const selectedShift = document.getElementById('csr-shift').value;
+            const filtered = (selectedShift === 'ALL') ? rawCSR : rawCSR.filter(t => t.ca === selectedShift);
+            const container = document.getElementById('csr-task-list');
+            container.innerHTML = '';
+
+            let passCount = 0;
+
+            filtered.forEach(task => {
+                const status = csrTaskStates[task.stt];
+                if (status === 'pass') passCount++;
+                const currentNote = csrTaskNotes[task.stt] || '';
+
+                const card = document.createElement('div');
+                card.className = 'task-card';
+                card.innerHTML = `
+                    <div class="task-header">
+                        <span class="task-badge">STT ` + task.stt + ` | ` + task.ca + ` | ` + task.gio + `</span>
+                        <span>⏱️ ` + task.uocTinhPhut + ` phút | ` + task.khuVucThietBi + `</span>
+                    </div>
+                    <div class="task-title">` + task.congViecPhaiLam + `</div>
+                    <button class="guide-btn" onclick="toggleGuide('guide-` + task.stt + `')">
+                        <span>ℹ️ Tiêu chuẩn đạt</span>
+                        <span>▼</span>
+                    </button>
+                    <div id="guide-` + task.stt + `" class="guide-content">
+                        <strong>Áp dụng ngày:</strong> ` + task.apDungNgay + ` | <strong>Tần suất:</strong> ` + task.tanSuat + `<br>
+                        <strong>Tiêu chuẩn:</strong> ` + task.tieuChuanDat + `
+                    </div>
+                    <div class="action-row">
+                        <button class="btn-status pass ` + (status === 'pass' ? 'active' : '') + `" onclick="setCSRTaskStatus(` + task.stt + `, 'pass')">✓ ĐẠT</button>
+                        <button class="btn-status fail ` + (status === 'fail' ? 'active' : '') + `" onclick="setCSRTaskStatus(` + task.stt + `, 'fail')">✗ KHÔNG ĐẠT</button>
+                    </div>
+                    <div id="fail-box-csr-` + task.stt + `" class="fail-box" style="display: ` + (status === 'fail' ? 'block' : 'none') + `;">
+                        <label class="form-label-portal" style="color:var(--gs25-red);">Ghi chú Không Đạt (Bắt buộc nhập):</label>
+                        <input type="text" class="fail-input" placeholder="Bắt buộc nhập Lý do Không Đạt..." value="` + currentNote + `" onchange="updateCSRNote(` + task.stt + `, this.value)">
+                        <button class="vswitch-btn" style="font-size:10px; background:#FFFFFF; color:var(--gs25-text); border:1px solid var(--gs25-border);" onclick="alert('Đã giả lập chụp ảnh bằng chứng qua Camera PDA!')">📷 Chụp ảnh bằng chứng</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            const pct = Math.round((passCount / (filtered.length || 1)) * 100);
+            document.getElementById('csr-progress').innerText = passCount + " / " + filtered.length + " (" + pct + "%)";
+        }
+
+        function renderSMTasks() {
+            const container = document.getElementById('sm-task-list');
+            container.innerHTML = '';
+
+            let passCount = 0;
+
+            rawSM.forEach(task => {
+                const status = smTaskStates[task.stt];
+                if (status === 'pass') passCount++;
+                const currentNote = smTaskNotes[task.stt] || '';
+
+                const card = document.createElement('div');
+                card.className = 'task-card';
+                card.innerHTML = `
+                    <div class="task-header">
+                        <span class="task-badge" style="background: rgba(255, 108, 0, 0.1); color: #FF6C00;">STT ` + task.stt + ` | ` + task.gio + ` | ` + task.nhomViec + `</span>
+                        <span>⏱️ ` + task.uocTinhPhut + ` phút</span>
+                    </div>
+                    <div class="task-title">` + task.noiDungSM + `</div>
+                    
+                    <div class="evidence-box">
+                        📌 <strong>Bằng chứng phải để lại:</strong> ` + task.bangChung + `
+                    </div>
+
+                    <button class="guide-btn" onclick="toggleGuide('sm-guide-` + task.stt + `')">
+                        <span>ℹ️ Hướng dẫn tiêu chuẩn kiểm tra</span>
+                        <span>▼</span>
+                    </button>
+                    <div id="sm-guide-` + task.stt + `" class="guide-content">
+                        <strong>Áp dụng ngày:</strong> ` + task.apDungNgay + ` | <strong>Tần suất:</strong> ` + task.tanSuat + `<br>
+                        <strong>Tiêu chuẩn đạt:</strong> ` + task.tieuChuanDat + `
+                    </div>
+
+                    <div class="action-row">
+                        <button class="btn-status pass ` + (status === 'pass' ? 'active' : '') + `" onclick="setSMTaskStatus(` + task.stt + `, 'pass')">✓ ĐẠT</button>
+                        <button class="btn-status fail ` + (status === 'fail' ? 'active' : '') + `" onclick="setSMTaskStatus(` + task.stt + `, 'fail')">✗ KHÔNG ĐẠT</button>
+                    </div>
+
+                    <div id="fail-box-sm-` + task.stt + `" class="fail-box" style="display: ` + (status === 'fail' ? 'block' : 'none') + `;">
+                        <label class="form-label-portal" style="color:var(--gs25-red);">Ghi chú Không Đạt & Giải trình bằng chứng:</label>
+                        <input type="text" class="fail-input" placeholder="Nhập lý do Không Đạt & thông tin bằng chứng..." value="` + currentNote + `" onchange="updateSMNote(` + task.stt + `, this.value)">
+                        <button class="vswitch-btn" style="font-size:10px; background:#FFFFFF; color:var(--gs25-text); border:1px solid var(--gs25-border);" onclick="alert('Đã tải lên hình ảnh bằng chứng cho SM Checklist!')">📷 Tải ảnh bằng chứng</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            const pct = Math.round((passCount / (rawSM.length || 1)) * 100);
+            document.getElementById('sm-progress').innerText = passCount + " / " + rawSM.length + " (" + pct + "%)";
+        }
+
+        function renderLogA() {
+            const tbody = document.getElementById('log-a-body');
+            tbody.innerHTML = '';
+
+            logbookState.tabA.forEach((dev, idx) => {
+                const val = parseFloat(dev.ca2Temp);
+                const isOut = (val > 5.0 || val < -22.0 || (val > -18.0 && val < 0));
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>` + dev.name + `</strong></td>
+                    <td style="font-size:9px; color:var(--gs25-muted);">` + dev.threshold + `</td>
+                    <td><input type="text" class="temp-input in-range" value="` + dev.ca1Temp + `°C" onchange="updateTempA(` + idx + `, 'ca1Temp', this.value)"></td>
+                    <td><input type="text" class="temp-input ` + (isOut ? 'out-range' : 'in-range') + `" value="` + dev.ca2Temp + `°C" onchange="updateTempA(` + idx + `, 'ca2Temp', this.value)"></td>
+                    <td><input type="text" class="temp-input in-range" value="` + dev.ca3Temp + `°C" onchange="updateTempA(` + idx + `, 'ca3Temp', this.value)"></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateTempA(index, shiftKey, val) {
+            logbookState.tabA[index][shiftKey] = val.replace('°C','');
+            renderWebstorePortal();
+        }
+
+        function saveIncidentB() {
+            logbookState.tabB[0] = {
+                stt: 1,
+                gioPhatHien: document.getElementById('inc-gioPhatHien').value,
+                thietBiKhuVuc: document.getElementById('inc-thietBi').value,
+                soDo: document.getElementById('inc-soDo').value,
+                xuLyTam: document.getElementById('inc-xuLyTam').value,
+                gioBaoSM: document.getElementById('inc-gioBaoSM').value,
+                soPhieuIC: document.getElementById('inc-soPhieu').value,
+                mucUuTien: document.getElementById('inc-mucUuTien').value,
+                ngayICNhan: document.getElementById('inc-ngayIC').value,
+                gioSuaXong: document.getElementById('inc-gioSuaXong').value,
+                smNghihemThu: document.getElementById('inc-smNghihemThu').value,
+                smKyDong: "✍️ SM (Đã ký)"
+            };
+            alert('Đã lưu Phiếu I&C thành công! Dữ liệu BẢNG B đã được cập nhật real-time sang GS25 Internal Web Portal.');
+            renderWebstorePortal();
+        }
+
+        function renderC2TablePDA() {
+            const tbody = document.getElementById('log-c-body');
+            tbody.innerHTML = '';
+            logbookState.tabC2.forEach((item, idx) => {
+                if (item.sku) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>` + item.gio + `</td>
+                        <td>` + item.ca + `</td>
+                        <td>` + item.sku + `</td>
+                        <td>` + item.tenSp + `</td>
+                        <td>` + item.sl + `</td>
+                        <td>` + item.lyDo + `</td>
+                        <td>` + item.soLenhDisposal + `</td>
+                        <td><input type="checkbox" ` + (item.smDoiChieu ? 'checked' : '') + ` onchange="logbookState.tabC2[` + idx + `].smDoiChieu = this.checked; syncLogbookToPortal();"></td>
+                    `;
+                    tbody.appendChild(tr);
+                }
+            });
+        }
+
+        function addDisposalRow() {
+            const sku = prompt("Quét/Nhập mã SKU sản phẩm cần hủy:", "893123456");
+            if (sku) {
+                const emptyIdx = logbookState.tabC2.findIndex(r => !r.sku);
+                const targetIdx = emptyIdx >= 0 ? emptyIdx : logbookState.tabC2.length;
+                logbookState.tabC2[targetIdx] = {
+                    stt: targetIdx + 1,
+                    gio: "15:20",
+                    ca: "Ca 2",
+                    sku: sku,
+                    tenSp: "Sữa chua Vinamilk 100g",
+                    sl: 1,
+                    lyDo: "Hết hạn sử dụng",
+                    soLenhDisposal: "DSP-20260812-10",
+                    nguoiThucHien: "Lê Thị B",
+                    smDoiChieu: true
+                };
+                renderC2TablePDA();
+                syncLogbookToPortal();
+            }
+        }
+
+        function syncLogbookToPortal() {
+            logbookState.tabC1[0].gioKiem = document.getElementById('c1-ca1-time').value;
+            logbookState.tabC1[0].nguoiKiem = document.getElementById('c1-ca1-user').value;
+            logbookState.tabC1[0].choice = parseInt(document.getElementById('c1-ca1-choice').value);
+
+            logbookState.tabC1[1].gioKiem = document.getElementById('c1-ca2-time').value;
+            logbookState.tabC1[1].nguoiKiem = document.getElementById('c1-ca2-user').value;
+            logbookState.tabC1[1].choice = parseInt(document.getElementById('c1-ca2-choice').value);
+
+            logbookState.tabC1[2].gioKiem = document.getElementById('c1-ca3-time').value;
+            logbookState.tabC1[2].nguoiKiem = document.getElementById('c1-ca3-user').value;
+            logbookState.tabC1[2].choice = parseInt(document.getElementById('c1-ca3-choice').value);
+
+            logbookState.tabD[0].thietBiChoSua = document.getElementById('d-thietBi').value;
+            logbookState.tabD[0].hangChoHuy = document.getElementById('d-hangHuy').value;
+            logbookState.tabD[0].tienQuy = document.getElementById('d-tienQuy').value;
+            logbookState.tabD[0].ghiChu = document.getElementById('d-ghiChu').value;
+
+            renderWebstorePortal();
+        }
+
+        function setupCanvas(id) {
+            const cvs = document.getElementById(id);
+            if (!cvs) return;
+            const ctx = cvs.getContext('2d');
+            let drawing = false;
+
+            cvs.onmousedown = cvs.ontouchstart = (e) => { drawing = true; ctx.beginPath(); };
+            cvs.onmouseup = cvs.ontouchend = () => { drawing = false; };
+            cvs.onmousemove = cvs.ontouchmove = (e) => {
+                if (!drawing) return;
+                const rect = cvs.getBoundingClientRect();
+                const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+                const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#0080FF';
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            };
+        }
+
+        function clearCanvas(id) {
+            const cvs = document.getElementById(id);
+            const ctx = cvs.getContext('2d');
+            ctx.clearRect(0, 0, cvs.width, cvs.height);
+        }
+
+        // RENDER WEBSTORE PORTAL TABLES MATCHING AUTHENTIC GS25 PORTAL STYLING
+        function renderWebstorePortal() {
+            const storeCode = document.getElementById('portal-store-select').value;
+            
+            // 1. CSR Table
+            const csrTbody = document.getElementById('portal-csr-tbody');
+            csrTbody.innerHTML = '';
+            rawCSR.forEach((item, idx) => {
+                const status = csrTaskStates[item.stt];
+                const note = csrTaskNotes[item.stt] || '';
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>` + (idx + 1) + `</td>
+                    <td>` + item.apDungNgay + `</td>
+                    <td>` + item.tanSuat + `</td>
+                    <td>` + item.ca + `</td>
+                    <td>` + item.gio + `</td>
+                    <td>` + item.uocTinhPhut + ` ph</td>
+                    <td>` + item.khuVucThietBi + `</td>
+                    <td><strong>` + item.congViecPhaiLam + `</strong></td>
+                    <td style="font-size:11px; color:#4B5563;">` + item.tieuChuanDat + `</td>
+                    <td>` + storeCode + `_CSR</td>
+                    <td>` + (status === 'fail' ? '<span class="status-pill-terminated">✗ KHÔNG ĐẠT</span>' : '<span class="status-pill-active">Active (ĐẠT)</span>') + `</td>
+                    <td style="font-size:11px; color:` + (status === 'fail' ? '#DC2626' : 'var(--gs25-muted)') + `;">` + (note ? note : (status === 'fail' ? 'Bắt buộc giải trình' : 'Hoàn thành SOP')) + `</td>
+                    <td><button class="btn-action-icon">✏️</button></td>
+                `;
+                csrTbody.appendChild(tr);
+            });
+
+            // 2. SM Table
+            const smTbody = document.getElementById('portal-sm-tbody');
+            smTbody.innerHTML = '';
+            rawSM.forEach((item, idx) => {
+                const status = smTaskStates[item.stt];
+                const note = smTaskNotes[item.stt] || '';
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>` + (idx + 1) + `</td>
+                    <td>` + item.apDungNgay + `</td>
+                    <td>` + item.tanSuat + `</td>
+                    <td>` + item.gio + `</td>
+                    <td>` + item.uocTinhPhut + ` ph</td>
+                    <td><span class="task-badge">` + item.nhomViec + `</span></td>
+                    <td><strong>` + item.noiDungSM + `</strong></td>
+                    <td style="font-size:11px; color:#4B5563;">` + item.tieuChuanDat + `</td>
+                    <td style="font-size:11px; color:#1E40AF; font-weight:600;">` + item.bangChung + `</td>
+                    <td>` + (status === 'fail' ? '<span class="status-pill-terminated">✗ KHÔNG ĐẠT</span>' : '<span class="status-pill-active">Active (ĐẠT)</span>') + `</td>
+                    <td style="font-size:11px; color:` + (status === 'fail' ? '#DC2626' : 'var(--gs25-green)') + `;">` + (note ? note : (status === 'fail' ? 'Yêu cầu bằng chứng' : '📷 Valid Watermark')) + `</td>
+                    <td><button class="btn-action-icon">✏️</button></td>
+                `;
+                smTbody.appendChild(tr);
+            });
+
+            // 3. Logbook Tab A Matrix Table
+            const logATbody = document.getElementById('portal-log-a-tbody');
+            logATbody.innerHTML = '';
+            logbookState.tabA.forEach((dev, idx) => {
+                const val2 = parseFloat(dev.ca2Temp);
+                const isOut2 = (val2 > 5.0 || val2 < -22.0 || (val2 > -18.0 && val2 < 0));
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>` + (idx + 1) + `</td>
+                    <td><strong>` + dev.name + `</strong></td>
+                    <td style="font-size:10px; color:var(--gs25-muted);">` + dev.threshold + `</td>
+                    <td>` + dev.ca1Time + `</td><td>` + dev.ca1Temp + `°C</td><td><span class="status-pill-active">Active</span></td>
+                    <td>` + dev.ca2Time + `</td><td>` + dev.ca2Temp + `°C</td><td>` + (isOut2 ? '<span class="status-pill-terminated">KĐ</span>' : '<span class="status-pill-active">Active</span>') + `</td>
+                    <td>` + dev.ca3Time + `</td><td>` + dev.ca3Temp + `°C</td><td><span class="status-pill-active">Active</span></td>
+                `;
+                logATbody.appendChild(tr);
+            });
+
+            // 4. Logbook Tab B Table (FULL 12 COLUMNS)
+            const logBTbody = document.getElementById('portal-log-b-tbody');
+            logBTbody.innerHTML = '';
+            logbookState.tabB.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>` + row.stt + `</td>
+                    <td>` + row.gioPhatHien + `</td>
+                    <td><strong>` + row.thietBiKhuVuc + `</strong></td>
+                    <td><strong style="color:var(--gs25-red);">` + row.soDo + `</strong></td>
+                    <td style="font-size:11px;">` + row.xuLyTam + `</td>
+                    <td>` + row.gioBaoSM + `</td>
+                    <td><strong style="color:#0080FF;">` + row.soPhieuIC + `</strong></td>
+                    <td>` + (row.mucUuTien ? '<span class="status-pill-terminated">' + row.mucUuTien + '</span>' : '') + `</td>
+                    <td>` + row.ngayICNhan + `</td>
+                    <td>` + row.gioSuaXong + `</td>
+                    <td><strong>` + row.smNghihemThu + `</strong></td>
+                    <td>` + (row.smKyDong ? '<div class="sig-box-display">' + row.smKyDong + '</div>' : '') + `</td>
+                `;
+                logBTbody.appendChild(tr);
+            });
+
+            // 5. Logbook Tab C1 Table
+            const logC1Tbody = document.getElementById('portal-log-c1-tbody');
+            logC1Tbody.innerHTML = '';
+            const c1Texts = [
+                "☐ Không phát hiện hàng hư hỏng, hết hạn hoặc không phù hợp",
+                "☐ Có sản phẩm đến hạn — đã thu hồi và xử lý đúng thời gian quy định",
+                "☐ Có sản phẩm nhưng ĐÃ QUÁ thời điểm thu hồi quy định (bắt buộc ghi rõ SKU ở C2 và báo SM)"
+            ];
+            logbookState.tabC1.forEach(row => {
+                const tr = document.createElement('tr');
+                const selectedText = c1Texts[row.choice - 1];
+                tr.innerHTML = `
+                    <td>` + row.stt + `</td>
+                    <td><strong>` + row.ca + `</strong></td>
+                    <td>` + row.gioKiem + `</td>
+                    <td>` + row.nguoiKiem + `</td>
+                    <td><span class="status-pill-active">✓ ` + selectedText + `</span></td>
+                `;
+                logC1Tbody.appendChild(tr);
+            });
+
+            // 6. Logbook Tab C2 Table
+            const logC2Tbody = document.getElementById('portal-log-c2-tbody');
+            logC2Tbody.innerHTML = '';
+            logbookState.tabC2.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>` + row.stt + `</td>
+                    <td>` + row.gio + `</td>
+                    <td>` + row.ca + `</td>
+                    <td>` + row.sku + `</td>
+                    <td><strong>` + row.tenSp + `</strong></td>
+                    <td>` + (row.sl ? row.sl : '') + `</td>
+                    <td>` + row.lyDo + `</td>
+                    <td>` + row.soLenhDisposal + `</td>
+                    <td>` + row.nguoiThucHien + `</td>
+                    <td>` + (row.sku ? (row.smDoiChieu ? '<span class="status-pill-active">✓ Đối chiếu</span>' : '☐ Chưa đối chiếu') : '') + `</td>
+                `;
+                logC2Tbody.appendChild(tr);
+            });
+
+            // 7. Logbook Tab D Table
+            const logDTbody = document.getElementById('portal-log-d-tbody');
+            logDTbody.innerHTML = '';
+            logbookState.tabD.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>` + row.stt + `</td>
+                    <td>` + row.gioBanGiao + `</td>
+                    <td><strong>` + row.caGiaoNhan + `</strong></td>
+                    <td>` + row.thietBiChoSua + `</td>
+                    <td>` + row.hangChoHuy + `</td>
+                    <td><strong>` + row.tienQuy + `</strong></td>
+                    <td><div class="sig-box-display">` + row.nguoiGiaoKy + `</div></td>
+                    <td><div class="sig-box-display">` + row.nguoiNhanKy + `</div></td>
+                    <td style="font-size:11px;">` + row.ghiChu + `</td>
+                `;
+                logDTbody.appendChild(tr);
+            });
+
+            // 8. SM Cross-Check Text
+            const isDone = document.getElementById('sm-check-done') ? document.getElementById('sm-check-done').checked : true;
+            const undoneNotes = document.getElementById('sm-check-notes') ? document.getElementById('sm-check-notes').value : "";
+            const sigName = document.getElementById('sm-sig-name') ? document.getElementById('sm-sig-name').value : "Store Manager VN0102";
+
+            const crossCheckTextEl = document.getElementById('portal-sm-crosscheck-text');
+            if (crossCheckTextEl) {
+                if (isDone) {
+                    crossCheckTextEl.className = 'status-pill-active';
+                    crossCheckTextEl.innerText = "✓ CSR đã hoàn thành và điền đầy đủ";
+                } else {
+                    crossCheckTextEl.className = 'status-pill-terminated';
+                    crossCheckTextEl.innerText = "✗ CSR CHƯA hoàn thành — STT chưa xong: " + undoneNotes;
+                }
+            }
+            const sigDisplayEl = document.getElementById('portal-sm-sig-display');
+            if (sigDisplayEl) {
+                sigDisplayEl.innerText = "SM ký tên: " + sigName;
+            }
+        }
+
+        window.onload = () => {
+            renderCSRTasks();
+            renderSMTasks();
+            renderLogA();
+            renderC2TablePDA();
+            setupCanvas('sig-canvas-1');
+            setupCanvas('sig-canvas-2');
+            setupCanvas('sig-canvas-b');
+        };
+    </script>
+</body>
+</html>
+"@
+
+[System.IO.File]::WriteAllText($templatePath, $CodeContent, [System.Text.Encoding]::UTF8)
+Write-Host "Updated template.html to make eLogbook Checklist a sub-item under Store Mgmt"
