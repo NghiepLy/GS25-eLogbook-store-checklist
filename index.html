@@ -906,7 +906,7 @@
                     </div>
                 </div>
 
-                <!-- UPDATED FILTER CONTROLS BAR (NEW 3 SELECT FILTERS FOR ÁP DỤNG NGÀY, TẦN SUẤT, CA) -->
+                <!-- FILTER CONTROLS BAR -->
                 <div class="portal-filter-card">
                     <div class="form-group" style="flex: 1; min-width: 170px;">
                         <label class="form-label-portal">Store (Cửa hàng):</label>
@@ -927,7 +927,6 @@
                         <input type="date" class="form-control-portal" value="2026-08-12" style="width: 135px;" onchange="renderWebstorePortal()">
                     </div>
 
-                    <!-- 1. FILTER ÁP DỤNG NGÀY -->
                     <div class="form-group" style="flex: 1; min-width: 140px;">
                         <label class="form-label-portal">Áp dụng ngày:</label>
                         <select id="portal-filter-day" class="form-control-portal" onchange="renderWebstorePortal()">
@@ -943,7 +942,6 @@
                         </select>
                     </div>
 
-                    <!-- 2. FILTER TẦN SUẤT -->
                     <div class="form-group" style="flex: 1; min-width: 130px;">
                         <label class="form-label-portal">Tần suất:</label>
                         <select id="portal-filter-freq" class="form-control-portal" onchange="renderWebstorePortal()">
@@ -954,7 +952,6 @@
                         </select>
                     </div>
 
-                    <!-- 3. FILTER CA LÀM VIỆC -->
                     <div class="form-group" style="flex: 1; min-width: 140px;">
                         <label class="form-label-portal">Ca làm việc:</label>
                         <select id="portal-filter-shift" class="form-control-portal" onchange="renderWebstorePortal()">
@@ -1238,13 +1235,44 @@
                     <!-- CSR TAB -->
                     <div id="pda-tab-csr">
                         <div class="filter-box">
-                            <div style="font-size: 11px; font-weight: 800; color: var(--gs25-muted); text-transform: uppercase;">⚡ Thuật toán Lọc Thông Minh (Smart Filter)</div>
-                            <div class="filter-row">
-                                <select id="csr-shift" class="filter-select" onchange="renderCSRTasks()">
-                                    <option value="ALL">Tất cả 113 Công việc CSR</option>
+                            <div style="font-size: 11px; font-weight: 800; color: #0080FF; text-transform: uppercase; margin-bottom: 8px;">⚡ BỘ LỌC CÔNG VIỆC CSR TRƯỚC KHI THỰC HIỆN</div>
+                            
+                            <!-- 1. ÁP DỤNG NGÀY -->
+                            <div style="margin-bottom: 6px;">
+                                <label class="form-label-portal">1. Áp dụng ngày:</label>
+                                <select id="pda-csr-filter-day" class="filter-select" onchange="renderCSRTasks()">
+                                    <option value="AUTO" selected>Mọi ngày + Thứ hôm nay (Thứ 3)</option>
+                                    <option value="Mọi ngày">Mọi ngày (Hằng ngày)</option>
+                                    <option value="Thứ 2">Thứ 2</option>
+                                    <option value="Thứ 3">Thứ 3</option>
+                                    <option value="Thứ 4">Thứ 4</option>
+                                    <option value="Thứ 5">Thứ 5</option>
+                                    <option value="Thứ 6">Thứ 6</option>
+                                    <option value="Thứ 7">Thứ 7</option>
+                                    <option value="Chủ nhật">Chủ nhật</option>
+                                    <option value="ALL">Tất cả ngày</option>
+                                </select>
+                            </div>
+
+                            <!-- 2. CA LÀM VIỆC -->
+                            <div style="margin-bottom: 6px;">
+                                <label class="form-label-portal">2. Ca làm việc đang trực:</label>
+                                <select id="pda-csr-filter-shift" class="filter-select" onchange="renderCSRTasks()">
                                     <option value="Ca 1" selected>Ca 1 (06:00 - 14:00) — 45 công việc</option>
                                     <option value="Ca 2">Ca 2 (14:00 - 22:00) — 39 công việc</option>
                                     <option value="Ca 3">Ca 3 (22:00 - 06:00) — 35 công việc</option>
+                                    <option value="ALL">Tất cả 3 ca (113 công việc CSR)</option>
+                                </select>
+                            </div>
+
+                            <!-- 3. TẦN SUẤT -->
+                            <div>
+                                <label class="form-label-portal">3. Tần suất kiểm tra:</label>
+                                <select id="pda-csr-filter-freq" class="filter-select" onchange="renderCSRTasks()">
+                                    <option value="ALL" selected>Tất cả Tần suất (Theo ngày, tuần, tháng)</option>
+                                    <option value="Theo ngày">Theo ngày</option>
+                                    <option value="Theo tuần">Theo tuần</option>
+                                    <option value="Theo tháng">Theo tháng (Chỉ làm đúng tuần ghi trong ô)</option>
                                 </select>
                             </div>
                         </div>
@@ -1261,6 +1289,48 @@
                     <div id="pda-tab-sm" style="display: none;">
                         <div class="banner-warning">
                             ⚠️ KHUNG GIỜ CAO ĐIỂM SÁNG (08:00): SM CÓ MẶT BÊN NGOÀI CỬA HÀNG QUAN SÁT VẬN HÀNH — KHÔNG NGỒI BÀN LÀM GIẤY TỜ
+                        </div>
+
+                        <div class="filter-box">
+                            <div style="font-size: 11px; font-weight: 800; color: #FF6C00; text-transform: uppercase; margin-bottom: 8px;">👔 BỘ LỌC CÔNG VIỆC SM TRƯỚC KHI THỰC HIỆN</div>
+
+                            <!-- 1. ÁP DỤNG NGÀY -->
+                            <div style="margin-bottom: 6px;">
+                                <label class="form-label-portal">1. Áp dụng ngày:</label>
+                                <select id="pda-sm-filter-day" class="filter-select" onchange="renderSMTasks()">
+                                    <option value="AUTO" selected>Mọi ngày + Thứ hôm nay (Thứ 3)</option>
+                                    <option value="Mọi ngày">Mọi ngày (Hằng ngày)</option>
+                                    <option value="Thứ 2">Thứ 2</option>
+                                    <option value="Thứ 3">Thứ 3</option>
+                                    <option value="Thứ 4">Thứ 4</option>
+                                    <option value="Thứ 5">Thứ 5</option>
+                                    <option value="Thứ 6">Thứ 6</option>
+                                    <option value="Thứ 7">Thứ 7</option>
+                                    <option value="Chủ nhật">Chủ nhật</option>
+                                    <option value="ALL">Tất cả ngày</option>
+                                </select>
+                            </div>
+
+                            <!-- 2. KHUNG GIỜ CA QUẢN LÝ -->
+                            <div style="margin-bottom: 6px;">
+                                <label class="form-label-portal">2. Khung giờ ca quản lý:</label>
+                                <select id="pda-sm-filter-shift" class="filter-select" onchange="renderSMTasks()">
+                                    <option value="ALL" selected>Tất cả 35 Công việc SM (08:00 - 17:00)</option>
+                                    <option value="SANG">Ca Sáng (08:00 - 12:00)</option>
+                                    <option value="CHIEU">Ca Chiều (12:00 - 17:00)</option>
+                                </select>
+                            </div>
+
+                            <!-- 3. TẦN SUẤT -->
+                            <div>
+                                <label class="form-label-portal">3. Tần suất kiểm tra:</label>
+                                <select id="pda-sm-filter-freq" class="filter-select" onchange="renderSMTasks()">
+                                    <option value="ALL" selected>Tất cả Tần suất (Theo ngày, tuần, tháng)</option>
+                                    <option value="Theo ngày">Theo ngày</option>
+                                    <option value="Theo tuần">Theo tuần</option>
+                                    <option value="Theo tháng">Theo tháng (Chỉ làm đúng tuần ghi trong ô)</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div style="margin-bottom: 12px; font-size: 12px; color: var(--gs25-muted); display: flex; justify-content: space-between; font-weight: 700;">
@@ -1647,9 +1717,41 @@
             renderWebstorePortal();
         }
 
+        // RENDER CSR TASKS ON PDA WITH PRE-CHECKLIST SMART FILTERS
         function renderCSRTasks() {
-            const selectedShift = document.getElementById('csr-shift').value;
-            const filtered = (selectedShift === 'ALL') ? rawCSR : rawCSR.filter(t => t.ca === selectedShift);
+            const selDay = document.getElementById('pda-csr-filter-day') ? document.getElementById('pda-csr-filter-day').value : 'AUTO';
+            const selShift = document.getElementById('pda-csr-filter-shift') ? document.getElementById('pda-csr-filter-shift').value : 'Ca 1';
+            const selFreq = document.getElementById('pda-csr-filter-freq') ? document.getElementById('pda-csr-filter-freq').value : 'ALL';
+
+            const currentDayOfWeek = 'Thứ 3';
+            const currentWeekOfMonth = 2;
+
+            const filtered = rawCSR.filter(task => {
+                // 1. Áp dụng ngày filter
+                if (selDay === 'AUTO') {
+                    if (task.apDungNgay !== 'Mọi ngày' && task.apDungNgay !== currentDayOfWeek) return false;
+                } else if (selDay !== 'ALL') {
+                    if (task.apDungNgay !== 'Mọi ngày' && !task.apDungNgay.includes(selDay)) return false;
+                }
+
+                // 2. Ca làm việc filter
+                if (selShift !== 'ALL' && task.ca !== selShift) return false;
+
+                // 3. Tần suất filter
+                if (selFreq === 'Theo ngày' && task.tanSuat !== 'Theo ngày') return false;
+                if (selFreq === 'Theo tuần' && task.tanSuat !== 'Theo tuần') return false;
+                if (selFreq === 'Theo tháng') {
+                    if (!task.tanSuat.includes('Theo tháng')) return false;
+                    // Rule: Việc Theo tháng chỉ làm vào đúng tuần ghi trong ô đó
+                    if (task.tanSuat.includes('Tuần 1') && currentWeekOfMonth !== 1) return false;
+                    if (task.tanSuat.includes('Tuần 2') && currentWeekOfMonth !== 2) return false;
+                    if (task.tanSuat.includes('Tuần 3') && currentWeekOfMonth !== 3) return false;
+                    if (task.tanSuat.includes('Tuần 4') && currentWeekOfMonth !== 4) return false;
+                }
+
+                return true;
+            });
+
             const container = document.getElementById('csr-task-list');
             container.innerHTML = '';
 
@@ -1669,7 +1771,7 @@
                     </div>
                     <div class="task-title">` + task.congViecPhaiLam + `</div>
                     <button class="guide-btn" onclick="toggleGuide('guide-` + task.stt + `')">
-                        <span>ℹ️ Tiêu chuẩn đạt</span>
+                        <span>ℹ️ Tiêu chuẩn đạt SOP</span>
                         <span>▼</span>
                     </button>
                     <div id="guide-` + task.stt + `" class="guide-content">
@@ -1693,13 +1795,50 @@
             document.getElementById('csr-progress').innerText = passCount + " / " + filtered.length + " (" + pct + "%)";
         }
 
+        // RENDER SM TASKS ON PDA WITH PRE-CHECKLIST SMART FILTERS
         function renderSMTasks() {
+            const selDay = document.getElementById('pda-sm-filter-day') ? document.getElementById('pda-sm-filter-day').value : 'AUTO';
+            const selShift = document.getElementById('pda-sm-filter-shift') ? document.getElementById('pda-sm-filter-shift').value : 'ALL';
+            const selFreq = document.getElementById('pda-sm-filter-freq') ? document.getElementById('pda-sm-filter-freq').value : 'ALL';
+
+            const currentDayOfWeek = 'Thứ 3';
+            const currentWeekOfMonth = 2;
+
+            const filtered = rawSM.filter(task => {
+                // 1. Áp dụng ngày filter
+                if (selDay === 'AUTO') {
+                    if (task.apDungNgay !== 'Mọi ngày' && task.apDungNgay !== currentDayOfWeek) return false;
+                } else if (selDay !== 'ALL') {
+                    if (task.apDungNgay !== 'Mọi ngày' && !task.apDungNgay.includes(selDay)) return false;
+                }
+
+                // 2. Khung giờ ca quản lý filter
+                if (selShift !== 'ALL') {
+                    const hour = parseInt((task.gio || '08:00').split(':')[0] || '8');
+                    if (selShift === 'SANG' && !(hour >= 8 && hour < 12)) return false;
+                    if (selShift === 'CHIEU' && !(hour >= 12 && hour <= 17)) return false;
+                }
+
+                // 3. Tần suất filter
+                if (selFreq === 'Theo ngày' && task.tanSuat !== 'Theo ngày') return false;
+                if (selFreq === 'Theo tuần' && task.tanSuat !== 'Theo tuần') return false;
+                if (selFreq === 'Theo tháng') {
+                    if (!task.tanSuat.includes('Theo tháng')) return false;
+                    if (task.tanSuat.includes('Tuần 1') && currentWeekOfMonth !== 1) return false;
+                    if (task.tanSuat.includes('Tuần 2') && currentWeekOfMonth !== 2) return false;
+                    if (task.tanSuat.includes('Tuần 3') && currentWeekOfMonth !== 3) return false;
+                    if (task.tanSuat.includes('Tuần 4') && currentWeekOfMonth !== 4) return false;
+                }
+
+                return true;
+            });
+
             const container = document.getElementById('sm-task-list');
             container.innerHTML = '';
 
             let passCount = 0;
 
-            rawSM.forEach(task => {
+            filtered.forEach(task => {
                 const status = smTaskStates[task.stt];
                 if (status === 'pass') passCount++;
                 const currentNote = smTaskNotes[task.stt] || '';
@@ -1740,8 +1879,8 @@
                 container.appendChild(card);
             });
 
-            const pct = Math.round((passCount / (rawSM.length || 1)) * 100);
-            document.getElementById('sm-progress').innerText = passCount + " / " + rawSM.length + " (" + pct + "%)";
+            const pct = Math.round((passCount / (filtered.length || 1)) * 100);
+            document.getElementById('sm-progress').innerText = passCount + " / " + filtered.length + " (" + pct + "%)";
         }
 
         function renderLogA() {
@@ -2092,4 +2231,4 @@
 "@
 
 [System.IO.File]::WriteAllText($templatePath, $CodeContent, [System.Text.Encoding]::UTF8)
-Write-Host "Updated template.html with new filter dropdowns"
+Write-Host "Updated template.html with Pre-Checklist Smart Filters for PDA App"
