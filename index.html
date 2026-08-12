@@ -1251,25 +1251,25 @@
                 </div>
 
                 <div class="pda-content">
-                    <!-- CSR TAB WITH STEP 1 & STEP 2 FILTERS (STEP 2.1 -> 2.4) -->
+                    <!-- CSR TAB WITH DYNAMIC REAL-TIME SHIFT & DAY TASK COUNTS -->
                     <div id="pda-tab-csr">
                         <div class="filter-box">
                             <div style="font-size: 11px; font-weight: 800; color: #0080FF; text-transform: uppercase; margin-bottom: 8px;">⚡ TRÌNH TỰ BỘ LỌC CÔNG VIỆC CSR (STEP 1 & STEP 2)</div>
                             
                             <!-- STEP 1: CHỌN CA THEO GIỜ HIỆN TẠI -->
                             <div style="margin-bottom: 6px;">
-                                <label class="form-label-portal">Step 1. Chọn Ca làm việc (Theo giờ hiện tại):</label>
+                                <label class="form-label-portal">1. CA LÀM VIỆC ĐANG TRỰC:</label>
                                 <select id="pda-csr-filter-shift" class="filter-select" onchange="renderCSRTasks()">
-                                    <option value="Ca 1" selected>Ca 1 (06:00 - 14:00) — 45 công việc</option>
-                                    <option value="Ca 2">Ca 2 (14:00 - 22:00) — 39 công việc</option>
-                                    <option value="Ca 3">Ca 3 (22:00 - 06:00) — 35 công việc</option>
-                                    <option value="ALL">Tất cả 3 ca (113 công việc CSR)</option>
+                                    <option value="Ca 1" selected>Ca 1 (06:00 - 14:00)</option>
+                                    <option value="Ca 2">Ca 2 (14:00 - 22:00)</option>
+                                    <option value="Ca 3">Ca 3 (22:00 - 06:00)</option>
+                                    <option value="ALL">Tất cả 3 ca</option>
                                 </select>
                             </div>
 
                             <!-- STEP 2: CHỌN ÁP DỤNG NGÀY -->
                             <div style="margin-bottom: 6px;">
-                                <label class="form-label-portal">Step 2. Chọn Áp dụng ngày:</label>
+                                <label class="form-label-portal">2. ÁP DỤNG NGÀY:</label>
                                 <select id="pda-csr-filter-day" class="filter-select" onchange="renderCSRTasks()">
                                     <option value="AUTO" selected>Mọi ngày + Thứ hôm nay (Thứ 3)</option>
                                     <option value="Mọi ngày">Mọi ngày (Hằng ngày - Step 2.1)</option>
@@ -1286,7 +1286,7 @@
 
                             <!-- TẦN SUẤT STEP 2.1 -> 2.4 -->
                             <div>
-                                <label class="form-label-portal">Step 2.1 - 2.4 Tần suất kiểm tra:</label>
+                                <label class="form-label-portal">3. TẦN SUẤT KIỂM TRA:</label>
                                 <select id="pda-csr-filter-freq" class="filter-select" onchange="renderCSRTasks()">
                                     <option value="ALL" selected>Tất cả Tần suất (Step 2.1, 2.2, 2.3, 2.4)</option>
                                     <option value="Theo ngày">Step 2.1: Theo ngày (Hằng ngày)</option>
@@ -1297,7 +1297,7 @@
                         </div>
 
                         <div style="margin-bottom: 12px; font-size: 12px; color: var(--gs25-muted); display: flex; justify-content: space-between; font-weight: 700;">
-                            <span>Tiến độ Tuân thủ Ca CSR:</span>
+                            <span id="csr-progress-label">Tiến độ Tuân thủ Ca CSR:</span>
                             <span id="csr-progress" style="color: var(--gs25-green);">0 / 0 (0%)</span>
                         </div>
 
@@ -1309,7 +1309,7 @@
                         </button>
                     </div>
 
-                    <!-- SM TAB WITH STEP 1 FILTERS (STEP 1.1 -> 1.4) -->
+                    <!-- SM TAB WITH DYNAMIC REAL-TIME SHIFT & DAY TASK COUNTS -->
                     <div id="pda-tab-sm" style="display: none;">
                         <div class="banner-warning">
                             ⚠️ KHUNG GIỜ CAO ĐIỂM SÁNG (08:00): SM CÓ MẶT BÊN NGOÀI CỬA HÀNG QUAN SÁT VẬN HÀNH — KHÔNG NGỒI BÀN LÀM GIẤY TỜ
@@ -1320,7 +1320,7 @@
 
                             <!-- STEP 1: CHỌN ÁP DỤNG NGÀY -->
                             <div style="margin-bottom: 6px;">
-                                <label class="form-label-portal">Step 1. Chọn Áp dụng ngày:</label>
+                                <label class="form-label-portal">1. ÁP DỤNG NGÀY:</label>
                                 <select id="pda-sm-filter-day" class="filter-select" onchange="renderSMTasks()">
                                     <option value="AUTO" selected>Mọi ngày + Thứ hôm nay (Thứ 3)</option>
                                     <option value="Mọi ngày">Mọi ngày (Hằng ngày - Step 1.1)</option>
@@ -1337,7 +1337,7 @@
 
                             <!-- KHUNG GIỜ CA QUẢN LÝ -->
                             <div style="margin-bottom: 6px;">
-                                <label class="form-label-portal">Khung giờ ca quản lý:</label>
+                                <label class="form-label-portal">2. KHUNG GIỜ CA QUẢN LÝ:</label>
                                 <select id="pda-sm-filter-shift" class="filter-select" onchange="renderSMTasks()">
                                     <option value="ALL" selected>Tất cả 35 Công việc SM (08:00 - 17:00)</option>
                                     <option value="SANG">Ca Sáng (08:00 - 12:00)</option>
@@ -1347,7 +1347,7 @@
 
                             <!-- TẦN SUẤT STEP 1.1 -> 1.4 -->
                             <div>
-                                <label class="form-label-portal">Step 1.1 - 1.4 Tần suất kiểm tra:</label>
+                                <label class="form-label-portal">3. TẦN SUẤT KIỂM TRA:</label>
                                 <select id="pda-sm-filter-freq" class="filter-select" onchange="renderSMTasks()">
                                     <option value="ALL" selected>Tất cả Tần suất (Step 1.1, 1.2, 1.3, 1.4)</option>
                                     <option value="Theo ngày">Step 1.1: Theo ngày (Hằng ngày)</option>
@@ -1755,7 +1755,7 @@
             renderWebstorePortal();
         }
 
-        // RENDER CSR TASKS ON PDA WITH PRE-CHECKLIST SMART FILTERS (STEP 1 & STEP 2: 2.1 -> 2.4)
+        // RENDER CSR TASKS ON PDA WITH REAL-TIME DYNAMIC SHIFT & DAY TASK COUNTS
         function renderCSRTasks() {
             const selDay = document.getElementById('pda-csr-filter-day') ? document.getElementById('pda-csr-filter-day').value : 'AUTO';
             const selShift = document.getElementById('pda-csr-filter-shift') ? document.getElementById('pda-csr-filter-shift').value : 'Ca 1';
@@ -1764,30 +1764,43 @@
             const currentDayOfWeek = 'Thứ 3';
             const currentWeekOfMonth = 2;
 
-            const filtered = rawCSR.filter(task => {
-                // Step 1: Ca filter
-                if (selShift !== 'ALL' && task.ca !== selShift) return false;
+            function matchCSR(task, shift, day, freq) {
+                if (shift !== 'ALL' && task.ca !== shift) return false;
 
-                // Step 2: Áp dụng ngày filter
-                if (selDay === 'AUTO') {
+                if (day === 'AUTO') {
                     if (task.apDungNgay !== 'Mọi ngày' && task.apDungNgay !== currentDayOfWeek) return false;
-                } else if (selDay !== 'ALL') {
-                    if (task.apDungNgay !== 'Mọi ngày' && !task.apDungNgay.includes(selDay)) return false;
+                } else if (day !== 'ALL') {
+                    if (task.apDungNgay !== 'Mọi ngày' && !task.apDungNgay.includes(day)) return false;
                 }
 
-                // Step 2.1 - 2.4: Tần suất filter
-                if (selFreq === 'Theo ngày' && task.tanSuat !== 'Theo ngày') return false;
-                if (selFreq === 'Theo tuần' && task.tanSuat !== 'Theo tuần') return false;
-                if (selFreq === 'Theo tháng') {
+                if (freq === 'Theo ngày' && task.tanSuat !== 'Theo ngày') return false;
+                if (freq === 'Theo tuần' && task.tanSuat !== 'Theo tuần') return false;
+                if (freq === 'Theo tháng') {
                     if (!task.tanSuat.includes('Theo tháng')) return false;
                     if (task.tanSuat.includes('Tuần 1') && currentWeekOfMonth !== 1) return false;
                     if (task.tanSuat.includes('Tuần 2') && currentWeekOfMonth !== 2) return false;
                     if (task.tanSuat.includes('Tuần 3') && currentWeekOfMonth !== 3) return false;
                     if (task.tanSuat.includes('Tuần 4') && currentWeekOfMonth !== 4) return false;
                 }
-
                 return true;
-            });
+            }
+
+            // Calculate dynamic counts for each shift option based on selected Day and Freq
+            const countCa1 = rawCSR.filter(t => matchCSR(t, 'Ca 1', selDay, selFreq)).length;
+            const countCa2 = rawCSR.filter(t => matchCSR(t, 'Ca 2', selDay, selFreq)).length;
+            const countCa3 = rawCSR.filter(t => matchCSR(t, 'Ca 3', selDay, selFreq)).length;
+            const countAll = rawCSR.filter(t => matchCSR(t, 'ALL', selDay, selFreq)).length;
+
+            // Update Dropdown Shift Options Text dynamically
+            const shiftSelect = document.getElementById('pda-csr-filter-shift');
+            if (shiftSelect && shiftSelect.options.length >= 4) {
+                shiftSelect.options[0].text = `Ca 1 (06:00 - 14:00) — ${countCa1} công việc`;
+                shiftSelect.options[1].text = `Ca 2 (14:00 - 22:00) — ${countCa2} công việc`;
+                shiftSelect.options[2].text = `Ca 3 (22:00 - 06:00) — ${countCa3} công việc`;
+                shiftSelect.options[3].text = `Tất cả 3 ca (${countAll} công việc CSR)`;
+            }
+
+            const filtered = rawCSR.filter(t => matchCSR(t, selShift, selDay, selFreq));
 
             const container = document.getElementById('csr-task-list');
             container.innerHTML = '';
@@ -1829,10 +1842,12 @@
             });
 
             const pct = Math.round((passCount / (filtered.length || 1)) * 100);
+            const shiftLabel = (selShift === 'ALL' ? '3 Ca CSR' : selShift);
+            document.getElementById('csr-progress-label').innerText = `Tiến độ Tuân thủ ${shiftLabel}:`;
             document.getElementById('csr-progress').innerText = passCount + " / " + filtered.length + " (" + pct + "%)";
         }
 
-        // RENDER SM TASKS ON PDA WITH PRE-CHECKLIST SMART FILTERS (STEP 1: 1.1 -> 1.4)
+        // RENDER SM TASKS ON PDA WITH REAL-TIME DYNAMIC SHIFT & DAY TASK COUNTS
         function renderSMTasks() {
             const selDay = document.getElementById('pda-sm-filter-day') ? document.getElementById('pda-sm-filter-day').value : 'AUTO';
             const selShift = document.getElementById('pda-sm-filter-shift') ? document.getElementById('pda-sm-filter-shift').value : 'ALL';
@@ -1841,34 +1856,45 @@
             const currentDayOfWeek = 'Thứ 3';
             const currentWeekOfMonth = 2;
 
-            const filtered = rawSM.filter(task => {
-                // Step 1: Áp dụng ngày filter
-                if (selDay === 'AUTO') {
+            function matchSM(task, shift, day, freq) {
+                if (day === 'AUTO') {
                     if (task.apDungNgay !== 'Mọi ngày' && task.apDungNgay !== currentDayOfWeek) return false;
-                } else if (selDay !== 'ALL') {
-                    if (task.apDungNgay !== 'Mọi ngày' && !task.apDungNgay.includes(selDay)) return false;
+                } else if (day !== 'ALL') {
+                    if (task.apDungNgay !== 'Mọi ngày' && !task.apDungNgay.includes(day)) return false;
                 }
 
-                // Khung giờ filter
-                if (selShift !== 'ALL') {
+                if (shift !== 'ALL') {
                     const hour = parseInt((task.gio || '08:00').split(':')[0] || '8');
-                    if (selShift === 'SANG' && !(hour >= 8 && hour < 12)) return false;
-                    if (selShift === 'CHIEU' && !(hour >= 12 && hour <= 17)) return false;
+                    if (shift === 'SANG' && !(hour >= 8 && hour < 12)) return false;
+                    if (shift === 'CHIEU' && !(hour >= 12 && hour <= 17)) return false;
                 }
 
-                // Step 1.1 - 1.4: Tần suất filter
-                if (selFreq === 'Theo ngày' && task.tanSuat !== 'Theo ngày') return false;
-                if (selFreq === 'Theo tuần' && task.tanSuat !== 'Theo tuần') return false;
-                if (selFreq === 'Theo tháng') {
+                if (freq === 'Theo ngày' && task.tanSuat !== 'Theo ngày') return false;
+                if (freq === 'Theo tuần' && task.tanSuat !== 'Theo tuần') return false;
+                if (freq === 'Theo tháng') {
                     if (!task.tanSuat.includes('Theo tháng')) return false;
                     if (task.tanSuat.includes('Tuần 1') && currentWeekOfMonth !== 1) return false;
                     if (task.tanSuat.includes('Tuần 2') && currentWeekOfMonth !== 2) return false;
                     if (task.tanSuat.includes('Tuần 3') && currentWeekOfMonth !== 3) return false;
                     if (task.tanSuat.includes('Tuần 4') && currentWeekOfMonth !== 4) return false;
                 }
-
                 return true;
-            });
+            }
+
+            // Calculate dynamic counts for SM shift options
+            const countAll = rawSM.filter(t => matchSM(t, 'ALL', selDay, selFreq)).length;
+            const countSang = rawSM.filter(t => matchSM(t, 'SANG', selDay, selFreq)).length;
+            const countChieu = rawSM.filter(t => matchSM(t, 'CHIEU', selDay, selFreq)).length;
+
+            // Update Dropdown Shift Options Text dynamically
+            const shiftSelect = document.getElementById('pda-sm-filter-shift');
+            if (shiftSelect && shiftSelect.options.length >= 3) {
+                shiftSelect.options[0].text = `Tất cả 35 Công việc SM (08:00 - 17:00) — ${countAll} công việc`;
+                shiftSelect.options[1].text = `Ca Sáng (08:00 - 12:00) — ${countSang} công việc`;
+                shiftSelect.options[2].text = `Ca Chiều (12:00 - 17:00) — ${countChieu} công việc`;
+            }
+
+            const filtered = rawSM.filter(t => matchSM(t, selShift, selDay, selFreq));
 
             const container = document.getElementById('sm-task-list');
             container.innerHTML = '';
@@ -2310,4 +2336,4 @@
 "@
 
 [System.IO.File]::WriteAllText($templatePath, $CodeContent, [System.Text.Encoding]::UTF8)
-Write-Host "Updated template.html with complete UI Header & Step-by-Step UI Filter rules and Submit buttons"
+Write-Host "Updated template.html with dynamic real-time task counts on Dropdowns and Progress Bar"
