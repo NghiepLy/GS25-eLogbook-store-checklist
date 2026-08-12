@@ -906,7 +906,7 @@
                     </div>
                 </div>
 
-                <!-- FILTER CONTROLS BAR -->
+                <!-- FILTER CONTROLS BAR WITH FROM DATE & TO DATE RANGE SELECTION -->
                 <div class="portal-filter-card">
                     <div class="form-group" style="flex: 1; min-width: 170px;">
                         <label class="form-label-portal">Store (Cửa hàng):</label>
@@ -918,13 +918,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label-portal">From Date:</label>
-                        <input type="date" class="form-control-portal" value="2026-05-14" style="width: 135px;">
+                        <label class="form-label-portal">From Date (Từ ngày):</label>
+                        <input type="date" id="portal-from-date" class="form-control-portal" value="2026-08-10" style="width: 135px;" onchange="renderWebstorePortal()">
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label-portal">To Date:</label>
-                        <input type="date" class="form-control-portal" value="2026-08-12" style="width: 135px;" onchange="renderWebstorePortal()">
+                        <label class="form-label-portal">To Date (Đến ngày):</label>
+                        <input type="date" id="portal-to-date" class="form-control-portal" value="2026-08-12" style="width: 135px;" onchange="renderWebstorePortal()">
                     </div>
 
                     <div class="form-group" style="flex: 1; min-width: 140px;">
@@ -984,13 +984,14 @@
                     </button>
                 </div>
 
-                <!-- TAB 1: CSR CHECKLIST TABLE -->
+                <!-- TAB 1: CSR CHECKLIST TABLE WITH NGÀY KIỂM TRA AUDIT DATE -->
                 <div id="portal-tab-csr-view">
                     <div class="portal-table-container">
                         <table class="gs25-table">
                             <thead>
                                 <tr>
                                     <th style="width: 40px;">No.</th>
+                                    <th style="width: 95px; background: #00569E;">Ngày kiểm tra</th>
                                     <th style="width: 90px;">Áp dụng ngày</th>
                                     <th style="width: 90px;">Tần suất</th>
                                     <th style="width: 60px;">Ca</th>
@@ -1023,13 +1024,14 @@
                     </div>
                 </div>
 
-                <!-- TAB 2: SM CHECKLIST TABLE -->
+                <!-- TAB 2: SM CHECKLIST TABLE WITH NGÀY KIỂM TRA AUDIT DATE -->
                 <div id="portal-tab-sm-view" style="display: none;">
                     <div class="portal-table-container">
                         <table class="gs25-table">
                             <thead>
                                 <tr>
                                     <th style="width: 40px;">No.</th>
+                                    <th style="width: 95px; background: #00569E;">Ngày kiểm tra</th>
                                     <th style="width: 90px;">Áp dụng ngày</th>
                                     <th style="width: 90px;">Tần suất</th>
                                     <th style="width: 60px;">Giờ</th>
@@ -1727,22 +1729,18 @@
             const currentWeekOfMonth = 2;
 
             const filtered = rawCSR.filter(task => {
-                // 1. Áp dụng ngày filter
                 if (selDay === 'AUTO') {
                     if (task.apDungNgay !== 'Mọi ngày' && task.apDungNgay !== currentDayOfWeek) return false;
                 } else if (selDay !== 'ALL') {
                     if (task.apDungNgay !== 'Mọi ngày' && !task.apDungNgay.includes(selDay)) return false;
                 }
 
-                // 2. Ca làm việc filter
                 if (selShift !== 'ALL' && task.ca !== selShift) return false;
 
-                // 3. Tần suất filter
                 if (selFreq === 'Theo ngày' && task.tanSuat !== 'Theo ngày') return false;
                 if (selFreq === 'Theo tuần' && task.tanSuat !== 'Theo tuần') return false;
                 if (selFreq === 'Theo tháng') {
                     if (!task.tanSuat.includes('Theo tháng')) return false;
-                    // Rule: Việc Theo tháng chỉ làm vào đúng tuần ghi trong ô đó
                     if (task.tanSuat.includes('Tuần 1') && currentWeekOfMonth !== 1) return false;
                     if (task.tanSuat.includes('Tuần 2') && currentWeekOfMonth !== 2) return false;
                     if (task.tanSuat.includes('Tuần 3') && currentWeekOfMonth !== 3) return false;
@@ -1805,21 +1803,18 @@
             const currentWeekOfMonth = 2;
 
             const filtered = rawSM.filter(task => {
-                // 1. Áp dụng ngày filter
                 if (selDay === 'AUTO') {
                     if (task.apDungNgay !== 'Mọi ngày' && task.apDungNgay !== currentDayOfWeek) return false;
                 } else if (selDay !== 'ALL') {
                     if (task.apDungNgay !== 'Mọi ngày' && !task.apDungNgay.includes(selDay)) return false;
                 }
 
-                // 2. Khung giờ ca quản lý filter
                 if (selShift !== 'ALL') {
                     const hour = parseInt((task.gio || '08:00').split(':')[0] || '8');
                     if (selShift === 'SANG' && !(hour >= 8 && hour < 12)) return false;
                     if (selShift === 'CHIEU' && !(hour >= 12 && hour <= 17)) return false;
                 }
 
-                // 3. Tần suất filter
                 if (selFreq === 'Theo ngày' && task.tanSuat !== 'Theo ngày') return false;
                 if (selFreq === 'Theo tuần' && task.tanSuat !== 'Theo tuần') return false;
                 if (selFreq === 'Theo tháng') {
@@ -2016,12 +2011,36 @@
             ctx.clearRect(0, 0, cvs.width, cvs.height);
         }
 
-        // RENDER WEBSTORE PORTAL TABLES WITH REAL-TIME DYNAMIC FILTERS (ÁP DỤNG NGÀY, TẦN SUẤT, CA)
+        // GENERATE DATES LIST FOR MULTI-DATE AUDIT LOGGING
+        function getDateRangeList(startDateStr, endDateStr) {
+            if (!startDateStr || !endDateStr) return ['12/08/2026'];
+            const start = new Date(startDateStr);
+            const end = new Date(endDateStr);
+            if (isNaN(start.getTime()) || isNaN(end.getTime())) return ['12/08/2026'];
+            
+            const dStart = start <= end ? start : end;
+            const dEnd = start <= end ? end : start;
+            
+            const list = [];
+            let count = 0;
+            for (let d = new Date(dEnd); d >= dStart && count < 3; d.setDate(d.getDate() - 1)) {
+                const dayStr = String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear();
+                list.push(dayStr);
+                count++;
+            }
+            return list.length ? list : ['12/08/2026'];
+        }
+
+        // RENDER WEBSTORE PORTAL TABLES WITH REAL-TIME DYNAMIC FILTERS & MULTI-DATE AUDIT LOGS
         function renderWebstorePortal() {
             const storeCode = document.getElementById('portal-store-select').value;
+            const fromDateVal = document.getElementById('portal-from-date') ? document.getElementById('portal-from-date').value : '2026-08-10';
+            const toDateVal = document.getElementById('portal-to-date') ? document.getElementById('portal-to-date').value : '2026-08-12';
             const filterDay = document.getElementById('portal-filter-day') ? document.getElementById('portal-filter-day').value : 'ALL';
             const filterFreq = document.getElementById('portal-filter-freq') ? document.getElementById('portal-filter-freq').value : 'ALL';
             const filterShift = document.getElementById('portal-filter-shift') ? document.getElementById('portal-filter-shift').value : 'ALL';
+
+            const auditDates = getDateRangeList(fromDateVal, toDateVal);
 
             // Filter CSR items
             const filteredCSR = rawCSR.filter(item => {
@@ -2044,56 +2063,74 @@
                 return true;
             });
             
-            // 1. CSR Table
+            // 1. CSR Table with Ngày kiểm tra column
             const csrTbody = document.getElementById('portal-csr-tbody');
             csrTbody.innerHTML = '';
-            filteredCSR.forEach((item, idx) => {
-                const status = csrTaskStates[item.stt];
-                const note = csrTaskNotes[item.stt] || '';
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>` + (idx + 1) + `</td>
-                    <td>` + item.apDungNgay + `</td>
-                    <td>` + item.tanSuat + `</td>
-                    <td>` + item.ca + `</td>
-                    <td>` + item.gio + `</td>
-                    <td>` + item.uocTinhPhut + ` ph</td>
-                    <td>` + item.khuVucThietBi + `</td>
-                    <td><strong>` + item.congViecPhaiLam + `</strong></td>
-                    <td style="font-size:11px; color:#4B5563;">` + item.tieuChuanDat + `</td>
-                    <td>` + storeCode + `_CSR</td>
-                    <td>` + (status === 'fail' ? '<span class="status-pill-terminated">✗ KHÔNG ĐẠT</span>' : '<span class="status-pill-active">Active (ĐẠT)</span>') + `</td>
-                    <td style="font-size:11px; color:` + (status === 'fail' ? '#DC2626' : 'var(--gs25-muted)') + `;">` + (note ? note : (status === 'fail' ? 'Bắt buộc giải trình' : 'Hoàn thành SOP')) + `</td>
-                    <td><button class="btn-action-icon">✏️</button></td>
-                `;
-                csrTbody.appendChild(tr);
-            });
-            document.getElementById('portal-csr-total').innerText = 'Total ' + filteredCSR.length + ' records';
+            let csrGlobalIdx = 1;
 
-            // 2. SM Table
+            auditDates.forEach(dateStr => {
+                filteredCSR.forEach(item => {
+                    const status = csrTaskStates[item.stt];
+                    const note = csrTaskNotes[item.stt] || '';
+                    const isToday = (dateStr === '12/08/2026');
+                    const itemStatus = isToday ? status : 'pass';
+                    const itemNote = isToday ? note : '';
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>` + (csrGlobalIdx++) + `</td>
+                        <td style="font-weight:700; color:#0080FF;">` + dateStr + `</td>
+                        <td>` + item.apDungNgay + `</td>
+                        <td>` + item.tanSuat + `</td>
+                        <td>` + item.ca + `</td>
+                        <td>` + item.gio + `</td>
+                        <td>` + item.uocTinhPhut + ` ph</td>
+                        <td>` + item.khuVucThietBi + `</td>
+                        <td><strong>` + item.congViecPhaiLam + `</strong></td>
+                        <td style="font-size:11px; color:#4B5563;">` + item.tieuChuanDat + `</td>
+                        <td>` + storeCode + `_CSR</td>
+                        <td>` + (itemStatus === 'fail' ? '<span class="status-pill-terminated">✗ KHÔNG ĐẠT</span>' : '<span class="status-pill-active">Active (ĐẠT)</span>') + `</td>
+                        <td style="font-size:11px; color:` + (itemStatus === 'fail' ? '#DC2626' : 'var(--gs25-muted)') + `;">` + (itemNote ? itemNote : (itemStatus === 'fail' ? 'Bắt buộc giải trình' : 'Hoàn thành SOP')) + `</td>
+                        <td><button class="btn-action-icon">✏️</button></td>
+                    `;
+                    csrTbody.appendChild(tr);
+                });
+            });
+            document.getElementById('portal-csr-total').innerText = 'Total ' + (csrGlobalIdx - 1) + ' records (' + auditDates.length + ' ngày audit)';
+
+            // 2. SM Table with Ngày kiểm tra column
             const smTbody = document.getElementById('portal-sm-tbody');
             smTbody.innerHTML = '';
-            filteredSM.forEach((item, idx) => {
-                const status = smTaskStates[item.stt];
-                const note = smTaskNotes[item.stt] || '';
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>` + (idx + 1) + `</td>
-                    <td>` + item.apDungNgay + `</td>
-                    <td>` + item.tanSuat + `</td>
-                    <td>` + item.gio + `</td>
-                    <td>` + item.uocTinhPhut + ` ph</td>
-                    <td><span class="task-badge">` + item.nhomViec + `</span></td>
-                    <td><strong>` + item.noiDungSM + `</strong></td>
-                    <td style="font-size:11px; color:#4B5563;">` + item.tieuChuanDat + `</td>
-                    <td style="font-size:11px; color:#1E40AF; font-weight:600;">` + item.bangChung + `</td>
-                    <td>` + (status === 'fail' ? '<span class="status-pill-terminated">✗ KHÔNG ĐẠT</span>' : '<span class="status-pill-active">Active (ĐẠT)</span>') + `</td>
-                    <td style="font-size:11px; color:` + (status === 'fail' ? '#DC2626' : 'var(--gs25-green)') + `;">` + (note ? note : (status === 'fail' ? 'Yêu cầu bằng chứng' : '📷 Valid Watermark')) + `</td>
-                    <td><button class="btn-action-icon">✏️</button></td>
-                `;
-                smTbody.appendChild(tr);
+            let smGlobalIdx = 1;
+
+            auditDates.forEach(dateStr => {
+                filteredSM.forEach(item => {
+                    const status = smTaskStates[item.stt];
+                    const note = smTaskNotes[item.stt] || '';
+                    const isToday = (dateStr === '12/08/2026');
+                    const itemStatus = isToday ? status : 'pass';
+                    const itemNote = isToday ? note : '';
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>` + (smGlobalIdx++) + `</td>
+                        <td style="font-weight:700; color:#0080FF;">` + dateStr + `</td>
+                        <td>` + item.apDungNgay + `</td>
+                        <td>` + item.tanSuat + `</td>
+                        <td>` + item.gio + `</td>
+                        <td>` + item.uocTinhPhut + ` ph</td>
+                        <td><span class="task-badge">` + item.nhomViec + `</span></td>
+                        <td><strong>` + item.noiDungSM + `</strong></td>
+                        <td style="font-size:11px; color:#4B5563;">` + item.tieuChuanDat + `</td>
+                        <td style="font-size:11px; color:#1E40AF; font-weight:600;">` + item.bangChung + `</td>
+                        <td>` + (itemStatus === 'fail' ? '<span class="status-pill-terminated">✗ KHÔNG ĐẠT</span>' : '<span class="status-pill-active">Active (ĐẠT)</span>') + `</td>
+                        <td style="font-size:11px; color:` + (itemStatus === 'fail' ? '#DC2626' : 'var(--gs25-green)') + `;">` + (itemNote ? itemNote : (itemStatus === 'fail' ? 'Yêu cầu bằng chứng' : '📷 Valid Watermark')) + `</td>
+                        <td><button class="btn-action-icon">✏️</button></td>
+                    `;
+                    smTbody.appendChild(tr);
+                });
             });
-            document.getElementById('portal-sm-total').innerText = 'Total ' + filteredSM.length + ' records';
+            document.getElementById('portal-sm-total').innerText = 'Total ' + (smGlobalIdx - 1) + ' records (' + auditDates.length + ' ngày audit)';
 
             // 3. Logbook Tab A Matrix Table
             const logATbody = document.getElementById('portal-log-a-tbody');
@@ -2231,4 +2268,4 @@
 "@
 
 [System.IO.File]::WriteAllText($templatePath, $CodeContent, [System.Text.Encoding]::UTF8)
-Write-Host "Updated template.html with Pre-Checklist Smart Filters for PDA App"
+Write-Host "Updated template.html with Audit Date column and Date Range filtering for Web Portal"
