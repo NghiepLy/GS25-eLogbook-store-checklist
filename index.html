@@ -1105,7 +1105,10 @@
                     <!-- BẢNG B -->
                     <div class="excel-section-header" style="display:flex; justify-content:space-between; align-items:center;">
                         <span>BẢNG B — BẤT THƯỜNG VÀ THIẾT BỊ CHƯA ĐẠT → PHIẾU I&C (ĐẦY ĐỦ 12 CỘT CHUẨN HR EXCEL)</span>
-                        <button class="vswitch-btn" style="background:#FFFFFF; color:#0080FF; font-size:11px; padding:4px 10px;" onclick="openICTicketModal()">📋 Tạo Ticket I&C Báo Cáo</button>
+                        <div style="display:flex; gap:8px;">
+                            <button class="vswitch-btn" style="background:#16A34A; color:white; font-size:11px; padding:4px 10px;" onclick="openAllDeviceHistoryModal()">📜 Xem Lịch Sử Bảo Trì Tất Cả Thiết Bị</button>
+                            <button class="vswitch-btn" style="background:#FFFFFF; color:#0080FF; font-size:11px; padding:4px 10px;" onclick="openICTicketModal()">📋 Tạo Ticket I&C Báo Cáo</button>
+                        </div>
                     </div>
                     <div class="portal-table-container" style="margin-bottom: 8px;">
                         <table class="gs25-table">
@@ -1130,7 +1133,7 @@
                         </table>
                     </div>
                     <div class="footer-note" style="margin-bottom: 20px;">
-                        Cột 'Mã (ID)' giúp quản lý định danh thiết bị duy nhất. Cột 'Lịch sử Bảo trì' cho phép xem lại các đợt sửa chữa gần nhất của từng thiết bị.
+                        Cột 'Mã (ID)' giúp quản lý định danh thiết bị duy nhất. Nút 'Xem Lịch Sử Bảo Trì Tất Cả Thiết Bị' mở giao diện bảng tổng hợp toàn bộ 14 thiết bị lạnh tại cửa hàng.
                     </div>
 
                     <!-- BẢNG C1 & C2 -->
@@ -1616,7 +1619,7 @@
                 <ul style="font-size: 13px; color: var(--gs25-text); padding-left: 20px; line-height: 1.8;">
                     <li><strong>Mã Thiết Bị (ID):</strong> Quản lý 14 thiết bị lạnh bằng Mã định danh độc nhất (EQ-REF-001 đến EQ-REF-014).</li>
                     <li><strong>I&C Ticket Form:</strong> Tự động kích hoạt form báo cáo sự cố gửi email về `ic.support@gs25.com.vn`.</li>
-                    <li><strong>Lịch sử Bảo trì Sửa chữa:</strong> Tra cứu lần sửa gần nhất và nguyên nhân sự cố của từng thiết bị trên Web Portal BẢNG B.</li>
+                    <li><strong>Bảng Tổng Hợp Lịch Sử Bảo Trì:</strong> Tra cứu UI bảng tổng hợp toàn bộ 14 thiết bị lạnh với thông tin lần sửa gần nhất & vấn đề sự cố tại Cửa hàng đang xem báo cáo.</li>
                 </ul>
             </div>
         </div>
@@ -1684,25 +1687,49 @@
         </div>
     </div>
 
-    <!-- MODAL 2: DEVICE MAINTENANCE HISTORY MODAL -->
+    <!-- MODAL 2: DEDICATED COMPREHENSIVE UI TABLE MODAL FOR ALL DEVICES MAINTENANCE HISTORY -->
     <div id="modal-device-history" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:9999; justify-content:center; align-items:center;">
-        <div style="background:white; border-radius:14px; width:720px; max-width:95%; padding:24px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.3); max-height:92vh; overflow-y:auto;">
+        <div style="background:white; border-radius:14px; width:1100px; max-width:96%; padding:24px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.3); max-height:92vh; overflow-y:auto;">
             <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #16A34A; padding-bottom:12px; margin-bottom:16px;">
-                <div style="font-weight:900; font-size:17px; color:#16A34A; display:flex; align-items:center; gap:8px;">
-                    <span>📜 LỊCH SỬ BẢO TRÌ SỬA CHỮA THIẾT BỊ (DEVICE REPAIR HISTORY)</span>
+                <div>
+                    <div style="font-weight:900; font-size:18px; color:#16A34A; display:flex; align-items:center; gap:8px;">
+                        <span>📜 BẢNG TỔNG HỢP LỊCH SỬ BẢO TRÌ SỬA CHỮA TẤT CẢ THIẾT BỊ LẠNH</span>
+                    </div>
+                    <div style="font-size:12px; color:#4B5563; margin-top:2px;">Báo cáo chi tiết các đợt sửa chữa gần nhất, sự cố đã khắc phục và tình trạng vận hành thiết bị</div>
                 </div>
                 <button onclick="document.getElementById('modal-device-history').style.display='none'" style="background:none; border:none; font-size:22px; cursor:pointer; color:#6B7280;">✖</button>
             </div>
 
-            <div style="margin-bottom:14px; padding:12px; background:#F0FDF4; border:1px solid #BBF7D0; border-radius:8px; font-size:13px; display:flex; flex-wrap:wrap; gap:16px;">
-                <div><strong>Mã (ID):</strong> <span id="history-dev-code" style="color:#0080FF; font-weight:800;">EQ-REF-008</span></div>
-                <div><strong>Tên Thiết Bị / Khu Vực:</strong> <span id="history-dev-name" style="font-weight:700;">Tủ đông 2</span></div>
-                <div><strong>Cửa Hàng:</strong> VN0102 - GS25 Nguyễn Trãi</div>
+            <!-- HEADER CONTEXT INFO CARDS -->
+            <div style="margin-bottom:16px; padding:14px; background:#F0FDF4; border:1px solid #BBF7D0; border-radius:10px; font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+                <div><strong>🏪 Cửa Hàng Báo Cáo:</strong> <span id="history-store-name" style="color:#0080FF; font-weight:800;">VN0102 - GS25 Nguyễn Trãi (HCM)</span></div>
+                <div><strong>📅 Thời Gian Trích Xuất:</strong> <span style="font-weight:700;">13/08/2026 13:52</span></div>
+                <div><strong>❄️ Tổng Số Thiết Bị Quản Lý:</strong> <span style="color:#16A34A; font-weight:800;">14 Thiết Bị Lạnh (EQ-REF-001 đến EQ-REF-014)</span></div>
             </div>
 
-            <div style="font-weight:800; font-size:13px; color:#1F2937; margin-bottom:10px;">DANH SÁCH LẦN SỬA CHỮA GẦN NHẤT & VẤN ĐỀ NỔI BẬT:</div>
+            <!-- DEDICATED FULL SUMMARY TABLE -->
+            <div class="portal-table-container">
+                <table class="gs25-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;">STT</th>
+                            <th style="width: 100px; background:#00569E;">Mã (ID)</th>
+                            <th style="width: 150px;">Tên Thiết Bị / Khu Vực</th>
+                            <th style="width: 140px;">Cửa Hàng Quản Lý</th>
+                            <th style="width: 120px; background:#16A34A;">Lần Sửa Gần Nhất</th>
+                            <th>Vấn Đề / Sự Cố Đã Sửa Chữa</th>
+                            <th>Hành Động Khắc Phục I&C</th>
+                            <th style="width: 130px;">Số Phiếu I&C</th>
+                            <th style="width: 130px;">Kỹ Thuật & SM Nghiệm Thu</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-tbody"></tbody>
+                </table>
+            </div>
 
-            <div id="history-logs-container" style="display:flex; flex-direction:column; gap:12px;"></div>
+            <div style="margin-top:14px; font-size:11px; color:#65A30D; background:#F7FEE7; border-left:4px solid #84CC16; padding:10px 14px; border-radius:0 8px 8px 0;">
+                💡 <strong>Ghi chú Vận hành:</strong> Toàn bộ 14 thiết bị lạnh được giám sát lịch sử bảo trì liên tục. Mọi sự cố phát sinh ngoài ngưỡng nhiệt độ tiêu chuẩn SOP đều tự động khởi tạo phiếu I&C Ticket và cập nhật nhật ký sửa chữa tại giao diện này.
+            </div>
         </div>
     </div>
 
@@ -1727,29 +1754,134 @@
             { code: "EQ-REF-014", name: "Tủ mát kho", threshold: "1°C đến 5°C", defaultTemp: "4.2" }
         ];
 
+        // COMPREHENSIVE MAINTENANCE HISTORY FOR ALL 14 COLD DEVICES
         const deviceHistoryStore = {
-            "EQ-REF-008": [
-                {
-                    date: "12/08/2026 11:45",
-                    ticketId: "INC-20260812-VN0102-001",
-                    priority: "P1 (High)",
-                    issueDesc: "Nhiệt độ tủ đông tăng bất thường (-9.2°C so với ngưỡng -22°C đến -18°C) do hỏng lốc máy nén lạnh.",
-                    fixDesc: "Đã thay lốc máy nén lạnh mới, vệ sinh dàn nóng và nạp gas R404a. Đo thử tải đạt -19.0°C (Đạt standard SOP).",
-                    technician: "Trần Bảo Trì (I&C Support Team)",
-                    smVerified: "Store Manager VN0102 (Đã ký duyệt)"
-                }
-            ],
-            "EQ-REF-001": [
-                {
-                    date: "05/08/2026 09:30",
-                    ticketId: "INC-20260805-VN0102-004",
-                    priority: "P2 (Normal)",
-                    issueDesc: "Rò rỉ nước dàn lạnh tủ đông counter.",
-                    fixDesc: "Xử lý thông đường ống thoát nước ngưng tụ và dán lại gioăng cao su mép cửa.",
-                    technician: "Nguyễn Văn Hùng (I&C Team)",
-                    smVerified: "Store Manager VN0102 (Đã ký duyệt)"
-                }
-            ]
+            "EQ-REF-008": {
+                date: "12/08/2026 11:45",
+                ticketId: "INC-20260812-VN0102-001",
+                priority: "P1 (High)",
+                issueDesc: "Nhiệt độ tủ đông tăng bất thường (-9.2°C so với ngưỡng -22°C đến -18°C) do hỏng lốc máy nén lạnh.",
+                fixDesc: "Đã thay lốc máy nén lạnh mới, vệ sinh dàn nóng và nạp gas R404a. Đo thử tải đạt -19.0°C (Đạt standard SOP).",
+                technician: "Trần Bảo Trì (I&C Team)",
+                smVerified: "Store Manager VN0102 (Đã ký)"
+            },
+            "EQ-REF-001": {
+                date: "05/08/2026 09:30",
+                ticketId: "INC-20260805-VN0102-004",
+                priority: "P2 (Normal)",
+                issueDesc: "Rò rỉ nước dàn lạnh tủ đông counter.",
+                fixDesc: "Xử lý thông đường ống thoát nước ngưng tụ và dán lại gioăng cao su mép cửa.",
+                technician: "Nguyễn Văn Hùng (I&C Team)",
+                smVerified: "Store Manager VN0102 (Đã ký)"
+            },
+            "EQ-REF-002": {
+                date: "18/07/2026 14:15",
+                ticketId: "INC-20260718-VN0102-002",
+                priority: "P2 (Normal)",
+                issueDesc: "Bám tuyết dàn lạnh tủ mát counter.",
+                fixDesc: "Đã thay cảm biến xả đá & vệ sinh dàn lạnh sạch sẽ.",
+                technician: "Trần Bảo Trì (I&C Team)",
+                smVerified: "Store Manager VN0102 (Đã ký)"
+            },
+            "EQ-REF-003": {
+                date: "02/08/2026 10:00",
+                ticketId: "INC-20260802-VN0102-001",
+                priority: "P3 (Low)",
+                issueDesc: "Quạt quầy tủ kem kêu to do mòn bạc đạn.",
+                fixDesc: "Thay mô-tơ quạt dàn lạnh mới, chạy êm đạt chuẩn tiếng ồn.",
+                technician: "Lê Văn Kỹ (I&C Team)",
+                smVerified: "Store Manager VN0102 (Đã ký)"
+            },
+            "EQ-REF-004": {
+                date: "25/07/2026 16:30",
+                ticketId: "INC-20260725-VN0102-003",
+                priority: "P3 (Low)",
+                issueDesc: "Đèn LED soi hàng Tủ OSC 1 chập chập.",
+                fixDesc: "Đã thay tăng-phô nguồn và thay LED thanh mới sáng chuẩn.",
+                technician: "Nguyễn Văn Hùng (I&C Team)",
+                smVerified: "Store Manager VN0102 (Đã ký)"
+            },
+            "EQ-REF-005": {
+                date: "10/06/2026 11:20",
+                ticketId: "INC-20260610-VN0102-005",
+                priority: "P2 (Normal)",
+                issueDesc: "Bảo dưỡng định kỳ & cân bằng áp suất nạp gas R134a.",
+                fixDesc: "Vệ sinh dàn nóng bụi bẩn, sạc bổ sung 200g gas R134a.",
+                technician: "Trần Bảo Trì (I&C Team)",
+                smVerified: "Store Manager VN0102 (Đã ký)"
+            },
+            "EQ-REF-006": {
+                date: "14/05/2026 08:45",
+                ticketId: "INC-20260514-VN0102-001",
+                priority: "P3 (Low)",
+                issueDesc: "Cửa kính Tủ OSC 3 hơi hở bản lề.",
+                fixDesc: "Cân chỉnh lại bản lề cửa lùa, dán thêm hít từ hít chặt khít.",
+                technician: "Lê Văn Kỹ (I&C Team)",
+                smVerified: "Store Manager VN0102 (Đã ký)"
+            },
+            "EQ-REF-007": {
+                date: "01/08/2026 15:10",
+                ticketId: "INC-20260801-VN0102-002",
+                priority: "P2 (Normal)",
+                issueDesc: "Bảo dưỡng định kỳ 6 tháng dàn lạnh Tủ đông 1.",
+                fixDesc: "Chịt rửa dàn nóng, xiết lại cọc điện nén và xịt dung dịch diệt khuẩn.",
+                technician: "Trần Bảo Trì (I&C Team)",
+                smVerified: "Store Manager VN0102 (Đã ký)"
+            },
+            "EQ-REF-009": {
+                date: "20/06/2026 13:00",
+                ticketId: "INC-20260620-VN0102-003",
+                priority: "P2 (Normal)",
+                issueDesc: "Tủ đông 3 xả tuyết lâu hơn bình thường.",
+                fixDesc: "Thay rơ-le thời gian xả tuyết tự động mới (Timer Defrost).",
+                technician: "Nguyễn Văn Hùng (I&C Team)",
+                smVerified: "Store Manager VN0102 (Đã ký)"
+            },
+            "EQ-REF-010": {
+                date: "05/05/2026 10:30",
+                ticketId: "INC-20260505-VN0102-002",
+                priority: "P3 (Low)",
+                issueDesc: "Chân đế Tủ đông 4 hơi khập khiễng.",
+                fixDesc: "Chêm cao su giảm chấn cân bằng và xiết ốc cố định.",
+                technician: "Lê Văn Kỹ (I&C Team)",
+                smVerified: "Store Manager VN0102 (Đã ký)"
+            },
+            "EQ-REF-011": {
+                date: "28/07/2026 17:00",
+                ticketId: "INC-20260728-VN0102-001",
+                priority: "P2 (Normal)",
+                issueDesc: "Màn nhựa cách nhiệt cửa kho WIC bị rách.",
+                fixDesc: "Thay mới bộ rèm nhựa dẻo cách nhiệt PVC & vệ sinh phin lọc gas.",
+                technician: "Trần Bảo Trì (I&C Team)",
+                smVerified: "Store Manager VN0102 (Đã ký)"
+            },
+            "EQ-REF-012": {
+                date: "15/06/2026 09:15",
+                ticketId: "INC-20260615-VN0102-004",
+                priority: "P2 (Normal)",
+                issueDesc: "Bảo dưỡng định kỳ cụm máy nén kho RIC.",
+                fixDesc: "Vệ sinh quạt tản nhiệt dàn nóng, đo dòng máy nén đạt 4.8A.",
+                technician: "Nguyễn Văn Hùng (I&C Team)",
+                smVerified: "Store Manager VN0102 (Đã ký)"
+            },
+            "EQ-REF-013": {
+                date: "02/07/2026 14:00",
+                ticketId: "INC-20260702-VN0102-002",
+                priority: "P3 (Low)",
+                issueDesc: "Đồng hồ hiển thị nhiệt độ điện tử tủ đông kho mờ số.",
+                fixDesc: "Thay mới đồng hồ LED đo nhiệt độ cảm biến Dixell.",
+                technician: "Lê Văn Kỹ (I&C Team)",
+                smVerified: "Store Manager VN0102 (Đã ký)"
+            },
+            "EQ-REF-014": {
+                date: "19/07/2026 11:00",
+                ticketId: "INC-20260719-VN0102-003",
+                priority: "P3 (Low)",
+                issueDesc: "Bụi bẩn bám cánh quạt đối lưu kho mát.",
+                fixDesc: "Tháo cánh quạt lau chùi xịt cồn diệt khuẩn và tra dầu mỡ.",
+                technician: "Trần Bảo Trì (I&C Team)",
+                smVerified: "Store Manager VN0102 (Đã ký)"
+            }
         };
 
         const csrTaskStates = {};
@@ -1783,7 +1915,7 @@
                 { stt: 2, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false }
             ],
             tabD: [
-                { stt: 1, gioBanGiao: "05:45", caGiaoNhan: "Ca 3 → Ca 1", thietBiChoSua: "INC-20260812-VN0102-001", hangChoHuy: "2 bánh bao cút", tienQuy: "5,000,000 ₫", nguoiGiaoKy: "✍️ Trần Văn C", nguoiNhanKy: "✍️ Phạm Văn A", ghiChu: "Tủ đông 2 chờ I&C sửa" }
+                { stt: 1, gioBanGiao: "05:45", caGiaoNhan: "Ca 3 → Ca 1", thietBiChoSua: "INC-20260812-VN0102-001", hangChoHuy: "2 bánh bao cút", tienQuy: "5,000,000 ₫", nguoiGiaoKy: "✍️ Trần Văn C", nguoiNhanKy: "✍️ Phạm Văn A", ghiChu: "Tủ đông 2 đang chờ kỹ thuật I&C đến sửa" }
             ]
         };
 
@@ -1896,61 +2028,66 @@
             };
 
             // Store in device history
-            if (!deviceHistoryStore[devCode]) deviceHistoryStore[devCode] = [];
-            deviceHistoryStore[devCode].unshift({
+            deviceHistoryStore[devCode] = {
                 date: "12/08/2026 11:45",
                 ticketId: "INC-20260812-VN0102-001",
                 priority: priority,
                 issueDesc: detail,
                 fixDesc: "Kỹ thuật I&C đã khắc phục thay lốc máy nén lạnh, vệ sinh dàn nóng và nạp gas R404a. Đo đạt -19.0°C.",
                 technician: "Trần Bảo Trì (I&C Team)",
-                smVerified: "Store Manager VN0102 (Đã ký duyệt)"
-            });
+                smVerified: "Store Manager VN0102 (Đã ký)"
+            };
 
             document.getElementById('modal-ic-ticket').style.display = 'none';
             alert('🚀 GỬI TICKET THÀNH CÔNG!\n\nTicket số INC-20260812-VN0102-001 đã tự động được gửi tới Email Bộ phận I&C (ic.support@gs25.com.vn)!\nDữ liệu sự cố đã được đồng bộ lên Web Portal.');
             renderWebstorePortal();
         }
 
-        // VIEW DEVICE MAINTENANCE HISTORY MODAL
-        function viewDeviceHistory(code, name) {
-            document.getElementById('history-dev-code').innerText = code;
-            document.getElementById('history-dev-name').innerText = name;
+        // OPEN DEDICATED COMPREHENSIVE UI TABLE MODAL FOR ALL DEVICES MAINTENANCE HISTORY
+        function openAllDeviceHistoryModal(highlightCode) {
+            const storeSelect = document.getElementById('portal-store-select');
+            const storeText = storeSelect ? storeSelect.options[storeSelect.selectedIndex].text : "VN0102 - GS25 Nguyễn Trãi (HCM)";
+            document.getElementById('history-store-name').innerText = storeText;
 
-            const container = document.getElementById('history-logs-container');
-            container.innerHTML = '';
+            const tbody = document.getElementById('history-table-tbody');
+            tbody.innerHTML = '';
 
-            const logs = deviceHistoryStore[code] || [
-                {
-                    date: "12/08/2026 11:45",
-                    ticketId: "INC-20260812-VN0102-001",
-                    priority: "P1 (High)",
-                    issueDesc: "Sự cố nhiệt độ tăng ngoài ngưỡng (" + name + ").",
-                    fixDesc: "Đã kiểm tra thay lốc máy nén lạnh, nạp gas mới. Đo đạt chuẩn.",
-                    technician: "Trần Bảo Trì (I&C Support)",
-                    smVerified: "Store Manager VN0102"
+            coldDevices.forEach((dev, idx) => {
+                const log = deviceHistoryStore[dev.code] || {
+                    date: "Chưa có sự cố",
+                    ticketId: "N/A",
+                    priority: "Đạt SOP",
+                    issueDesc: "Hoạt động bình thường, không có sự cố phát sinh.",
+                    fixDesc: "Bảo dưỡng định kỳ tiêu chuẩn.",
+                    technician: "I&C Team",
+                    smVerified: "SM VN0102"
+                };
+
+                const isHighlighted = (highlightCode === dev.code);
+
+                const tr = document.createElement('tr');
+                if (isHighlighted) {
+                    tr.style.background = "#FEF3C7";
                 }
-            ];
-
-            logs.forEach(log => {
-                const div = document.createElement('div');
-                div.style.cssText = "border:1px solid #E2E8F0; padding:12px; border-radius:8px; background:#F8FAFC; font-size:12px; line-height:1.6;";
-                div.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; font-weight:700; color:#0080FF; margin-bottom:4px;">
-                        <span>📅 Ngày hoàn thành: ` + log.date + `</span>
-                        <span class="status-pill-terminated">` + log.ticketId + ` (` + log.priority + `)</span>
-                    </div>
-                    <div style="margin-bottom:4px;"><strong>Vấn đề / Sự cố:</strong> <span style="color:#DC2626;">` + log.issueDesc + `</span></div>
-                    <div style="margin-bottom:4px;"><strong>Hành động sửa chữa I&C:</strong> <span style="color:#16A34A; font-weight:600;">` + log.fixDesc + `</span></div>
-                    <div style="display:flex; justify-content:space-between; font-size:11px; color:#64748B; border-top:1px dashed #CBD5E1; padding-top:4px; margin-top:6px;">
-                        <span>🔧 Kỹ thuật viên: ` + log.technician + `</span>
-                        <span>✍️ SM Nghiệm thu: ` + log.smVerified + `</span>
-                    </div>
+                tr.innerHTML = `
+                    <td>` + (idx + 1) + `</td>
+                    <td><span style="font-size:11px; background:#E6F6FF; color:#0080FF; padding:3px 6px; border-radius:4px; font-weight:800;">` + dev.code + `</span></td>
+                    <td><strong>` + dev.name + `</strong></td>
+                    <td style="font-size:11px; color:#4B5563;">` + storeText.split(' (')[0] + `</td>
+                    <td><strong style="color:#16A34A;">` + log.date + `</strong></td>
+                    <td style="font-size:11px; color:` + (log.ticketId !== 'N/A' ? '#DC2626' : '#4B5563') + `;">` + log.issueDesc + `</td>
+                    <td style="font-size:11px; color:#15803D; font-weight:600;">` + log.fixDesc + `</td>
+                    <td>` + (log.ticketId !== 'N/A' ? '<strong style="color:#0080FF;">' + log.ticketId + '</strong>' : '<span style="color:#9CA3AF;">N/A</span>') + `</td>
+                    <td style="font-size:11px;">` + log.technician + `<br><span style="color:#10B981; font-weight:700;">✓ ` + log.smVerified + `</span></td>
                 `;
-                container.appendChild(div);
+                tbody.appendChild(tr);
             });
 
             document.getElementById('modal-device-history').style.display = 'flex';
+        }
+
+        function viewDeviceHistory(code, name) {
+            openAllDeviceHistoryModal(code);
         }
 
         // RENDER CSR TASKS ON PDA WITH REAL-TIME DYNAMIC SHIFT & DAY TASK COUNTS
@@ -2307,7 +2444,9 @@
 
         // RENDER WEBSTORE PORTAL TABLES WITH REAL-TIME DYNAMIC FILTERS & EQUIPMENT CODE
         function renderWebstorePortal() {
-            const storeCode = document.getElementById('portal-store-select').value;
+            const storeSelect = document.getElementById('portal-store-select');
+            const storeCode = storeSelect ? storeSelect.value : 'VN0102';
+            const storeText = storeSelect ? storeSelect.options[storeSelect.selectedIndex].text : 'VN0102 - GS25 Nguyễn Trãi';
             const fromDateVal = document.getElementById('portal-from-date') ? document.getElementById('portal-from-date').value : '2026-08-10';
             const toDateVal = document.getElementById('portal-to-date') ? document.getElementById('portal-to-date').value : '2026-08-12';
             const filterDay = document.getElementById('portal-filter-day') ? document.getElementById('portal-filter-day').value : 'ALL';
@@ -2544,5 +2683,6 @@
 </html>
 "@
 
+$templatePath = "C:\Users\LYVINGHIEP\.gemini\antigravity-ide\brain\15942b83-9b2a-4e40-b5df-170732d15a53\scratch\template.html"
 [System.IO.File]::WriteAllText($templatePath, $CodeContent, [System.Text.Encoding]::UTF8)
-Write-Host "Updated template.html with Equipment ID, I&C Ticket Form Modal, Email Dispatch, and Maintenance History Modal"
+Write-Host "Updated template.html with dedicated All Devices Maintenance History Table UI"
