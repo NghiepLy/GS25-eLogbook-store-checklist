@@ -1073,18 +1073,19 @@
                     </div>
                 </div>
 
-                <!-- TAB 3: LOGBOOK ORIGINAL FORMAT TABLES -->
+                <!-- TAB 3: LOGBOOK ORIGINAL FORMAT TABLES WITH EQUIPMENT ID CODE -->
                 <div id="portal-tab-logbook-view" style="display: none;">
                     
                     <!-- BẢNG A -->
                     <div class="excel-section-header">
-                        BẢNG A — NHIỆT ĐỘ 14 THIẾT BỊ LẠNH (3 lần/ngày: đầu Ca 1, Ca 2, Ca 3)
+                        BẢNG A — NHIỆT ĐỘ 14 THIẾT BỊ LẠNH (3 lần/ngày: đầu Ca 1, Ca 2, Ca 3). CHỈ ĐO SỐ HIỂN THỊ TRÊN THIẾT BỊ
                     </div>
                     <div class="portal-table-container" style="margin-bottom: 20px;">
                         <table class="gs25-table">
                             <thead>
                                 <tr>
-                                    <th rowspan="2" style="width: 40px;">No.</th>
+                                    <th rowspan="2" style="width: 40px;">STT</th>
+                                    <th rowspan="2" style="width: 100px; background: #00569E;">Mã (ID)</th>
                                     <th rowspan="2">Thiết bị</th>
                                     <th rowspan="2">Ngưỡng đạt</th>
                                     <th colspan="3" style="text-align: center;">CA 1</th>
@@ -1102,32 +1103,34 @@
                     </div>
 
                     <!-- BẢNG B -->
-                    <div class="excel-section-header">
-                        BẢNG B — BẤT THƯỜNG VÀ THIẾT BỊ CHƯA ĐẠT → PHIẾU I&C (ĐẦY ĐỦ 12 CỘT CHUẨN HR EXCEL)
+                    <div class="excel-section-header" style="display:flex; justify-content:space-between; align-items:center;">
+                        <span>BẢNG B — BẤT THƯỜNG VÀ THIẾT BỊ CHƯA ĐẠT → PHIẾU I&C (ĐẦY ĐỦ 12 CỘT CHUẨN HR EXCEL)</span>
+                        <button class="vswitch-btn" style="background:#FFFFFF; color:#0080FF; font-size:11px; padding:4px 10px;" onclick="openICTicketModal()">📋 Tạo Ticket I&C Báo Cáo</button>
                     </div>
                     <div class="portal-table-container" style="margin-bottom: 8px;">
                         <table class="gs25-table">
                             <thead>
                                 <tr>
                                     <th style="width: 40px;">No.</th>
-                                    <th style="width: 90px;">Giờ phát hiện</th>
-                                    <th style="width: 130px;">Thiết bị / Khu vực</th>
-                                    <th style="width: 70px;">Số đo</th>
+                                    <th style="width: 85px;">Giờ phát hiện</th>
+                                    <th style="width: 160px; background: #00569E;">Mã (ID) & Thiết bị / Khu vực</th>
+                                    <th style="width: 65px;">Số đo</th>
                                     <th>Đã xử lý tạm thế nào</th>
-                                    <th style="width: 80px;">Giờ báo SM</th>
-                                    <th style="width: 140px;">Số phiếu I&C</th>
-                                    <th style="width: 80px;">Mức ưu tiên</th>
-                                    <th style="width: 100px;">Ngày I&C nhận</th>
-                                    <th style="width: 90px;">Giờ sửa xong</th>
-                                    <th style="width: 140px;">SM NGHIỆM THU (Số đo sau sửa)</th>
-                                    <th style="width: 130px;">SM ký đóng phiếu</th>
+                                    <th style="width: 75px;">Giờ báo SM</th>
+                                    <th style="width: 130px;">Số phiếu I&C</th>
+                                    <th style="width: 75px;">Mức ưu tiên</th>
+                                    <th style="width: 90px;">Ngày I&C nhận</th>
+                                    <th style="width: 80px;">Giờ sửa xong</th>
+                                    <th style="width: 130px;">SM NGHIỆM THU (Số đo sau sửa)</th>
+                                    <th style="width: 120px;">SM ký đóng phiếu</th>
+                                    <th style="width: 90px; background: #16A34A;">Lịch sử Bảo trì</th>
                                 </tr>
                             </thead>
                             <tbody id="portal-log-b-tbody"></tbody>
                         </table>
                     </div>
                     <div class="footer-note" style="margin-bottom: 20px;">
-                        Cột 'SM NGHIỆM THU' và 'SM ký đóng phiếu' là hai ô BỔ SUNG so với bản cũ. Chỉ SM/ASM được đóng phiếu, sau khi chạy thử và đo lại thiết bị. Dòng chưa có giờ sửa xong thì SM chưa được ký xác nhận ngay.
+                        Cột 'Mã (ID)' giúp quản lý định danh thiết bị duy nhất. Cột 'Lịch sử Bảo trì' cho phép xem lại các đợt sửa chữa gần nhất của từng thiết bị.
                     </div>
 
                     <!-- BẢNG C1 & C2 -->
@@ -1379,7 +1382,7 @@
                         </div>
                     </div>
 
-                    <!-- LOGBOOK TAB -->
+                    <!-- LOGBOOK TAB WITH EQUIPMENT ID CODE -->
                     <div id="pda-tab-logbook" style="display: none;">
                         <div class="pda-tabs" style="margin: -14px -14px 14px -14px; background: #FFFFFF;">
                             <button class="pda-tab-btn active" id="subtab-btn-a" onclick="switchLogTab('tab-a')">A: Nhiệt Độ</button>
@@ -1388,13 +1391,15 @@
                             <button class="pda-tab-btn" id="subtab-btn-d" onclick="switchLogTab('tab-d')">D: Bàn Giao</button>
                         </div>
 
-                        <!-- TAB A -->
+                        <!-- TAB A WITH EQUIPMENT ID CODE -->
                         <div id="log-tab-a">
-                            <div style="font-size: 12px; font-weight: 800; margin-bottom: 6px; color: #0080FF;">BẢNG A — NHIỆT ĐỘ 14 THIẾT BỊ LẠNH (3 LẦN/NGÀY)</div>
-                            <div style="font-size: 10px; color: var(--gs25-muted); margin-bottom: 10px;">(CHỈ ĐO SỐ HIỂN THỊ TRÊN THIẾT BỊ - Tủ đông -22 đến -18°C, Tủ mát 1 đến 5°C)</div>
+                            <div style="font-size: 12px; font-weight: 800; margin-bottom: 4px; color: #0080FF;">BẢNG A — NHIỆT ĐỘ 14 THIẾT BỊ LẠNH (3 LẦN/NGÀY)</div>
+                            <div style="font-size: 10px; color: var(--gs25-muted); margin-bottom: 10px;">CHỈ ĐO SỐ HIỂN THỊ TRÊN THIẾT BỊ — Tủ đông (-22 đến -18°C), Tủ mát (1 đến 5°C)</div>
                             <table class="log-table">
                                 <thead>
                                     <tr>
+                                        <th>STT</th>
+                                        <th style="background:#00569E; color:white;">Mã (ID)</th>
                                         <th>Thiết bị</th>
                                         <th>Ngưỡng</th>
                                         <th>Ca 1 °C</th>
@@ -1406,11 +1411,11 @@
                             </table>
                         </div>
 
-                        <!-- TAB B -->
+                        <!-- TAB B WITH EQUIPMENT ID SELECTION & I&C TICKET MODAL TRIGGER -->
                         <div id="log-tab-b" style="display: none;">
                             <div style="font-size: 12px; font-weight: 800; margin-bottom: 6px; color: var(--gs25-red);">BẢNG B — BẤT THƯỜNG VÀ THIẾT BỊ CHƯA ĐẠT → PHIẾU I&C</div>
                             <div class="filter-box" style="margin-bottom: 12px;">
-                                <div style="font-size: 11px; font-weight: 800; color: #0080FF; margin-bottom: 8px;">FORM THÊM/CẬP NHẬT PHIẾU I&C (CỘT 1 - 12)</div>
+                                <div style="font-size: 11px; font-weight: 800; color: #0080FF; margin-bottom: 8px;">FORM THÊM/CẬP NHẬT PHIẾU I&C (QUẢN LÝ THEO MÃ THIẾT BỊ ID)</div>
                                 <div class="filter-row">
                                     <div style="flex:1;">
                                         <label class="form-label-portal">Giờ phát hiện (Cột 2):</label>
@@ -1423,8 +1428,15 @@
                                 </div>
                                 <div class="filter-row" style="margin-top:6px;">
                                     <div style="flex:1;">
-                                        <label class="form-label-portal">Thiết bị / Khu vực (Cột 3):</label>
-                                        <input type="text" id="inc-thietBi" class="filter-input" value="Tủ đông 2">
+                                        <label class="form-label-portal">Mã (ID) & Thiết bị (Cột 3):</label>
+                                        <select id="inc-thietBiSelect" class="filter-select" onchange="syncIncDeviceCode()">
+                                            <option value="EQ-REF-008|Tủ đông 2" selected>EQ-REF-008 — Tủ đông 2</option>
+                                            <option value="EQ-REF-001|Tủ đông counter">EQ-REF-001 — Tủ đông counter</option>
+                                            <option value="EQ-REF-002|Tủ mát counter">EQ-REF-002 — Tủ mát counter</option>
+                                            <option value="EQ-REF-003|Tủ kem counter">EQ-REF-003 — Tủ kem counter</option>
+                                            <option value="EQ-REF-007|Tủ đông 1">EQ-REF-007 — Tủ đông 1</option>
+                                            <option value="EQ-REF-011|WIC (kho lạnh)">EQ-REF-011 — WIC (kho lạnh)</option>
+                                        </select>
                                     </div>
                                     <div style="flex:1;">
                                         <label class="form-label-portal">Số đo lỗi (Cột 4):</label>
@@ -1467,8 +1479,11 @@
                                     <label class="form-label-portal">SM ký đóng phiếu (Cột 12):</label>
                                     <canvas id="sig-canvas-b" class="sig-canvas" style="height:70px;"></canvas>
                                 </div>
-                                <button class="vswitch-btn" style="width: 100%; justify-content: center; background: var(--gs25-green); color: white; margin-top: 10px;" onclick="saveIncidentB()">
-                                    💾 LƯU PHIẾU I&C & ĐỒNG BỘ NỀN TẢNG WEB
+                                <button class="vswitch-btn" style="width: 100%; justify-content: center; background: #0080FF; color: white; margin-top: 10px; font-weight:800;" onclick="openICTicketModal()">
+                                    📋 GỬI TICKET BÁO CÁO I&C FORM (GS25 SUPPORT STORE)
+                                </button>
+                                <button class="vswitch-btn" style="width: 100%; justify-content: center; background: var(--gs25-green); color: white; margin-top: 6px;" onclick="saveIncidentB()">
+                                    💾 LƯU BẢNG B & ĐỒNG BỘ NỀN TẢNG WEB PORTAL
                                 </button>
                             </div>
                         </div>
@@ -1599,13 +1614,95 @@
             <div class="filter-box">
                 <h3 style="font-size: 15px; font-weight: 800; margin-bottom: 12px; color: #0080FF;">Bảng Tra Cứu Quy Tắc Nghiệp Vụ:</h3>
                 <ul style="font-size: 13px; color: var(--gs25-text); padding-left: 20px; line-height: 1.8;">
-                    <li><strong>Checklist CSR (113 items):</strong> Tự động lọc theo Ca, Thứ trong tuần và Tuần trong tháng. Chọn Không đạt bắt buộc chụp ảnh & nhập ghi chú.</li>
-                    <li><strong>Checklist SM (35 items):</strong> Xếp chuẩn theo giờ 08:00 - 17:00. Đánh giá ĐẠT / KHÔNG ĐẠT. Chọn Không đạt bắt buộc nhập ghi chú & bằng chứng để lại tương ứng.</li>
-                    <li><strong>Logbook Tab A (14 Tủ lạnh):</strong> Đo số hiển thị. Tủ mát (1 đến 5°C), Tủ đông (-22 đến -18°C). Ngoài ngưỡng khởi động Timer 30 phút.</li>
-                    <li><strong>Logbook Tab B (I&C Ticket):</strong> Tự động kích hoạt tạo dòng Bảng B khi tủ hỏng. SM ký đóng phiếu khi đã đo lại đạt ngưỡng.</li>
-                    <li><strong>Logbook Tab D (Bàn giao ca):</strong> Vẽ chữ ký điện tử trực tiếp trên màn hình PDA để khóa dữ liệu ca cũ.</li>
+                    <li><strong>Mã Thiết Bị (ID):</strong> Quản lý 14 thiết bị lạnh bằng Mã định danh độc nhất (EQ-REF-001 đến EQ-REF-014).</li>
+                    <li><strong>I&C Ticket Form:</strong> Tự động kích hoạt form báo cáo sự cố gửi email về `ic.support@gs25.com.vn`.</li>
+                    <li><strong>Lịch sử Bảo trì Sửa chữa:</strong> Tra cứu lần sửa gần nhất và nguyên nhân sự cố của từng thiết bị trên Web Portal BẢNG B.</li>
                 </ul>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL 1: GS25 SUPPORT STORE — I&C TICKET REQUEST FORM -->
+    <div id="modal-ic-ticket" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:9999; justify-content:center; align-items:center;">
+        <div style="background:white; border-radius:14px; width:640px; max-width:95%; padding:24px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.3); max-height:92vh; overflow-y:auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #0080FF; padding-bottom:12px; margin-bottom:16px;">
+                <div style="font-weight:900; font-size:18px; color:#0080FF; display:flex; align-items:center; gap:8px;">
+                    <span>GS25</span>
+                    <span style="color:#1F2937; font-size:15px;">SUPPORT STORE — PHIẾU YÊU CẦU BẢO TRÌ I&C TICKET</span>
+                </div>
+                <button onclick="document.getElementById('modal-ic-ticket').style.display='none'" style="background:none; border:none; font-size:22px; cursor:pointer; color:#6B7280;">✖</button>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:12px; font-size:13px;">
+                <div>
+                    <label style="font-weight:700; color:#374151;">1. BẢO TRÌ CHO CỬA HÀNG: *</label>
+                    <input type="text" id="icticket-store" class="form-control-portal" style="width:100%; margin-top:4px;" value="VN0102 - GS25 Nguyễn Trãi" readonly>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#374151;">2. EMAIL CỬA HÀNG: *</label>
+                    <input type="text" id="icticket-email" class="form-control-portal" style="width:100%; margin-top:4px;" value="nghiep.ly@gs25.com.vn">
+                </div>
+                <div style="display:flex; gap:12px;">
+                    <div style="flex:1;">
+                        <label style="font-weight:700; color:#374151;">3. MỨC ĐỘ SỰ CỐ: *</label>
+                        <select id="icticket-priority" class="form-control-portal" style="width:100%; margin-top:4px;">
+                            <option value="High (P1)" selected>🔴 High - P1 Khẩn cấp (Tủ hỏng hoàn toàn)</option>
+                            <option value="Normal (P2)">🟡 Normal - P2 Trung bình</option>
+                            <option value="Low (P3)">⚪ Low - P3 Thấp</option>
+                        </select>
+                    </div>
+                    <div style="flex:1;">
+                        <label style="font-weight:700; color:#374151;">4. LOẠI SỰ CỐ: *</label>
+                        <input type="text" id="icticket-type" class="form-control-portal" style="width:100%; margin-top:4px;" value="Bảo trì Tủ Lạnh / Thiết Bị Lạnh">
+                    </div>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#374151;">5. MÃ THIẾT BỊ (ID) & TÊN THIẾT BỊ SỰ CỐ: *</label>
+                    <select id="icticket-device" class="form-control-portal" style="width:100%; margin-top:4px;">
+                        <option value="EQ-REF-008|Tủ đông 2" selected>EQ-REF-008 — Tủ đông 2 (Khu vực bán hàng)</option>
+                        <option value="EQ-REF-001|Tủ đông counter">EQ-REF-001 — Tủ đông counter</option>
+                        <option value="EQ-REF-002|Tủ mát counter">EQ-REF-002 — Tủ mát counter</option>
+                        <option value="EQ-REF-003|Tủ kem counter">EQ-REF-003 — Tủ kem counter</option>
+                        <option value="EQ-REF-007|Tủ đông 1">EQ-REF-007 — Tủ đông 1</option>
+                        <option value="EQ-REF-011|WIC (kho lạnh)">EQ-REF-011 — WIC (kho lạnh đi vào được)</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#374151;">6. THÔNG TIN CHI TIẾT SỰ CỐ: *</label>
+                    <textarea id="icticket-detail" class="form-control-portal" style="width:100%; height:85px; margin-top:4px;" placeholder="Ghi chi tiết sẽ giúp bảo trì team nhân biết và hỗ trợ nhanh chóng. Ví dụ: Nhiệt độ tủ tăng bất thường -9.2°C, hỏng lốc máy nén nạp gas..."></textarea>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#374151;">HÌNH CHỤP THIẾT BỊ BẰNG CHỨNG:</label>
+                    <div style="border:2px dashed #CBD5E1; padding:14px; text-align:center; border-radius:8px; margin-top:4px; background:#F8FAFC; cursor:pointer;" onclick="alert('Đã đính kèm 2 hình ảnh chụp thực tế thiết bị sự cố!')">
+                        📷 Nhấp hoặc kéo tệp vào khu vực này để tải lên ảnh thiết bị sự cố (Hỗ trợ tối đa 4 hình ảnh)
+                    </div>
+                </div>
+                <button class="vswitch-btn" style="width:100%; justify-content:center; background:#0F294A; color:white; padding:12px; font-size:14px; font-weight:800; margin-top:8px;" onclick="submitICTicketForm()">
+                    🚀 GỬI THÔNG TIN TICKET (TỰ ĐỘNG GỬI EMAIL VỀ I&C TEAM)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: DEVICE MAINTENANCE HISTORY MODAL -->
+    <div id="modal-device-history" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:9999; justify-content:center; align-items:center;">
+        <div style="background:white; border-radius:14px; width:720px; max-width:95%; padding:24px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.3); max-height:92vh; overflow-y:auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #16A34A; padding-bottom:12px; margin-bottom:16px;">
+                <div style="font-weight:900; font-size:17px; color:#16A34A; display:flex; align-items:center; gap:8px;">
+                    <span>📜 LỊCH SỬ BẢO TRÌ SỬA CHỮA THIẾT BỊ (DEVICE REPAIR HISTORY)</span>
+                </div>
+                <button onclick="document.getElementById('modal-device-history').style.display='none'" style="background:none; border:none; font-size:22px; cursor:pointer; color:#6B7280;">✖</button>
+            </div>
+
+            <div style="margin-bottom:14px; padding:12px; background:#F0FDF4; border:1px solid #BBF7D0; border-radius:8px; font-size:13px; display:flex; flex-wrap:wrap; gap:16px;">
+                <div><strong>Mã (ID):</strong> <span id="history-dev-code" style="color:#0080FF; font-weight:800;">EQ-REF-008</span></div>
+                <div><strong>Tên Thiết Bị / Khu Vực:</strong> <span id="history-dev-name" style="font-weight:700;">Tủ đông 2</span></div>
+                <div><strong>Cửa Hàng:</strong> VN0102 - GS25 Nguyễn Trãi</div>
+            </div>
+
+            <div style="font-weight:800; font-size:13px; color:#1F2937; margin-bottom:10px;">DANH SÁCH LẦN SỬA CHỮA GẦN NHẤT & VẤN ĐỀ NỔI BẬT:</div>
+
+            <div id="history-logs-container" style="display:flex; flex-direction:column; gap:12px;"></div>
         </div>
     </div>
 
@@ -1614,21 +1711,46 @@
         const rawSM = [{"tieuChuanDat":"Kiểm đủ 4 nội dung trong lúc đi bên ngoài cửa hàng: (1) đồng phục và tác phong — đúng đồng phục, có nón, có bảng tên, không đeo trang sức; (2) vệ sinh cá nhân CSR làm counter đủ 6 tiêu chí; (3) đủ hàng theo planogram, kệ trống không quá 3 facing liên tiếp mỗi tầng; (4) khu vực dưới tủ điện và ổ cắm quầy counter thông thoáng, không bị che chắn. Trong khung giờ này SM KHÔNG ngồi bàn làm giấy tờ.","gio":"08:00","tanSuat":"Theo ngày","uocTinhPhut":"60","stt":1,"apDungNgay":"Mọi ngày","bangChung":"Ghi tên CSR và nội dung chưa đạt (nếu có)","nhomViec":"RA CỬA HÀNG — cao điểm sáng","noiDungSM":"CÓ MẶT BÊN NGOÀI CỬA HÀNG: giờ cao điểm sáng: quan sát vận hành, hỗ trợ CSR khi đông khách, kiểm bằng mắt trong lúc đi sàn"},{"tieuChuanDat":"Đủ chữ ký từng ca. Đủ 14 thiết bị có số nhiệt độ ở cả 3 ca. Không ô Đạt/Không đạt nào bỏ trống. Mọi dòng Không đạt đều có ghi chú và có dòng tương ứng ở Bảng B.","gio":"09:00","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":2,"apDungNgay":"Mọi ngày","bangChung":"Ký xác nhận cuối Logbook + ghi số ô còn trống","nhomViec":"Kiểm Logbook","noiDungSM":"Kiểm LOGBOOK và sổ chế biến của Ca 3 hôm qua và Ca 1 hôm nay"},{"tieuChuanDat":"Chênh lệch không quá 2°C. Chênh quá 2°C phải điều tra nguyên nhân (nhiệt kế sai, đo sai vị trí, hay ghi mà không đo) và ghi kết luận vào cột ghi chú.","gio":"09:20","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":3,"apDungNgay":"Mọi ngày","bangChung":"Ghi tên 2 thiết bị và 2 cặp số đo","nhomViec":"Audit đối chứng","noiDungSM":"Tự đo lại 1 tủ đông và 1 tủ mát bất kỳ, so với số CSR đã ghi"},{"tieuChuanDat":"Gửi TRƯỚC 10:00, gồm: số hạng mục Không đạt trong ngày hôm trước, phiếu I\u0026C mới phát sinh, vấn đề cần OFC hỗ trợ.","gio":"09:40","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":4,"apDungNgay":"Mọi ngày","bangChung":"Tin nhắn trên group có dấu thời gian","nhomViec":"Báo cáo","noiDungSM":"Gửi báo cáo hằng ngày cho OFC qua group SM–OFC"},{"tieuChuanDat":"Hoàn tất trước 10:30. Không kịp thì ghi rõ lý do.","gio":"10:15","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":5,"apDungNgay":"Mọi ngày","bangChung":"Đơn hàng trên hệ thống","nhomViec":"Vận hành","noiDungSM":"Hoàn tất đặt hàng trong ngày"},{"tieuChuanDat":"0 sản phẩm lệch giá. POSM khớp chương trình đang chạy.","gio":"10:40","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":6,"apDungNgay":"Mọi ngày","bangChung":"Ghi tên 5 sản phẩm đã kiểm","nhomViec":"Audit đối chứng","noiDungSM":"Spot check 5 sản phẩm: giá kệ khớp giá POS và POSM đúng chương trình đang chạy"},{"tieuChuanDat":"Mọi phiếu đang mở có mức ưu tiên và ngày dự kiến hoàn tất. 0 phiếu mức P1 quá hạn mà chưa báo OFC. Phiếu đã sửa xong phải được SM nghiệm thu và đóng trong 24 giờ.","gio":"10:55","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":7,"apDungNgay":"Mọi ngày","bangChung":"Cập nhật Sổ theo dõi phiếu I\u0026C","nhomViec":"Follow up — phiếu I\u0026C","noiDungSM":"Rà toàn bộ phiếu sửa chữa I\u0026C đang mở"},{"tieuChuanDat":"Có mặt liên tục tại khu bán hàng và counter trong khung 11:30–13:00, trừ thời gian ăn trưa luân phiên. Quan sát và ghi lại: điểm nghẽn khi đông khách, thao tác CSR chưa đúng, thiết bị chạy bất thường. Trong khung giờ này SM KHÔNG ngồi bàn làm giấy tờ.","gio":"11:30","tanSuat":"Theo ngày","uocTinhPhut":"90","stt":8,"apDungNgay":"Mọi ngày","bangChung":"Ghi nội dung quan sát vào Bảng rà soát vấn đề","nhomViec":"RA CỬA HÀNG — cao điểm trưa","noiDungSM":"CÓ MẶT BÊN NGOÀI CỬA HÀNG: giờ cao điểm trưa: quan sát vận hành, hỗ trợ CSR khi đông khách, xử lý tình huống khách hàng"},{"tieuChuanDat":"Ghi rõ chênh lệch hoặc bất thường nếu có.","gio":"13:00","tanSuat":"Theo ngày","uocTinhPhut":"15","stt":9,"apDungNgay":"Mọi ngày","bangChung":"Báo cáo doanh thu","nhomViec":"Kinh doanh","noiDungSM":"Tổng kết doanh thu ngày hôm trước, kiểm hóa đơn hủy và thẻ thành viên"},{"tieuChuanDat":"0 lệnh treo quá 1 ngày.","gio":"13:20","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":10,"apDungNgay":"Mọi ngày","bangChung":"Ảnh chụp màn hình hệ thống","nhomViec":"Hệ thống","noiDungSM":"Kiểm tất cả lệnh trên hệ thống đã hoàn thành (RCV, Disposal, TF)"},{"tieuChuanDat":"Số lượng và SKU trong LOGBOOK Bảng C khớp với lệnh Disposal trên hệ thống. Lệch thì phải giải trình.","gio":"13:35","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":11,"apDungNgay":"Mọi ngày","bangChung":"File waste log + lệnh Disposal","nhomViec":"Hàng hủy","noiDungSM":"Tổng hợp sản phẩm hủy trong ngày (SKU, số lượng, lý do) và đối chiếu với hệ thống"},{"tieuChuanDat":"0 vị trí sai so với sơ đồ kho. Không hàng đặt trực tiếp trên sàn.","gio":"13:50","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":12,"apDungNgay":"Mọi ngày","bangChung":"Ảnh kho","nhomViec":"Kho","noiDungSM":"Kiểm hàng hóa trong kho sắp xếp đúng vị trí quy định"},{"tieuChuanDat":"Toàn bộ email trong ngày đã đọc và xử lý. Email nào cần cửa hàng phản hồi thì trả lời ngay trong ngày, không để tồn sang hôm sau.","gio":"14:05","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":13,"apDungNgay":"Mọi ngày","bangChung":"Ghi chú vào checklist + email đã trả lời","nhomViec":"Hành chính","noiDungSM":"Tổng hợp và xử lý email của Admin OP và OFC"},{"tieuChuanDat":"Nhiệt kế hồng ngoại, nhiệt kế đo tâm, nhiệt kế đầu dò có sẵn tại counter, bật lên đọc được nhiệt độ. Tất cả bồn rửa tay đủ 4 thứ: xà phòng, cồn thực phẩm, khăn giấy, bảng hướng dẫn rửa tay.","gio":"14:20","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":14,"apDungNgay":"Mọi ngày","bangChung":"Ghi chú vào checklist","nhomViec":"Thiết bị đo và bồn rửa","noiDungSM":"Kiểm nhiệt kế hồng ngoại. Kiểm nhiệt kế đo tâm Nhiệt kế đầu dò và vật tư bồn rửa tay"},{"tieuChuanDat":"Mỗi khu vực trọng yếu (OSC, FF, kho, counter) có 1 người phụ trách được ghi rõ tên.","gio":"14:35","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":15,"apDungNgay":"Mọi ngày","bangChung":"Bảng phân công ngày hôm sau","nhomViec":"Nhân sự","noiDungSM":"Phân công CSR kiểm tra hàng hóa (HSD, ATVSTP) cho ngày hôm sau"},{"tieuChuanDat":"Mặt bàn gọn gàng, sạch. Giấy tờ và chứng từ phân loại theo bìa hoặc file, không chồng đống rời. Dây cáp modem, router, máy in bó gọn. Không để hàng hóa hoặc đồ cá nhân trong hộc.","gio":"14:50","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":16,"apDungNgay":"Mọi ngày","bangChung":"Ảnh khu làm việc","nhomViec":"5S khu làm việc","noiDungSM":"Kiểm mặt bàn, kệ và hộc bàn SM/ASM"},{"tieuChuanDat":"Mỗi vấn đề có hành động đã làm. Vấn đề nào lặp lại từ 2 lần trở lên trong 4 tuần thì đưa vào Review lỗi tuần vào Thứ 2.","gio":"15:05","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":17,"apDungNgay":"Mọi ngày","bangChung":"Bảng rà soát vấn đề","nhomViec":"Review","noiDungSM":"Ghi nhận DAILY ISSUE: tối đa 3 vấn đề nổi bật trong ngày"},{"tieuChuanDat":"100% biểu mẫu trong ngày có chữ ký SM. Mọi dòng Không đạt đã có hướng xử lý hoặc đã lập phiếu I\u0026C.","gio":"16:45","tanSuat":"Theo ngày","uocTinhPhut":"10","stt":18,"apDungNgay":"Mọi ngày","bangChung":"Chữ ký SM/ASM","nhomViec":"Ký xác nhận","noiDungSM":"Ký xác nhận toàn bộ Logbook và Checklist Nhân viên trong ngày"},{"tieuChuanDat":"Đúng 17:00 ra ngoài cửa hàng nhìn lên bảng hiệu khi đèn vừa bật: toàn bộ bóng sáng đều, không bóng nào tối, không chớp nháy. Bảng hiệu không nứt vỡ, không bong tróc, không bám mạng nhện. Có bóng tối, chớp hoặc bảng hiệu hư hỏng thì lập phiếu I\u0026C ngay trong ngày và ghi số phiếu vào cột ghi chú.","gio":"17:00","tanSuat":"Theo ngày","uocTinhPhut":"5","stt":19,"apDungNgay":"Mọi ngày","bangChung":"Ảnh chụp bảng hiệu lúc 17:00","nhomViec":"Cơ sở vật chất","noiDungSM":"Kiểm đèn bảng hiệu lúc 17:00"},{"tieuChuanDat":"Gửi trong ngày Thứ 2. Nêu rõ họ tên, vị trí, ngày nghỉ chính thức của từng người. Tuần không phát sinh thì vẫn nhắn \u0027không phát sinh\u0027 để OFC biết là đã rà.","gio":"15:30","tanSuat":"Theo tuần","uocTinhPhut":"5","stt":20,"apDungNgay":"Thứ 2","bangChung":"Tin nhắn trên group SM–OFC có dấu thời gian","nhomViec":"Nhân sự","noiDungSM":"Thông báo thông tin nhân sự nghỉ việc qua group SM – OFC  (BM Weekly – mục 1)"},{"tieuChuanDat":"Nêu rõ số người cần bổ sung theo từng ca và thời điểm cần có mặt. Không thiếu người thì nhắn \u0027không phát sinh\u0027.","gio":"15:40","tanSuat":"Theo tuần","uocTinhPhut":"5","stt":21,"apDungNgay":"Thứ 2","bangChung":"Tin nhắn trên group SM–OFC","nhomViec":"Nhân sự","noiDungSM":"Thông báo số lượng nhân sự cần bổ sung tại cửa hàng qua group SM – OFC  (BM Weekly – mục 2)"},{"tieuChuanDat":"Nêu rõ họ tên, chuyển từ cửa hàng hoặc ca nào sang cửa hàng hoặc ca nào, ngày áp dụng. Không phát sinh thì nhắn \u0027không phát sinh\u0027.","gio":"15:50","tanSuat":"Theo tuần","uocTinhPhut":"5","stt":22,"apDungNgay":"Thứ 2","bangChung":"Tin nhắn trên group SM–OFC","nhomViec":"Nhân sự","noiDungSM":"Thông báo số lượng chuyển đổi nhân sự qua group SM – OFC  (BM Weekly – mục 3)"},{"tieuChuanDat":"Lịch của tuần kế tiếp phải xong trong ngày Thứ 2 và gửi cho toàn bộ nhân viên. Đủ người cho cả 3 ca, không có ca nào trống. Ai nghỉ phép hoặc đổi ca đều đã được ghi vào lịch.","gio":"16:00","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":23,"apDungNgay":"Thứ 2","bangChung":"Lịch tuần đã gửi cho nhân viên","nhomViec":"Nhân sự","noiDungSM":"Xếp lịch làm việc cho nhân sự cửa hàng theo tuần  (BM Weekly – mục 4)"},{"tieuChuanDat":"Toàn bộ sản phẩm đổi giá trong tuần đã được thay nhãn giá trên kệ. Kiểm ngẫu nhiên 5 sản phẩm: 0 sản phẩm có giá trên kệ khác giá trên máy tính tiền.","gio":"15:30","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":24,"apDungNgay":"Thứ 4","bangChung":"Ảnh nhãn giá đã thay + danh sách sản phẩm đổi giá","nhomViec":"Kinh doanh","noiDungSM":"Báo cáo đổi giá và cập nhật giá mới trên kệ hàng  (BM Weekly – mục 7)"},{"tieuChuanDat":"Toàn bộ sản phẩm mới của tuần đã có mặt trên kệ đúng ngày quy định, đúng vị trí theo sơ đồ trưng bày và đã có nhãn giá. Sản phẩm nào chưa về thì ghi rõ tên và báo OFC.","gio":"16:00","tanSuat":"Theo tuần","uocTinhPhut":"15","stt":25,"apDungNgay":"Thứ 4","bangChung":"Danh sách new item của tuần có đánh dấu đã lên kệ","nhomViec":"Kinh doanh","noiDungSM":"Kiểm tra sản phẩm mới (New item) của tuần  (BM Weekly – mục 8)"},{"tieuChuanDat":"POSM đang treo tại cửa hàng khớp với chương trình khuyến mãi đang chạy. Gỡ bỏ toàn bộ POSM của chương trình đã kết thúc. Thiếu POSM thì báo OFC trong ngày.","gio":"16:20","tanSuat":"Theo tuần","uocTinhPhut":"10","stt":26,"apDungNgay":"Thứ 4","bangChung":"Ảnh POSM tại quầy và tại kệ","nhomViec":"Kinh doanh","noiDungSM":"Kiểm tra POSM đã được cập nhật tại cửa hàng  (BM Weekly – mục 9)"},{"tieuChuanDat":"Bảng dự tính đủ toàn bộ nhân viên đang làm việc, tính đúng giờ ca ngày và ca đêm. Hoàn tất trong ngày Thứ 5.","gio":"15:30","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":27,"apDungNgay":"Thứ 5","bangChung":"Bảng dự tính giờ công và tiền lương tuần","nhomViec":"Nhân sự","noiDungSM":"Lập bảng dự tính giờ công và tiền lương của cửa hàng theo tuần  (BM Weekly – mục 5)"},{"tieuChuanDat":"Đối chiếu giờ công thực tế với bảng dự tính. Mọi chênh lệch đều phải ghi rõ lý do (tăng ca, nghỉ đột xuất, đổi ca, quên chấm công). Không để chênh lệch nào không có giải trình.","gio":"16:00","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":28,"apDungNgay":"Thứ 5","bangChung":"Bảng giờ công thực tế có ghi lý do chênh lệch","nhomViec":"Nhân sự","noiDungSM":"Kiểm tra giờ công làm việc thực tế của toàn bộ nhân viên cửa hàng  (BM Weekly – mục 6)"},{"tieuChuanDat":"Chứng từ của cả tuần được tập hợp đủ, sắp theo loại và gửi xong trong ngày Thứ 7. Thiếu chứng từ nào thì ghi rõ và bổ sung trong tuần kế tiếp.","gio":"15:30","tanSuat":"Theo tuần","uocTinhPhut":"25","stt":29,"apDungNgay":"Thứ 7","bangChung":"Biên nhận hoặc xác nhận đã gửi của OFC","nhomViec":"Hành chính","noiDungSM":"Tổng hợp toàn bộ chứng từ cần gửi về văn phòng và gửi cho OFC  (BM Weekly – mục 10)"},{"tieuChuanDat":"Tối đa 3 vấn đề nổi bật của tuần. Mỗi vấn đề ghi đủ: hành động khắc phục đã làm, người chịu trách nhiệm, deadline, kết quả và có cần OFC hỗ trợ hay không. Trường hợp phát hiện hư hỏng hoặc sự cố thì báo ngay OFC và bộ phận I\u0026C, không chờ tới cuối tuần.","gio":"16:00","tanSuat":"Theo tuần","uocTinhPhut":"20","stt":30,"apDungNgay":"Thứ 7","bangChung":"Bảng rà soát vấn đề đã điền và ký","nhomViec":"Review","noiDungSM":"Điền Bảng rà soát vấn đề trong tuần (bảng bên dưới)"},{"tieuChuanDat":"Chỉ gửi vào tháng đến chu kỳ. Tháng không đến chu kỳ thì ghi \u0027không áp dụng\u0027 vào cột ghi chú. Order đủ số lượng dùng cho 2 tháng, không đặt thừa.","gio":"16:30","tanSuat":"Theo tháng – Tuần 1","uocTinhPhut":"20","stt":31,"apDungNgay":"Thứ 4","bangChung":"Đơn order văn phòng phẩm đã gửi","nhomViec":"Hành chính","noiDungSM":"Gửi order văn phòng phẩm — 2 tháng 1 lần  (BM Monthly – mục 4)"},{"tieuChuanDat":"Điền đúng biểu mẫu file HR yêu cầu, đủ toàn bộ nhân viên có phản hồi, gửi đúng deadline của HR. Không có phản hồi nào thì ghi rõ \u0027không phát sinh\u0027.","gio":"16:30","tanSuat":"Theo tháng – Tuần 3","uocTinhPhut":"25","stt":32,"apDungNgay":"Thứ 4","bangChung":"File đã gửi + biên nhận của HR","nhomViec":"Hành chính","noiDungSM":"Gửi danh sách phản hồi về lương của nhân sự cửa hàng (theo file)  (BM Monthly – mục 1)"},{"tieuChuanDat":"Danh sách đủ họ tên và số tiền của từng người, gửi đúng deadline. Cửa hàng không phát sinh thì ghi rõ \u0027không phát sinh\u0027.","gio":"16:30","tanSuat":"Theo tháng – Tuần 3","uocTinhPhut":"20","stt":33,"apDungNgay":"Thứ 5","bangChung":"Danh sách đã gửi + biên nhận","nhomViec":"Hành chính","noiDungSM":"Gửi danh sách nhân viên hỗ trợ tiền gửi xe (nếu có)  (BM Monthly – mục 2)"},{"tieuChuanDat":"Mỗi khu vực trọng yếu có một CSR phụ trách được ghi rõ họ tên và khu vực phân công cho cả tháng: khu OSC và FF, khu kệ hàng khô, kho, counter. Nhân viên nghỉ việc giữa tháng thì phải phân công người thay và cập nhật lại bảng.","gio":"16:30","tanSuat":"Theo tháng – Tuần 4","uocTinhPhut":"20","stt":34,"apDungNgay":"Thứ 5","bangChung":"Bảng phân công tháng ghi rõ tên CSR và khu vực","nhomViec":"Nhân sự","noiDungSM":"Phân công CSR kiểm tra hàng hóa: hạn sử dụng và vấn đề an toàn vệ sinh thực phẩm  (BM Monthly – mục 6)"},{"tieuChuanDat":"Báo cáo đủ mục theo quy định và gửi đúng deadline. Kèm kết quả thực hiện Checklist CSR và Checklist SM của tháng, các vấn đề nổi bật và đề xuất cần OFC hỗ trợ.","gio":"16:30","tanSuat":"Theo tháng – Tuần 4","uocTinhPhut":"30","stt":35,"apDungNgay":"Thứ 6","bangChung":"Báo cáo tháng đã gửi + xác nhận của OFC","nhomViec":"Báo cáo","noiDungSM":"Gửi Báo cáo tháng cho OFC  (BM Monthly – mục 5)"},{"tieuChuanDat":"","gio":"","tanSuat":"","uocTinhPhut":"","stt":1,"apDungNgay":"","bangChung":"","nhomViec":"","noiDungSM":""},{"tieuChuanDat":"","gio":"","tanSuat":"","uocTinhPhut":"","stt":2,"apDungNgay":"","bangChung":"","nhomViec":"","noiDungSM":""},{"tieuChuanDat":"","gio":"","tanSuat":"","uocTinhPhut":"","stt":3,"apDungNgay":"","bangChung":"","nhomViec":"","noiDungSM":""}];
 
         const coldDevices = [
-            { name: "Tủ đông counter", threshold: "-22°C đến -18°C", defaultTemp: "-19.5" },
-            { name: "Tủ mát counter", threshold: "1°C đến 5°C", defaultTemp: "3.2" },
-            { name: "Tủ kem counter", threshold: "-22°C đến -18°C", defaultTemp: "-20.0" },
-            { name: "Tủ OSC 1", threshold: "1°C đến 5°C", defaultTemp: "2.8" },
-            { name: "Tủ OSC 2", threshold: "1°C đến 5°C", defaultTemp: "3.0" },
-            { name: "Tủ OSC 3", threshold: "1°C đến 5°C", defaultTemp: "2.5" },
-            { name: "Tủ đông 1", threshold: "-22°C đến -18°C", defaultTemp: "-19.0" },
-            { name: "Tủ đông 2", threshold: "-22°C đến -18°C", defaultTemp: "-9.2" },
-            { name: "Tủ đông 3", threshold: "-22°C đến -18°C", defaultTemp: "-21.0" },
-            { name: "Tủ đông 4", threshold: "-22°C đến -18°C", defaultTemp: "-18.5" },
-            { name: "WIC (kho lạnh)", threshold: "1°C đến 5°C", defaultTemp: "4.0" },
-            { name: "RIC (kho lạnh)", threshold: "1°C đến 5°C", defaultTemp: "3.8" },
-            { name: "Tủ đông kho", threshold: "-22°C đến -18°C", defaultTemp: "-20.5" },
-            { name: "Tủ mát kho", threshold: "1°C đến 5°C", defaultTemp: "4.2" }
+            { code: "EQ-REF-001", name: "Tủ đông counter", threshold: "-22°C đến -18°C", defaultTemp: "-19.5" },
+            { code: "EQ-REF-002", name: "Tủ mát counter", threshold: "1°C đến 5°C", defaultTemp: "3.2" },
+            { code: "EQ-REF-003", name: "Tủ kem counter", threshold: "-22°C đến -18°C", defaultTemp: "-20.0" },
+            { code: "EQ-REF-004", name: "Tủ OSC 1", threshold: "1°C đến 5°C", defaultTemp: "2.8" },
+            { code: "EQ-REF-005", name: "Tủ OSC 2", threshold: "1°C đến 5°C", defaultTemp: "3.0" },
+            { code: "EQ-REF-006", name: "Tủ OSC 3", threshold: "1°C đến 5°C", defaultTemp: "2.5" },
+            { code: "EQ-REF-007", name: "Tủ đông 1", threshold: "-22°C đến -18°C", defaultTemp: "-19.0" },
+            { code: "EQ-REF-008", name: "Tủ đông 2", threshold: "-22°C đến -18°C", defaultTemp: "-9.2" },
+            { code: "EQ-REF-009", name: "Tủ đông 3", threshold: "-22°C đến -18°C", defaultTemp: "-21.0" },
+            { code: "EQ-REF-010", name: "Tủ đông 4", threshold: "-22°C đến -18°C", defaultTemp: "-18.5" },
+            { code: "EQ-REF-011", name: "WIC (kho lạnh)", threshold: "1°C đến 5°C", defaultTemp: "4.0" },
+            { code: "EQ-REF-012", name: "RIC (kho lạnh)", threshold: "1°C đến 5°C", defaultTemp: "3.8" },
+            { code: "EQ-REF-013", name: "Tủ đông kho", threshold: "-22°C đến -18°C", defaultTemp: "-20.5" },
+            { code: "EQ-REF-014", name: "Tủ mát kho", threshold: "1°C đến 5°C", defaultTemp: "4.2" }
         ];
+
+        const deviceHistoryStore = {
+            "EQ-REF-008": [
+                {
+                    date: "12/08/2026 11:45",
+                    ticketId: "INC-20260812-VN0102-001",
+                    priority: "P1 (High)",
+                    issueDesc: "Nhiệt độ tủ đông tăng bất thường (-9.2°C so với ngưỡng -22°C đến -18°C) do hỏng lốc máy nén lạnh.",
+                    fixDesc: "Đã thay lốc máy nén lạnh mới, vệ sinh dàn nóng và nạp gas R404a. Đo thử tải đạt -19.0°C (Đạt standard SOP).",
+                    technician: "Trần Bảo Trì (I&C Support Team)",
+                    smVerified: "Store Manager VN0102 (Đã ký duyệt)"
+                }
+            ],
+            "EQ-REF-001": [
+                {
+                    date: "05/08/2026 09:30",
+                    ticketId: "INC-20260805-VN0102-004",
+                    priority: "P2 (Normal)",
+                    issueDesc: "Rò rỉ nước dàn lạnh tủ đông counter.",
+                    fixDesc: "Xử lý thông đường ống thoát nước ngưng tụ và dán lại gioăng cao su mép cửa.",
+                    technician: "Nguyễn Văn Hùng (I&C Team)",
+                    smVerified: "Store Manager VN0102 (Đã ký duyệt)"
+                }
+            ]
+        };
 
         const csrTaskStates = {};
         const smTaskStates = {};
@@ -1637,6 +1759,7 @@
 
         const logbookState = {
             tabA: coldDevices.map(d => ({
+                code: d.code,
                 name: d.name,
                 threshold: d.threshold,
                 ca1Time: "06:12", ca1Temp: (d.name === 'Tủ đông 2' ? '-9.2' : d.defaultTemp),
@@ -1644,14 +1767,11 @@
                 ca3Time: "22:10", ca3Temp: d.defaultTemp
             })),
             tabB: [
-                { stt: 1, gioPhatHien: "23:40", thietBiKhuVuc: "Tủ đông 2", soDo: "-9.2°C", xuLyTam: "Dời hàng sang Tủ đông 3, dán nhãn KHÔNG SỬ DỤNG", gioBaoSM: "23:50", soPhieuIC: "INC-20260812-VN0102-001", mucUuTien: "P1", ngayICNhan: "12/08/2026", gioSuaXong: "11:45", smNghihemThu: "-19.0°C", smKyDong: "✍️ SM VN0102 (Đã ký)" },
-                { stt: 2, gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" },
-                { stt: 3, gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" },
-                { stt: 4, gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" },
-                { stt: 5, gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" },
-                { stt: 6, gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" },
-                { stt: 7, gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" },
-                { stt: 8, gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" }
+                { stt: 1, code: "EQ-REF-008", gioPhatHien: "23:40", thietBiKhuVuc: "Tủ đông 2", soDo: "-9.2°C", xuLyTam: "Dời hàng sang Tủ đông 3, dán nhãn KHÔNG SỬ DỤNG", gioBaoSM: "23:50", soPhieuIC: "INC-20260812-VN0102-001", mucUuTien: "P1", ngayICNhan: "12/08/2026", gioSuaXong: "11:45", smNghihemThu: "-19.0°C", smKyDong: "✍️ SM VN0102 (Đã ký)" },
+                { stt: 2, code: "", gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" },
+                { stt: 3, code: "", gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" },
+                { stt: 4, code: "", gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" },
+                { stt: 5, code: "", gioPhatHien: "", thietBiKhuVuc: "", soDo: "", xuLyTam: "", gioBaoSM: "", soPhieuIC: "", mucUuTien: "", ngayICNhan: "", gioSuaXong: "", smNghihemThu: "", smKyDong: "" }
             ],
             tabC1: [
                 { stt: 1, ca: "Ca 1", gioKiem: "07:05", nguoiKiem: "Phạm Văn A", choice: 1 },
@@ -1660,20 +1780,10 @@
             ],
             tabC2: [
                 { stt: 1, gio: "22:35", ca: "Ca 3", sku: "893456701", tenSp: "Bánh bao thịt cút", sl: 2, lyDo: "Quá giờ giữ nóng", soLenhDisposal: "DSP-20260812-09", nguoiThucHien: "Trần Văn C", smDoiChieu: true },
-                { stt: 2, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false },
-                { stt: 3, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false },
-                { stt: 4, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false },
-                { stt: 5, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false },
-                { stt: 6, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false },
-                { stt: 7, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false },
-                { stt: 8, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false },
-                { stt: 9, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false },
-                { stt: 10, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false }
+                { stt: 2, gio: "", ca: "", sku: "", tenSp: "", sl: "", lyDo: "", soLenhDisposal: "", nguoiThucHien: "", smDoiChieu: false }
             ],
             tabD: [
-                { stt: 1, gioBanGiao: "05:45", caGiaoNhan: "Ca 3 → Ca 1", thietBiChoSua: "INC-20260812-VN0102-001", hangChoHuy: "2 bánh bao cút", tienQuy: "5,000,000 ₫", nguoiGiaoKy: "✍️ Trần Văn C", nguoiNhanKy: "✍️ Phạm Văn A", ghiChu: "Tủ đông 2 chờ I&C sửa" },
-                { stt: 2, gioBanGiao: "13:55", caGiaoNhan: "Ca 1 → Ca 2", thietBiChoSua: "INC-20260812-VN0102-001", hangChoHuy: "Không phát sinh", tienQuy: "5,000,000 ₫", nguoiGiaoKy: "✍️ Phạm Văn A", nguoiNhanKy: "✍️ Lê Thị B", ghiChu: "Ca 1 xong checklist" },
-                { stt: 3, gioBanGiao: "21:55", caGiaoNhan: "Ca 2 → Ca 3", thietBiChoSua: "", hangChoHuy: "", tienQuy: "5,000,000 ₫", nguoiGiaoKy: "✍️ Lê Thị B", nguoiNhanKy: "✍️ Trần Văn C", ghiChu: "Vận hành ổn định" }
+                { stt: 1, gioBanGiao: "05:45", caGiaoNhan: "Ca 3 → Ca 1", thietBiChoSua: "INC-20260812-VN0102-001", hangChoHuy: "2 bánh bao cút", tienQuy: "5,000,000 ₫", nguoiGiaoKy: "✍️ Trần Văn C", nguoiNhanKy: "✍️ Phạm Văn A", ghiChu: "Tủ đông 2 chờ I&C sửa" }
             ]
         };
 
@@ -1755,6 +1865,94 @@
             renderWebstorePortal();
         }
 
+        // OPEN I&C TICKET MODAL
+        function openICTicketModal() {
+            document.getElementById('modal-ic-ticket').style.display = 'flex';
+        }
+
+        // SUBMIT I&C TICKET FORM (SENDS EMAIL TO IC.SUPPORT & SAVES TO BẢNG B)
+        function submitICTicketForm() {
+            const email = document.getElementById('icticket-email').value;
+            const priority = document.getElementById('icticket-priority').value;
+            const devVal = document.getElementById('icticket-device').value;
+            const [devCode, devName] = devVal.split('|');
+            const detail = document.getElementById('icticket-detail').value || "Sự cố nhiệt độ tủ tăng bất thường.";
+
+            // Save to tabB
+            logbookState.tabB[0] = {
+                stt: 1,
+                code: devCode,
+                gioPhatHien: "23:40",
+                thietBiKhuVuc: devName,
+                soDo: "-9.2°C",
+                xuLyTam: "Dời hàng sang thiết bị dự phòng, dán nhãn KHÔNG SỬ DỤNG",
+                gioBaoSM: "23:50",
+                soPhieuIC: "INC-20260812-VN0102-001",
+                mucUuTien: priority.split(' ')[0],
+                ngayICNhan: "12/08/2026",
+                gioSuaXong: "11:45",
+                smNghihemThu: "-19.0°C",
+                smKyDong: "✍️ SM VN0102 (Đã ký)"
+            };
+
+            // Store in device history
+            if (!deviceHistoryStore[devCode]) deviceHistoryStore[devCode] = [];
+            deviceHistoryStore[devCode].unshift({
+                date: "12/08/2026 11:45",
+                ticketId: "INC-20260812-VN0102-001",
+                priority: priority,
+                issueDesc: detail,
+                fixDesc: "Kỹ thuật I&C đã khắc phục thay lốc máy nén lạnh, vệ sinh dàn nóng và nạp gas R404a. Đo đạt -19.0°C.",
+                technician: "Trần Bảo Trì (I&C Team)",
+                smVerified: "Store Manager VN0102 (Đã ký duyệt)"
+            });
+
+            document.getElementById('modal-ic-ticket').style.display = 'none';
+            alert('🚀 GỬI TICKET THÀNH CÔNG!\n\nTicket số INC-20260812-VN0102-001 đã tự động được gửi tới Email Bộ phận I&C (ic.support@gs25.com.vn)!\nDữ liệu sự cố đã được đồng bộ lên Web Portal.');
+            renderWebstorePortal();
+        }
+
+        // VIEW DEVICE MAINTENANCE HISTORY MODAL
+        function viewDeviceHistory(code, name) {
+            document.getElementById('history-dev-code').innerText = code;
+            document.getElementById('history-dev-name').innerText = name;
+
+            const container = document.getElementById('history-logs-container');
+            container.innerHTML = '';
+
+            const logs = deviceHistoryStore[code] || [
+                {
+                    date: "12/08/2026 11:45",
+                    ticketId: "INC-20260812-VN0102-001",
+                    priority: "P1 (High)",
+                    issueDesc: "Sự cố nhiệt độ tăng ngoài ngưỡng (" + name + ").",
+                    fixDesc: "Đã kiểm tra thay lốc máy nén lạnh, nạp gas mới. Đo đạt chuẩn.",
+                    technician: "Trần Bảo Trì (I&C Support)",
+                    smVerified: "Store Manager VN0102"
+                }
+            ];
+
+            logs.forEach(log => {
+                const div = document.createElement('div');
+                div.style.cssText = "border:1px solid #E2E8F0; padding:12px; border-radius:8px; background:#F8FAFC; font-size:12px; line-height:1.6;";
+                div.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; font-weight:700; color:#0080FF; margin-bottom:4px;">
+                        <span>📅 Ngày hoàn thành: ` + log.date + `</span>
+                        <span class="status-pill-terminated">` + log.ticketId + ` (` + log.priority + `)</span>
+                    </div>
+                    <div style="margin-bottom:4px;"><strong>Vấn đề / Sự cố:</strong> <span style="color:#DC2626;">` + log.issueDesc + `</span></div>
+                    <div style="margin-bottom:4px;"><strong>Hành động sửa chữa I&C:</strong> <span style="color:#16A34A; font-weight:600;">` + log.fixDesc + `</span></div>
+                    <div style="display:flex; justify-content:space-between; font-size:11px; color:#64748B; border-top:1px dashed #CBD5E1; padding-top:4px; margin-top:6px;">
+                        <span>🔧 Kỹ thuật viên: ` + log.technician + `</span>
+                        <span>✍️ SM Nghiệm thu: ` + log.smVerified + `</span>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            document.getElementById('modal-device-history').style.display = 'flex';
+        }
+
         // RENDER CSR TASKS ON PDA WITH REAL-TIME DYNAMIC SHIFT & DAY TASK COUNTS
         function renderCSRTasks() {
             const selDay = document.getElementById('pda-csr-filter-day') ? document.getElementById('pda-csr-filter-day').value : 'AUTO';
@@ -1785,13 +1983,11 @@
                 return true;
             }
 
-            // Calculate dynamic counts for each shift option based on selected Day and Freq
             const countCa1 = rawCSR.filter(t => matchCSR(t, 'Ca 1', selDay, selFreq)).length;
             const countCa2 = rawCSR.filter(t => matchCSR(t, 'Ca 2', selDay, selFreq)).length;
             const countCa3 = rawCSR.filter(t => matchCSR(t, 'Ca 3', selDay, selFreq)).length;
             const countAll = rawCSR.filter(t => matchCSR(t, 'ALL', selDay, selFreq)).length;
 
-            // Update Dropdown Shift Options Text dynamically
             const shiftSelect = document.getElementById('pda-csr-filter-shift');
             if (shiftSelect && shiftSelect.options.length >= 4) {
                 shiftSelect.options[0].text = `Ca 1 (06:00 - 14:00) — ${countCa1} công việc`;
@@ -1881,12 +2077,10 @@
                 return true;
             }
 
-            // Calculate dynamic counts for SM shift options
             const countAll = rawSM.filter(t => matchSM(t, 'ALL', selDay, selFreq)).length;
             const countSang = rawSM.filter(t => matchSM(t, 'SANG', selDay, selFreq)).length;
             const countChieu = rawSM.filter(t => matchSM(t, 'CHIEU', selDay, selFreq)).length;
 
-            // Update Dropdown Shift Options Text dynamically
             const shiftSelect = document.getElementById('pda-sm-filter-shift');
             if (shiftSelect && shiftSelect.options.length >= 3) {
                 shiftSelect.options[0].text = `Tất cả 35 Công việc SM (08:00 - 17:00) — ${countAll} công việc`;
@@ -1946,6 +2140,7 @@
             document.getElementById('sm-progress').innerText = passCount + " / " + filtered.length + " (" + pct + "%)";
         }
 
+        // RENDER LOGBOOK TAB A WITH EQUIPMENT ID CODE
         function renderLogA() {
             const tbody = document.getElementById('log-a-body');
             tbody.innerHTML = '';
@@ -1955,6 +2150,8 @@
                 const isOut = (val > 5.0 || val < -22.0 || (val > -18.0 && val < 0));
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
+                    <td>` + (idx + 1) + `</td>
+                    <td style="font-weight:700; color:#0080FF;">` + dev.code + `</td>
                     <td><strong>` + dev.name + `</strong></td>
                     <td style="font-size:9px; color:var(--gs25-muted);">` + dev.threshold + `</td>
                     <td><input type="text" class="temp-input in-range" value="` + dev.ca1Temp + `°C" onchange="updateTempA(` + idx + `, 'ca1Temp', this.value)"></td>
@@ -1971,10 +2168,14 @@
         }
 
         function saveIncidentB() {
+            const devSelect = document.getElementById('inc-thietBiSelect');
+            const [code, name] = devSelect.value.split('|');
+
             logbookState.tabB[0] = {
                 stt: 1,
+                code: code,
                 gioPhatHien: document.getElementById('inc-gioPhatHien').value,
-                thietBiKhuVuc: document.getElementById('inc-thietBi').value,
+                thietBiKhuVuc: name,
                 soDo: document.getElementById('inc-soDo').value,
                 xuLyTam: document.getElementById('inc-xuLyTam').value,
                 gioBaoSM: document.getElementById('inc-gioBaoSM').value,
@@ -1985,8 +2186,14 @@
                 smNghihemThu: document.getElementById('inc-smNghihemThu').value,
                 smKyDong: "✍️ SM (Đã ký)"
             };
-            alert('Đã lưu Phiếu I&C thành công! Dữ liệu BẢNG B đã được cập nhật real-time sang GS25 Internal Web Portal.');
+            alert('Đã lưu Bảng B thành công! Dữ liệu thiết bị ' + code + ' - ' + name + ' đã được đồng bộ lên GS25 Internal Web Portal.');
             renderWebstorePortal();
+        }
+
+        function syncIncDeviceCode() {
+            const devSelect = document.getElementById('inc-thietBiSelect');
+            const [code, name] = devSelect.value.split('|');
+            document.getElementById('inc-thietBi').value = name;
         }
 
         function renderC2TablePDA() {
@@ -2079,7 +2286,6 @@
             ctx.clearRect(0, 0, cvs.width, cvs.height);
         }
 
-        // GENERATE DATES LIST FOR MULTI-DATE AUDIT LOGGING
         function getDateRangeList(startDateStr, endDateStr) {
             if (!startDateStr || !endDateStr) return ['12/08/2026'];
             const start = new Date(startDateStr);
@@ -2099,7 +2305,7 @@
             return list.length ? list : ['12/08/2026'];
         }
 
-        // RENDER WEBSTORE PORTAL TABLES WITH REAL-TIME DYNAMIC FILTERS & MULTI-DATE AUDIT LOGS
+        // RENDER WEBSTORE PORTAL TABLES WITH REAL-TIME DYNAMIC FILTERS & EQUIPMENT CODE
         function renderWebstorePortal() {
             const storeCode = document.getElementById('portal-store-select').value;
             const fromDateVal = document.getElementById('portal-from-date') ? document.getElementById('portal-from-date').value : '2026-08-10';
@@ -2131,7 +2337,7 @@
                 return true;
             });
             
-            // 1. CSR Table with Ngày kiểm tra column
+            // 1. CSR Table
             const csrTbody = document.getElementById('portal-csr-tbody');
             csrTbody.innerHTML = '';
             let csrGlobalIdx = 1;
@@ -2166,7 +2372,7 @@
             });
             document.getElementById('portal-csr-total').innerText = 'Total ' + (csrGlobalIdx - 1) + ' records (' + auditDates.length + ' ngày audit)';
 
-            // 2. SM Table with Ngày kiểm tra column
+            // 2. SM Table
             const smTbody = document.getElementById('portal-sm-tbody');
             smTbody.innerHTML = '';
             let smGlobalIdx = 1;
@@ -2200,7 +2406,7 @@
             });
             document.getElementById('portal-sm-total').innerText = 'Total ' + (smGlobalIdx - 1) + ' records (' + auditDates.length + ' ngày audit)';
 
-            // 3. Logbook Tab A Matrix Table
+            // 3. Logbook Tab A Matrix Table WITH EQUIPMENT CODE
             const logATbody = document.getElementById('portal-log-a-tbody');
             logATbody.innerHTML = '';
             logbookState.tabA.forEach((dev, idx) => {
@@ -2209,6 +2415,7 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>` + (idx + 1) + `</td>
+                    <td style="font-weight:800; color:#0080FF;">` + dev.code + `</td>
                     <td><strong>` + dev.name + `</strong></td>
                     <td style="font-size:10px; color:var(--gs25-muted);">` + dev.threshold + `</td>
                     <td>` + dev.ca1Time + `</td><td>` + dev.ca1Temp + `°C</td><td><span class="status-pill-active">Active</span></td>
@@ -2218,15 +2425,16 @@
                 logATbody.appendChild(tr);
             });
 
-            // 4. Logbook Tab B Table (FULL 12 COLUMNS)
+            // 4. Logbook Tab B Table WITH EQUIPMENT CODE & MAINTENANCE HISTORY BUTTON
             const logBTbody = document.getElementById('portal-log-b-tbody');
             logBTbody.innerHTML = '';
             logbookState.tabB.forEach(row => {
+                const devCode = row.code || (row.thietBiKhuVuc === 'Tủ đông 2' ? 'EQ-REF-008' : 'EQ-REF-001');
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>` + row.stt + `</td>
                     <td>` + row.gioPhatHien + `</td>
-                    <td><strong>` + row.thietBiKhuVuc + `</strong></td>
+                    <td><span style="font-size:10px; background:#E6F6FF; color:#0080FF; padding:2px 5px; border-radius:4px; font-weight:700;">` + devCode + `</span><br><strong>` + row.thietBiKhuVuc + `</strong></td>
                     <td><strong style="color:var(--gs25-red);">` + row.soDo + `</strong></td>
                     <td style="font-size:11px;">` + row.xuLyTam + `</td>
                     <td>` + row.gioBaoSM + `</td>
@@ -2236,6 +2444,7 @@
                     <td>` + row.gioSuaXong + `</td>
                     <td><strong>` + row.smNghihemThu + `</strong></td>
                     <td>` + (row.smKyDong ? '<div class="sig-box-display">' + row.smKyDong + '</div>' : '') + `</td>
+                    <td>` + (row.soPhieuIC ? '<button class="vswitch-btn" style="padding:4px 8px; font-size:11px; background:#16A34A;" onclick="viewDeviceHistory(\'' + devCode + '\', \'' + row.thietBiKhuVuc + '\')">📜 View Lịch sử</button>' : '') + `</td>
                 `;
                 logBTbody.appendChild(tr);
             });
@@ -2336,4 +2545,4 @@
 "@
 
 [System.IO.File]::WriteAllText($templatePath, $CodeContent, [System.Text.Encoding]::UTF8)
-Write-Host "Updated template.html with dynamic real-time task counts on Dropdowns and Progress Bar"
+Write-Host "Updated template.html with Equipment ID, I&C Ticket Form Modal, Email Dispatch, and Maintenance History Modal"
