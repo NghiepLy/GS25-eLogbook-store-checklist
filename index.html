@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -1580,13 +1580,21 @@
                                     <div style="flex:1;">
                                         <label class="form-label-portal">Mã (ID) & Thiết bị (Cột 3):</label>
                                         <select id="inc-thietBiSelect" class="filter-select" onchange="syncIncDeviceCode()">
-                                            <option value="EQ-REF-008|Tủ đông 2" selected>EQ-REF-008 — Tủ đông 2</option>
-                                            <option value="EQ-REF-001|Tủ đông counter">EQ-REF-001 — Tủ đông counter</option>
-                                            <option value="EQ-REF-002|Tủ mát counter">EQ-REF-002 — Tủ mát counter</option>
-                                            <option value="EQ-REF-003|Tủ kem counter">EQ-REF-003 — Tủ kem counter</option>
-                                            <option value="EQ-REF-007|Tủ đông 1">EQ-REF-007 — Tủ đông 1</option>
-                                            <option value="EQ-REF-011|WIC (kho lạnh)">EQ-REF-011 — WIC (kho lạnh)</option>
-                                        </select>
+                                             <option value="TBMM##037|Tủ đông counter" selected>TBMM##037 — Tủ đông counter</option>
+                                             <option value="TBMM##036|Tủ mát counter">TBMM##036 — Tủ mát counter</option>
+                                             <option value="TBMM##032|Tủ kem counter">TBMM##032 — Tủ kem counter</option>
+                                             <option value="TBMM##007|Tủ OSC 1">TBMM##007 — Tủ OSC 1</option>
+                                             <option value="TBMM##011|Tủ OSC 2">TBMM##011 — Tủ OSC 2</option>
+                                             <option value="TBMM##028|Tủ OSC 3">TBMM##028 — Tủ OSC 3</option>
+                                             <option value="TBMM##014|Tủ đông 1">TBMM##014 — Tủ đông 1</option>
+                                             <option value="TBMM##031|Tủ đông 2">TBMM##031 — Tủ đông 2</option>
+                                             <option value="TBMM##035|Tủ đông 3">TBMM##035 — Tủ đông 3</option>
+                                             <option value="TBMM##034|Tủ đông 4">TBMM##034 — Tủ đông 4</option>
+                                             <option value="TBMM##029|WIC (kho lạnh)">TBMM##029 — WIC (kho lạnh)</option>
+                                             <option value="TBMM##030|RIC (kho lạnh)">TBMM##030 — RIC (kho lạnh)</option>
+                                             <option value="TBMM##014_K|Tủ đông kho">TBMM##014_K — Tủ đông kho</option>
+                                             <option value="TBMM##033|Tủ mát kho">TBMM##033 — Tủ mát kho</option>
+                                         </select>
                                     </div>
                                     <div style="flex:1;">
                                         <label class="form-label-portal">Số đo lỗi (Cột 4):</label>
@@ -1810,7 +1818,7 @@
             <div class="filter-box">
                 <h3 style="font-size: 15px; font-weight: 800; margin-bottom: 12px; color: #0080FF;">Bảng Tra Cứu Quy Tắc Nghiệp Vụ:</h3>
                 <ul style="font-size: 13px; color: var(--gs25-text); padding-left: 20px; line-height: 1.8;">
-                    <li><strong>Mã Thiết Bị (ID):</strong> Quản lý 14 thiết bị lạnh bằng Mã định danh độc nhất (EQ-REF-001 đến EQ-REF-014).</li>
+                    <li><strong>Mã Thiết Bị (ID):</strong> Quản lý 14 thiết bị lạnh bằng Mã định danh độc nhất liên thông hệ thống bảo trì (TBMM##007 đến TBMM##037).</li>
                     <li><strong>I&C Ticket Form:</strong> Tự động kích hoạt form báo cáo sự cố gửi email về `ic.support@gs25.com.vn`.</li>
                     <li><strong>Bảng Tổng Hợp Lịch Sử Bảo Trì:</strong> Tra cứu UI bảng tổng hợp toàn bộ 14 thiết bị lạnh với thông tin lần sửa gần nhất & vấn đề sự cố tại Cửa hàng đang xem báo cáo.</li>
                 </ul>
@@ -1855,12 +1863,20 @@
                 <div>
                     <label style="font-weight:700; color:#374151;">5. MÃ THIẾT BỊ (ID) & TÊN THIẾT BỊ SỰ CỐ: *</label>
                     <select id="icticket-device" class="form-control-portal" style="width:100%; margin-top:4px;">
-                        <option value="EQ-REF-008|Tủ đông 2" selected>EQ-REF-008 — Tủ đông 2 (Khu vực bán hàng)</option>
-                        <option value="EQ-REF-001|Tủ đông counter">EQ-REF-001 — Tủ đông counter</option>
-                        <option value="EQ-REF-002|Tủ mát counter">EQ-REF-002 — Tủ mát counter</option>
-                        <option value="EQ-REF-003|Tủ kem counter">EQ-REF-003 — Tủ kem counter</option>
-                        <option value="EQ-REF-007|Tủ đông 1">EQ-REF-007 — Tủ đông 1</option>
-                        <option value="EQ-REF-011|WIC (kho lạnh)">EQ-REF-011 — WIC (kho lạnh đi vào được)</option>
+                        <option value="TBMM##031|Tủ đông 2" selected>TBMM##031 — Tủ đông 2 (Khu vực bán hàng - Tủ đông đứng)</option>
+                        <option value="TBMM##037|Tủ đông counter">TBMM##037 — Tủ đông counter (Tủ đông bàn Lassele)</option>
+                        <option value="TBMM##036|Tủ mát counter">TBMM##036 — Tủ mát counter (Tủ mát bàn Kistem)</option>
+                        <option value="TBMM##032|Tủ kem counter">TBMM##032 — Tủ kem counter (Tủ đông Kem)</option>
+                        <option value="TBMM##007|Tủ OSC 1">TBMM##007 — Tủ OSC 1 (Hệ thống tủ mát không cửa)</option>
+                        <option value="TBMM##011|Tủ OSC 2">TBMM##011 — Tủ OSC 2 (Tủ OSC)</option>
+                        <option value="TBMM##028|Tủ OSC 3">TBMM##028 — Tủ OSC 3 (Tủ OSC)</option>
+                        <option value="TBMM##014|Tủ đông 1">TBMM##014 — Tủ đông 1 (Tủ đông)</option>
+                        <option value="TBMM##035|Tủ đông 3">TBMM##035 — Tủ đông 3 (Tủ mát 3 cửa)</option>
+                        <option value="TBMM##034|Tủ đông 4">TBMM##034 — Tủ đông 4 (Tủ mát 2 cửa)</option>
+                        <option value="TBMM##029|WIC (kho lạnh)">TBMM##029 — WIC (Kho lạnh 4 cửa)</option>
+                        <option value="TBMM##030|RIC (kho lạnh)">TBMM##030 — RIC (Kho lạnh 5 cửa)</option>
+                        <option value="TBMM##014_K|Tủ đông kho">TBMM##014_K — Tủ đông kho</option>
+                        <option value="TBMM##033|Tủ mát kho">TBMM##033 — Tủ mát kho (Tủ mát 1 cửa)</option>
                     </select>
                 </div>
                 <div>
@@ -1897,7 +1913,7 @@
             <div style="margin-bottom:16px; padding:14px; background:#F0FDF4; border:1px solid #BBF7D0; border-radius:10px; font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px;">
                 <div><strong>🏪 Cửa Hàng Báo Cáo:</strong> <span id="history-store-name" style="color:#0080FF; font-weight:800;">VN0102 - GS25 Nguyễn Trãi (HCM)</span></div>
                 <div><strong>📅 Thời Gian Trích Xuất:</strong> <span style="font-weight:700;">13/08/2026 13:52</span></div>
-                <div><strong>❄️ Tổng Số Thiết Bị Quản Lý:</strong> <span style="color:#16A34A; font-weight:800;">14 Thiết Bị Lạnh (EQ-REF-001 đến EQ-REF-014)</span></div>
+                <div><strong>❄️ Tổng Số Thiết Bị Quản Lý:</strong> <span style="color:#16A34A; font-weight:800;">14 Thiết Bị Lạnh (Mã hệ thống TBMM##007 đến TBMM##037)</span></div>
             </div>
 
             <!-- DEDICATED FULL SUMMARY TABLE -->
@@ -3086,12 +3102,12 @@
             const logBTbody = document.getElementById('portal-log-b-tbody');
             logBTbody.innerHTML = '';
             logbookState.tabB.forEach(row => {
-                const devCode = row.code || (row.thietBiKhuVuc === 'Tủ đông 2' ? 'EQ-REF-008' : 'EQ-REF-001');
+                const devCode = row.code || (row.thietBiKhuVuc === 'Tủ đông 2' ? 'TBMM##031' : '');
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>` + row.stt + `</td>
                     <td>` + row.gioPhatHien + `</td>
-                    <td><span style="font-size:10px; background:#E6F6FF; color:#0080FF; padding:2px 5px; border-radius:4px; font-weight:700;">` + devCode + `</span><br><strong>` + row.thietBiKhuVuc + `</strong></td>
+                    <td>` + (devCode ? `<span style="font-size:10px; background:#E6F6FF; color:#0080FF; padding:2px 5px; border-radius:4px; font-weight:700;">` + devCode + `</span><br>` : '') + `<strong>` + row.thietBiKhuVuc + `</strong></td>
                     <td><strong style="color:var(--gs25-red);">` + row.soDo + `</strong></td>
                     <td style="font-size:11px;">` + row.xuLyTam + `</td>
                     <td>` + row.gioBaoSM + `</td>
