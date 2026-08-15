@@ -832,9 +832,11 @@
     <div class="view-switcher-bar">
         <div style="font-weight: 800; display: flex; align-items: center; gap: 8px;">
             <span>GS25 VIETNAM</span>
-            <span style="background: #00A0E9; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px;">eLogbook System v2.0</span>
+            <span style="background: #00A0E9; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px;">eLogbook System v4.0</span>
         </div>
         <div class="view-switch-btns">
+            <button class="vswitch-btn" style="background:#16A34A; border-color:#16A34A;" onclick="openStaffLoginModal()">🔑 Đăng nhập Staff ID</button>
+            <button class="vswitch-btn" style="background:#D97706; border-color:#D97706;" onclick="saveDraftPDA()">💾 Lưu Tạm (Draft)</button>
             <button class="vswitch-btn" id="btn-pda" onclick="switchView('pda')">📱 PDA Handheld App</button>
             <button class="vswitch-btn active" id="btn-cms" onclick="switchView('cms')">💻 eLogbook - GS25 Internal Web Portal</button>
         </div>
@@ -1730,6 +1732,66 @@
             <div style="margin-top:14px; font-size:11px; color:#65A30D; background:#F7FEE7; border-left:4px solid #84CC16; padding:10px 14px; border-radius:0 8px 8px 0;">
                 💡 <strong>Ghi chú Vận hành:</strong> Toàn bộ 14 thiết bị lạnh được giám sát lịch sử bảo trì liên tục. Mọi sự cố phát sinh ngoài ngưỡng nhiệt độ tiêu chuẩn SOP đều tự động khởi tạo phiếu I&C Ticket và cập nhật nhật ký sửa chữa tại giao diện này.
             </div>
+    <!-- MODAL 3: STAFF LOGIN MODAL -->
+    <div id="modal-staff-login" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:9999; justify-content:center; align-items:center;">
+        <div style="background:white; border-radius:14px; width:450px; max-width:92%; padding:24px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.3);">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #0080FF; padding-bottom:10px; margin-bottom:16px;">
+                <div style="font-weight:900; font-size:16px; color:#0080FF;">🔑 ĐĂNG NHẬP PDA BẰNG STAFF CODE ID</div>
+                <button onclick="document.getElementById('modal-staff-login').style.display='none'" style="background:none; border:none; font-size:20px; cursor:pointer;">✖</button>
+            </div>
+            <div style="font-size:12px; color:#4B5563; margin-bottom:14px; line-height:1.5;">
+                Nhập Staff Code ID của nhân viên để hệ thống tự động nhận diện vai trò (CSR hoặc Store Manager SM) và tải danh mục tương ứng.
+            </div>
+            <div style="margin-bottom:14px;">
+                <label style="font-weight:700; font-size:12px;">Mã Nhân Viên Staff Code ID:</label>
+                <input type="text" id="login-staff-code-input" class="form-control-portal" style="width:100%; margin-top:4px; font-weight:800;" placeholder="Ví dụ: VN0102_CSR hoặc VN0102_SM" value="VN0102_CSR">
+            </div>
+            <div style="font-size:11px; color:#6B7280; margin-bottom:12px; font-weight:700;">Nút Chọn Nhanh Giả Lập User:</div>
+            <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:16px;">
+                <button class="vswitch-btn" style="background:#E6F6FF; color:#0080FF; border:1px solid #0080FF; text-align:left;" onclick="quickSelectStaff('VN0102_CSR', 'Lý Vĩ Nghiệp', 'CSR', 'VN0102 - GS25 Nguyễn Trãi')">👤 CSR: VN0102_CSR — Lý Vĩ Nghiệp (GS25 Nguyễn Trãi)</button>
+                <button class="vswitch-btn" style="background:#FEF3C7; color:#D97706; border:1px solid #D97706; text-align:left;" onclick="quickSelectStaff('VN0102_SM', 'Lý Vĩ Nghiệp', 'SM', 'VN0102 - GS25 Nguyễn Trãi')">👔 SM: VN0102_SM — Lý Vĩ Nghiệp (GS25 Nguyễn Trãi)</button>
+                <button class="vswitch-btn" style="background:#F3F4F6; color:#374151; border:1px solid #D1D5DB; text-align:left;" onclick="quickSelectStaff('VN0105_CSR', 'Phạm Văn A', 'CSR', 'VN0105 - GS25 Lê Lai')">👤 CSR: VN0105_CSR — Phạm Văn A (GS25 Lê Lai)</button>
+            </div>
+            <button class="vswitch-btn" style="width:100%; justify-content:center; background:#0080FF; color:white; padding:10px; font-weight:800;" onclick="confirmStaffLogin()">🚀 XÁC NHẬN ĐĂNG NHẬP PDA</button>
+        </div>
+    </div>
+
+    <!-- MODAL 4: ACTIVE SHIFT DRAFT PROMPT MODAL -->
+    <div id="modal-shift-draft-prompt" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:10000; justify-content:center; align-items:center;">
+        <div style="background:white; border-radius:14px; width:480px; max-width:92%; padding:24px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.4);">
+            <div style="font-weight:900; font-size:17px; color:#D97706; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+                <span>⚠️</span> <span>PHÁT HIỆN BẢN LƯU TẠM TRONG CA LÀM VIỆC</span>
+            </div>
+            <div id="shift-prompt-msg" style="font-size:13px; color:#374151; line-height:1.6; margin-bottom:18px;">
+                Hệ thống nhận diện bạn đang trong cùng Ca làm việc (Ca 1). Bạn có bản lưu tạm tiến độ trước đó. Bạn muốn tiếp tục hay bỏ qua để làm mới?
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button class="vswitch-btn" style="flex:1; justify-content:center; background:#16A34A; color:white; padding:10px; font-weight:800;" onclick="resumeDraftPDA()">▶️ TIẾP TỤC BẢN LƯU TẠM</button>
+                <button class="vswitch-btn" style="flex:1; justify-content:center; background:#DC2626; color:white; padding:10px; font-weight:800;" onclick="discardDraftPDA()">🗑️ BỎ QUA & LÀM MỚI</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 5: PHOTO UPLOAD SIMULATOR MODAL -->
+    <div id="modal-photo-upload" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:9999; justify-content:center; align-items:center;">
+        <div style="background:white; border-radius:14px; width:460px; max-width:92%; padding:20px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.3);">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #0080FF; padding-bottom:8px; margin-bottom:14px;">
+                <div style="font-weight:900; font-size:15px; color:#0080FF;">📷 UPLOAD HÌNH ẢNH BẰNG CHỨNG CHECKLIST</div>
+                <button onclick="document.getElementById('modal-photo-upload').style.display='none'" style="background:none; border:none; font-size:20px; cursor:pointer;">✖</button>
+            </div>
+            <div style="font-size:12px; color:#4B5563; margin-bottom:10px;" id="upload-item-title">
+                Checklist Item #1
+            </div>
+            <div style="border:2px dashed #93C5FD; background:#EFF6FF; border-radius:10px; padding:20px; text-align:center; cursor:pointer; margin-bottom:12px;" onclick="simulatePhotoCapture()">
+                <div style="font-size:32px; margin-bottom:4px;">📸</div>
+                <div style="font-size:12px; font-weight:700; color:#1E40AF;">Bấm để chụp ảnh bằng Camera PDA hoặc Chọn tệp ảnh</div>
+                <div style="font-size:10px; color:#6B7280; margin-top:4px;">(Hỗ trợ định dạng JPG, PNG - Tối đa 5MB)</div>
+            </div>
+            <div id="photo-preview-container" style="display:none; margin-bottom:12px; text-align:center;">
+                <img id="photo-preview-img" src="" alt="Preview" style="max-width:100%; height:140px; object-fit:cover; border-radius:8px; border:1px solid #CBD5E1;">
+                <div style="font-size:11px; color:#16A34A; font-weight:700; margin-top:4px;">✓ Ảnh đã được đính kèm thành công!</div>
+            </div>
+            <button class="vswitch-btn" style="width:100%; justify-content:center; background:#0080FF; color:white; padding:10px; font-weight:800;" onclick="confirmPhotoUpload()">💾 LƯU ẢNH BẰNG CHỨNG ITEM</button>
         </div>
     </div>
 
@@ -2090,6 +2152,157 @@
             openAllDeviceHistoryModal(code);
         }
 
+        // CURRENT USER CONTEXT & LOGIN HANDLER
+        let currentUser = {
+            staffCode: "VN0102_CSR",
+            name: "Lý Vĩ Nghiệp",
+            role: "CSR",
+            store: "VN0102 - GS25 Nguyễn Trãi"
+        };
+
+        let currentActiveShift = "Ca 1";
+        let activeUploadTaskId = null;
+        const taskPhotosStore = {};
+
+        function openStaffLoginModal() {
+            document.getElementById('modal-staff-login').style.display = 'flex';
+        }
+
+        function quickSelectStaff(code, name, role, store) {
+            document.getElementById('login-staff-code-input').value = code;
+            currentUser = { staffCode: code, name: name, role: role, store: store };
+        }
+
+        function confirmStaffLogin() {
+            const inputCode = document.getElementById('login-staff-code-input').value.trim();
+            if (inputCode) {
+                if (inputCode.toUpperCase().includes('SM')) {
+                    currentUser.role = 'SM';
+                    currentUser.staffCode = inputCode;
+                    currentUser.name = "Lý Vĩ Nghiệp (SM)";
+                } else {
+                    currentUser.role = 'CSR';
+                    currentUser.staffCode = inputCode;
+                    currentUser.name = "Lý Vĩ Nghiệp (CSR)";
+                }
+            }
+            updateHeaderUserUI();
+            document.getElementById('modal-staff-login').style.display = 'none';
+            if (currentUser.role === 'SM') {
+                switchPdaTab('sm');
+            } else {
+                switchPdaTab('csr');
+            }
+            checkShiftDraftOnLoad();
+        }
+
+        function updateHeaderUserUI() {
+            const userEl = document.getElementById('pda-header-user');
+            const roleEl = document.getElementById('pda-header-role');
+            if (userEl) userEl.innerText = "👤 " + currentUser.name;
+            if (roleEl) roleEl.innerText = "Role: " + currentUser.role + " (" + currentUser.staffCode + ")";
+        }
+
+        // DRAFT SAVE & SHIFT CHECK
+        function saveDraftPDA() {
+            const draftData = {
+                timestamp: new Date().toISOString(),
+                shift: currentActiveShift,
+                staffCode: currentUser.staffCode,
+                csrStates: csrTaskStates,
+                csrNotes: csrTaskNotes,
+                smStates: smTaskStates,
+                smNotes: smTaskNotes,
+                logState: logbookState
+            };
+            localStorage.setItem('gs25_elogbook_draft', JSON.stringify(draftData));
+            alert('💾 BẢN LƯU TẠM THÀNH CÔNG!\n\nDữ liệu checklist Ca ' + currentActiveShift + ' đã được lưu tạm trên máy PDA.');
+        }
+
+        function checkShiftDraftOnLoad() {
+            const rawDraft = localStorage.getItem('gs25_elogbook_draft');
+            if (rawDraft) {
+                try {
+                    const draft = JSON.parse(rawDraft);
+                    if (draft.shift === currentActiveShift) {
+                        const promptMsgEl = document.getElementById('shift-prompt-msg');
+                        if (promptMsgEl) {
+                            promptMsgEl.innerText = "Hệ thống phát hiện bản lưu tạm trong Ca hiện tại (" + currentActiveShift + ") của " + draft.staffCode + ". Bạn muốn tiếp tục bản lưu tạm hay bỏ qua để làm mới?";
+                        }
+                        document.getElementById('modal-shift-draft-prompt').style.display = 'flex';
+                    }
+                } catch(e) {}
+            }
+        }
+
+        function resumeDraftPDA() {
+            const rawDraft = localStorage.getItem('gs25_elogbook_draft');
+            if (rawDraft) {
+                const draft = JSON.parse(rawDraft);
+                Object.assign(csrTaskStates, draft.csrStates || {});
+                Object.assign(csrTaskNotes, draft.csrNotes || {});
+                Object.assign(smTaskStates, draft.smStates || {});
+                Object.assign(smTaskNotes, draft.smNotes || {});
+                renderCSRTasks();
+                renderSMTasks();
+                renderLogA();
+            }
+            document.getElementById('modal-shift-draft-prompt').style.display = 'none';
+        }
+
+        function discardDraftPDA() {
+            localStorage.removeItem('gs25_elogbook_draft');
+            document.getElementById('modal-shift-draft-prompt').style.display = 'none';
+        }
+
+        // PHOTO UPLOAD MODAL SIMULATOR
+        function openPhotoUploadModal(taskId, title) {
+            activeUploadTaskId = taskId;
+            document.getElementById('upload-item-title').innerText = "📷 Đính kèm ảnh bằng chứng cho: STT " + taskId + " - " + title;
+            document.getElementById('photo-preview-container').style.display = taskPhotosStore[taskId] ? 'block' : 'none';
+            if (taskPhotosStore[taskId]) {
+                document.getElementById('photo-preview-img').src = taskPhotosStore[taskId];
+            }
+            document.getElementById('modal-photo-upload').style.display = 'flex';
+        }
+
+        function simulatePhotoCapture() {
+            const demoImg = "https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&w=400&q=80";
+            document.getElementById('photo-preview-img').src = demoImg;
+            document.getElementById('photo-preview-container').style.display = 'block';
+            if (activeUploadTaskId) {
+                taskPhotosStore[activeUploadTaskId] = demoImg;
+            }
+        }
+
+        function confirmPhotoUpload() {
+            document.getElementById('modal-photo-upload').style.display = 'none';
+            alert('✓ Đã lưu hình ảnh bằng chứng cho Checklist Item!');
+            renderCSRTasks();
+            renderSMTasks();
+        }
+
+        function viewDeviceHistory(code, name) {
+            openAllDeviceHistoryModal(code);
+        }
+
+        // 30-MIN TIMER FOR TEMPERATURE MEASUREMENT
+        function start30MinTimer(index) {
+            alert('⏱️ Đã kích hoạt Timer đếm ngược 30 phút đo lại nhiệt độ cho ' + logbookState.tabA[index].code + ' (' + logbookState.tabA[index].name + ')!\n\nVui lòng kiểm tra dời hàng hoặc dán nhãn tạm thời và đo lại sau 30 phút.');
+            setTimeout(() => {
+                const retryVal = prompt("ĐÃ HẾT 30 PHÚT! Vui lòng nhập số đo nhiệt độ đo lại lần 2 cho " + logbookState.tabA[index].code + ":", "-9.2");
+                if (retryVal !== null) {
+                    logbookState.tabA[index].ca2Temp = retryVal;
+                    renderLogA();
+                    if (parseFloat(retryVal) > 5.0 || parseFloat(retryVal) < -22.0 || (parseFloat(retryVal) > -18.0 && parseFloat(retryVal) < 0)) {
+                        if (confirm("Số đo lần 2 vẫn Không Đạt (" + retryVal + "°C)! Bạn có muốn mở Form Lập Phiếu Yêu Cầu Sửa Chữa I&C BẢNG B ngay lập tức không?")) {
+                            openICTicketModal();
+                        }
+                    }
+                }
+            }, 500);
+        }
+
         // RENDER CSR TASKS ON PDA WITH REAL-TIME DYNAMIC SHIFT & DAY TASK COUNTS
         function renderCSRTasks() {
             const selDay = document.getElementById('pda-csr-filter-day') ? document.getElementById('pda-csr-filter-day').value : 'AUTO';
@@ -2138,12 +2351,37 @@
             const container = document.getElementById('csr-task-list');
             container.innerHTML = '';
 
+            // SECTION GOM NHÓM THIẾT BỊ ĐANG SỬA CHỮA (ACTIVE I&C TICKET GROUPING SECTION)
+            const activeICTicket = logbookState.tabB.find(r => r.soPhieuIC && r.code);
+            if (activeICTicket) {
+                const groupBanner = document.createElement('div');
+                groupBanner.className = 'filter-box';
+                groupBanner.style.background = '#FEF2F2';
+                groupBanner.style.borderColor = '#EF4444';
+                groupBanner.innerHTML = `
+                    <div style="font-size:12px; font-weight:800; color:#DC2626; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+                        <span>⚠️ SECTION: THIẾT BỊ ĐANG SỬA CHỮA (I&C TICKET) / CẦN RE-CHECK</span>
+                    </div>
+                    <div style="font-size:11px; color:#374151; line-height:1.5;">
+                        <strong>Mã Thiết Bị:</strong> <span style="color:#0080FF; font-weight:800;">` + activeICTicket.code + `</span> (` + activeICTicket.thietBiKhuVuc + `)<br>
+                        <strong>Số Phiếu I&C:</strong> <strong style="color:#DC2626;">` + activeICTicket.soPhieuIC + `</strong> | <strong>Mức ưu tiên:</strong> ` + activeICTicket.mucUuTien + `<br>
+                        <strong>Hiện trạng:</strong> ` + activeICTicket.xuLyTam + `<br>
+                        <strong>Trạng thái:</strong> <span class="status-pill-terminated">Team I&C Đang xử lý sửa chữa</span>
+                    </div>
+                    <button class="vswitch-btn" style="width:100%; margin-top:8px; background:#16A34A; color:white; font-size:11px;" onclick="start30MinTimer(7)">
+                        🔄 CSR Re-check / Cập Nhật Kết Quả Sau Khi Sửa Xong
+                    </button>
+                `;
+                container.appendChild(groupBanner);
+            }
+
             let passCount = 0;
 
             filtered.forEach(task => {
                 const status = csrTaskStates[task.stt];
                 if (status === 'pass') passCount++;
                 const currentNote = csrTaskNotes[task.stt] || '';
+                const hasPhoto = !!taskPhotosStore[task.stt];
 
                 const card = document.createElement('div');
                 card.className = 'task-card';
@@ -2165,14 +2403,45 @@
                         <button class="btn-status pass ` + (status === 'pass' ? 'active' : '') + `" onclick="setCSRTaskStatus(` + task.stt + `, 'pass')">✓ ĐẠT</button>
                         <button class="btn-status fail ` + (status === 'fail' ? 'active' : '') + `" onclick="setCSRTaskStatus(` + task.stt + `, 'fail')">✗ KHÔNG ĐẠT</button>
                     </div>
-                    <div id="fail-box-csr-` + task.stt + `" class="fail-box" style="display: ` + (status === 'fail' ? 'block' : 'none') + `;">
-                        <label class="form-label-portal" style="color:var(--gs25-red);">Ghi chú Không Đạt (Bắt buộc nhập):</label>
-                        <input type="text" class="fail-input" placeholder="Bắt buộc nhập Lý do Không Đạt..." value="` + currentNote + `" onchange="updateCSRNote(` + task.stt + `, this.value)">
-                        <button class="vswitch-btn" style="font-size:10px; background:#FFFFFF; color:var(--gs25-text); border:1px solid var(--gs25-border);" onclick="alert('Đã giả lập chụp ảnh bằng chứng qua Camera PDA!')">📷 Chụp ảnh bằng chứng</button>
+                    
+                    <!-- GHI CHÚ HIỂN THỊ CHO CẢ ĐẠT VÀ KHÔNG ĐẠT -->
+                    <div style="margin-top:10px; background:#F8FAFC; border:1px solid #E2E8F0; padding:8px 10px; border-radius:8px;">
+                        <label class="form-label-portal" style="color:var(--gs25-text); font-size:11px;">Ghi chú công việc (Nhập cho cả Đạt & Không đạt):</label>
+                        <input type="text" class="fail-input" style="margin-bottom:6px;" placeholder="Nhập ghi chú giải trình hoặc chú thích lưu ý..." value="` + currentNote + `" onchange="updateCSRNote(` + task.stt + `, this.value)">
+                        
+                        <!-- NÚT UPLOAD HÌNH ẢNH CHO MỌI ITEM -->
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <button class="vswitch-btn" style="font-size:11px; background:` + (hasPhoto ? '#ECFDF5' : '#FFFFFF') + `; color:` + (hasPhoto ? '#10B981' : 'var(--gs25-text)') + `; border:1px solid ` + (hasPhoto ? '#A7F3D0' : 'var(--gs25-border)') + `;" onclick="openPhotoUploadModal(` + task.stt + `, '` + task.congViecPhaiLam.replace(/'/g,"") + `')">
+                                📷 ` + (hasPhoto ? '✓ Đã Upload ảnh bằng chứng' : 'Upload hình ảnh bằng chứng') + `
+                            </button>
+                            ` + (hasPhoto ? '<span style="font-size:10px; color:#10B981; font-weight:700;">🖼️ 1 photo</span>' : '') + `
+                        </div>
                     </div>
                 `;
                 container.appendChild(card);
             });
+
+            // KHỐI SM XÁC NHẬN CROSS-CHECK Ở CUỐI CHECKLIST CSR
+            const crossCheckCard = document.createElement('div');
+            crossCheckCard.className = 'filter-box';
+            crossCheckCard.style.background = '#EFF6FF';
+            crossCheckCard.style.borderColor = '#93C5FD';
+            crossCheckCard.style.marginTop = '16px';
+            crossCheckCard.innerHTML = `
+                <div style="font-size:12px; font-weight:800; color:#1E40AF; margin-bottom:8px;">✍️ SM XÁC NHẬN CROSS-CHECK (KIỂM TRA CHÉO)</div>
+                <div style="font-size:11px; margin-bottom:6px;">
+                    <label style="font-weight:700; cursor:pointer;"><input type="checkbox" id="pda-sm-cross-1" checked onchange="syncLogbookToPortal()"> ☐ CSR đã hoàn thành và điền đầy đủ 100%</label>
+                </div>
+                <div style="font-size:11px; margin-bottom:8px;">
+                    <label style="font-weight:700; cursor:pointer;"><input type="checkbox" id="pda-sm-cross-2" onchange="syncLogbookToPortal()"> ☐ CSR CHƯA hoàn thành — Nêu rõ danh sách các STT chưa hoàn thành:</label>
+                    <input type="text" id="pda-sm-cross-undone-stt" class="filter-input" placeholder="Ví dụ: STT 12, 45, 89 chưa làm..." style="margin-top:4px;" onchange="syncLogbookToPortal()">
+                </div>
+                <div>
+                    <label class="form-label-portal">Chữ ký xác nhận của SM (SM Ký tên):</label>
+                    <input type="text" class="filter-input" value="Store Manager VN0102" readonly>
+                </div>
+            `;
+            container.appendChild(crossCheckCard);
 
             const pct = Math.round((passCount / (filtered.length || 1)) * 100);
             const shiftLabel = (selShift === 'ALL' ? '3 Ca CSR' : selShift);
@@ -2236,6 +2505,7 @@
                 const status = smTaskStates[task.stt];
                 if (status === 'pass') passCount++;
                 const currentNote = smTaskNotes[task.stt] || '';
+                const hasPhoto = !!taskPhotosStore['SM_' + task.stt];
 
                 const card = document.createElement('div');
                 card.className = 'task-card';
@@ -2264,10 +2534,17 @@
                         <button class="btn-status fail ` + (status === 'fail' ? 'active' : '') + `" onclick="setSMTaskStatus(` + task.stt + `, 'fail')">✗ KHÔNG ĐẠT</button>
                     </div>
 
-                    <div id="fail-box-sm-` + task.stt + `" class="fail-box" style="display: ` + (status === 'fail' ? 'block' : 'none') + `;">
-                        <label class="form-label-portal" style="color:var(--gs25-red);">Ghi chú Không Đạt & Giải trình bằng chứng:</label>
-                        <input type="text" class="fail-input" placeholder="Nhập lý do Không Đạt & thông tin bằng chứng..." value="` + currentNote + `" onchange="updateSMNote(` + task.stt + `, this.value)">
-                        <button class="vswitch-btn" style="font-size:10px; background:#FFFFFF; color:var(--gs25-text); border:1px solid var(--gs25-border);" onclick="alert('Đã tải lên hình ảnh bằng chứng cho SM Checklist!')">📷 Tải ảnh bằng chứng</button>
+                    <!-- GHI CHÚ & UPLOAD HÌNH ẢNH CHO CẢ ĐẠT VÀ KHÔNG ĐẠT -->
+                    <div style="margin-top:10px; background:#FFFBEB; border:1px solid #FDE68A; padding:8px 10px; border-radius:8px;">
+                        <label class="form-label-portal" style="color:#D97706; font-size:11px;">Ghi chú quản lý & Bằng chứng số:</label>
+                        <input type="text" class="fail-input" style="margin-bottom:6px;" placeholder="Nhập giải trình chỉ đạo của SM..." value="` + currentNote + `" onchange="updateSMNote(` + task.stt + `, this.value)">
+                        
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <button class="vswitch-btn" style="font-size:11px; background:` + (hasPhoto ? '#FEF3C7' : '#FFFFFF') + `; color:` + (hasPhoto ? '#D97706' : 'var(--gs25-text)') + `; border:1px solid ` + (hasPhoto ? '#FDE68A' : 'var(--gs25-border)') + `;" onclick="openPhotoUploadModal('SM_' + ` + task.stt + `, '` + task.noiDungSM.replace(/'/g,"") + `')">
+                                📷 ` + (hasPhoto ? '✓ Đã Upload ảnh bằng chứng SM' : 'Upload ảnh bằng chứng SM') + `
+                            </button>
+                            ` + (hasPhoto ? '<span style="font-size:10px; color:#D97706; font-weight:700;">🖼️ 1 photo</span>' : '') + `
+                        </div>
                     </div>
                 `;
                 container.appendChild(card);
@@ -2277,7 +2554,7 @@
             document.getElementById('sm-progress').innerText = passCount + " / " + filtered.length + " (" + pct + "%)";
         }
 
-        // RENDER LOGBOOK TAB A WITH EQUIPMENT ID CODE
+        // RENDER LOGBOOK TAB A WITH EQUIPMENT ID CODE FROM SYSTEM BẢO TRÌ
         function renderLogA() {
             const tbody = document.getElementById('log-a-body');
             tbody.innerHTML = '';
@@ -2292,7 +2569,10 @@
                     <td><strong>` + dev.name + `</strong></td>
                     <td style="font-size:9px; color:var(--gs25-muted);">` + dev.threshold + `</td>
                     <td><input type="text" class="temp-input in-range" value="` + dev.ca1Temp + `°C" onchange="updateTempA(` + idx + `, 'ca1Temp', this.value)"></td>
-                    <td><input type="text" class="temp-input ` + (isOut ? 'out-range' : 'in-range') + `" value="` + dev.ca2Temp + `°C" onchange="updateTempA(` + idx + `, 'ca2Temp', this.value)"></td>
+                    <td>
+                        <input type="text" class="temp-input ` + (isOut ? 'out-range' : 'in-range') + `" value="` + dev.ca2Temp + `°C" onchange="updateTempA(` + idx + `, 'ca2Temp', this.value)">
+                        ` + (isOut ? '<br><button class="vswitch-btn" style="font-size:9px; padding:2px 5px; margin-top:3px; background:#DC2626;" onclick="start30MinTimer(' + idx + ')">⏱️ Timer 30ph</button>' : '') + `
+                    </td>
                     <td><input type="text" class="temp-input in-range" value="` + dev.ca3Temp + `°C" onchange="updateTempA(` + idx + `, 'ca3Temp', this.value)"></td>
                 `;
                 tbody.appendChild(tr);
@@ -2677,12 +2957,8 @@
             setupCanvas('sig-canvas-1');
             setupCanvas('sig-canvas-2');
             setupCanvas('sig-canvas-b');
+            checkShiftDraftOnLoad();
         };
     </script>
 </body>
 </html>
-"@
-
-$templatePath = "C:\Users\LYVINGHIEP\.gemini\antigravity-ide\brain\15942b83-9b2a-4e40-b5df-170732d15a53\scratch\template.html"
-[System.IO.File]::WriteAllText($templatePath, $CodeContent, [System.Text.Encoding]::UTF8)
-Write-Host "Updated template.html with dedicated All Devices Maintenance History Table UI"
